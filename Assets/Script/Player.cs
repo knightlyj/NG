@@ -9,6 +9,8 @@ public struct PlayerInput
     public bool left;
     public bool right;
     public bool jump;
+
+    public Vector2 targetPos;
 }
 
 public enum BoundSide
@@ -21,9 +23,9 @@ public enum BoundSide
 
 public class Player : MonoBehaviour {
     //role properties
-    float maxHorSpeed = 1.0f;
+    float maxHorSpeed = 2.0f;
     float movForce = 10;
-    float movForceInAir = 1;
+    float movForceInAir = 10;
     float jumpSpeed = 4;
     public CharacterProperties Properties;
 
@@ -31,10 +33,16 @@ public class Player : MonoBehaviour {
     private Transform groundCheck1;
     private Transform groundCheck2;
     public bool isLocalPlayer = true;
-	// Use this for initialization
-	void Start () {
+    Animator animator;
+    Transform trMainHand;
+    Transform trOffHand;
+    // Use this for initialization
+    void Start () {
         groundCheck1 = transform.Find("GroundCheck1");
         groundCheck2 = transform.Find("GroundCheck2");
+        animator = GetComponent<Animator>();
+        trMainHand = transform.FindChild("Body").FindChild("MainHand");
+        trOffHand = transform.FindChild("Body").FindChild("OffHand");
     }
 
     bool grounded = true;
@@ -43,8 +51,11 @@ public class Player : MonoBehaviour {
         if (isLocalPlayer)
         {
             UpdateInput();
-            CheckShoot();
+            CheckShootAndDir();
         }
+        
+        UpdateFlip();
+        UpdateArmDir();
         grounded = Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Ground"))
             || Physics2D.Linecast(transform.position, groundCheck2.position, 1 << LayerMask.NameToLayer("Ground"))
             || Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Platform"))
@@ -88,6 +99,8 @@ public class Player : MonoBehaviour {
         
         CheckJump(); //jump
         CheckCrossPlatform(); //按住下时,要穿过platform
+
+        UpdateAnimation(rb); //动画状态更新
     }
     
     
@@ -170,16 +183,17 @@ public class Player : MonoBehaviour {
     }
 
     DateTime lastShootTime = DateTime.Now;
-    void CheckShoot()
+    void CheckShootAndDir()
     {
+        this.input.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         if (Input.GetMouseButton(0))
         {
             TimeSpan span = DateTime.Now - lastShootTime;
             if(span.TotalMilliseconds > 200)
             {
                 ProjectileSpawner ps = GameObject.FindWithTag("ProjectileSpawner").GetComponent<ProjectileSpawner>();
-                Vector2 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                ps.Shoot(ProjectileSpawner.ProjectileType.Arrow, this.gameObject, transform.position, targetPos, 1);
+                ps.Shoot(ProjectileSpawner.ProjectileType.Arrow, this.gameObject, transform.position, this.input.targetPos, 1);
                 lastShootTime = DateTime.Now;
             }
         }
@@ -190,10 +204,67 @@ public class Player : MonoBehaviour {
             if (span.TotalMilliseconds > 200)
             {
                 ProjectileSpawner ps = GameObject.FindWithTag("ProjectileSpawner").GetComponent<ProjectileSpawner>();
-                Vector2 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                ps.Shoot(ProjectileSpawner.ProjectileType.Bullet, this.gameObject, transform.position, targetPos, 1);
+                ps.Shoot(ProjectileSpawner.ProjectileType.Bullet, this.gameObject, transform.position, this.input.targetPos, 1);
                 lastShootTime = DateTime.Now;
             }
+        }
+    }
+
+    void UpdateAnimation(Rigidbody2D rb)
+    {
+        if (grounded)
+        {
+            if (Mathf.Abs(rb.velocity.x) > 0.01f)
+                animator.SetBool("Run", true);
+            else
+                animator.SetBool("Run", false);
+
+            animator.SetFloat("VerticleSpeed", 0);
+        }
+        else
+        {
+            animator.SetBool("Run", false);
+            animator.SetFloat("VerticleSpeed", rb.velocity.y);
+        }
+    }
+
+    void UpdateArmDir() //武器瞄准方向
+    {
+        Vector2 direction = this.input.targetPos - (Vector2)this.transform.position;
+        direction.Normalize();
+        float angle = Mathf.Acos(direction.x) / Mathf.PI * 180;
+        if (direction.y < 0)
+            angle = -angle;
+
+        //朝向在正面的180度范围内
+        if (angle >= 90)
+            angle = 180 - angle;
+        else if (angle <= -90)
+            angle = -180 - angle;
+
+        //朝向左边时会导致角度反转,没详细了解原因
+        if (!faceRight)
+            angle = -angle;
+
+        trMainHand.rotation = Quaternion.Euler(0, 0, angle);
+        trOffHand.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    bool faceRight = true;
+    void UpdateFlip()
+    {
+        Vector2 direction = this.input.targetPos - (Vector2)this.transform.position;
+        bool change = false;
+        if(direction.x >= 0 && !faceRight)
+            change = true;
+        else if(direction.x < 0 && faceRight)
+            change = true;
+        if (change)
+        {
+            faceRight = !faceRight;
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
         }
     }
 }
