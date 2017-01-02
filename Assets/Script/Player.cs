@@ -27,7 +27,8 @@ public class Player : MonoBehaviour {
     float movForce = 10;
     float movForceInAir = 10;
     float jumpSpeed = 4;
-    public CharacterProperties Properties;
+    public CharacterProperties properties = new CharacterProperties();
+    public BuffModule buffModule = new BuffModule();
 
     public PlayerInput input;
     private Transform groundCheck1;
@@ -43,6 +44,8 @@ public class Player : MonoBehaviour {
         animator = GetComponent<Animator>();
         trMainHand = transform.FindChild("Body").FindChild("MainHand");
         trOffHand = transform.FindChild("Body").FindChild("OffHand");
+
+        SetUpBodySR();
     }
 
     bool grounded = true;
@@ -54,14 +57,15 @@ public class Player : MonoBehaviour {
             CheckShootAndDir();
         }
         
-        UpdateFlip();
+        UpdateFace();
         UpdateArmDir();
         grounded = Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Ground"))
             || Physics2D.Linecast(transform.position, groundCheck2.position, 1 << LayerMask.NameToLayer("Ground"))
             || Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Platform"))
             || Physics2D.Linecast(transform.position, groundCheck2.position, 1 << LayerMask.NameToLayer("Platform"));
-        
+
         //Debug.Log("grounded: " + grounded);
+        this.buffModule.UpateBuff(Time.deltaTime);
     }
     
     void FixedUpdate()
@@ -186,14 +190,16 @@ public class Player : MonoBehaviour {
     void CheckShootAndDir()
     {
         this.input.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+        DamageDate damage = new DamageDate();
+        damage.physicalDamage = 10;
+        damage.knockBack = 200;
         if (Input.GetMouseButton(0))
         {
             TimeSpan span = DateTime.Now - lastShootTime;
             if(span.TotalMilliseconds > 200)
             {
                 ProjectileSpawner ps = GameObject.FindWithTag("ProjectileSpawner").GetComponent<ProjectileSpawner>();
-                ps.Shoot(ProjectileSpawner.ProjectileType.Arrow, this.gameObject, transform.position, this.input.targetPos, 1);
+                ps.Shoot(ProjectileSpawner.ProjectileType.Arrow, this.gameObject, transform.position, this.input.targetPos, 1, damage);
                 lastShootTime = DateTime.Now;
             }
         }
@@ -204,7 +210,7 @@ public class Player : MonoBehaviour {
             if (span.TotalMilliseconds > 200)
             {
                 ProjectileSpawner ps = GameObject.FindWithTag("ProjectileSpawner").GetComponent<ProjectileSpawner>();
-                ps.Shoot(ProjectileSpawner.ProjectileType.Bullet, this.gameObject, transform.position, this.input.targetPos, 1);
+                ps.Shoot(ProjectileSpawner.ProjectileType.Bullet, this.gameObject, transform.position, this.input.targetPos, 1, damage);
                 lastShootTime = DateTime.Now;
             }
         }
@@ -251,7 +257,7 @@ public class Player : MonoBehaviour {
     }
 
     bool faceRight = true;
-    void UpdateFlip()
+    void UpdateFace()
     {
         Vector2 direction = this.input.targetPos - (Vector2)this.transform.position;
         bool change = false;
@@ -266,5 +272,40 @@ public class Player : MonoBehaviour {
             theScale.x *= -1;
             transform.localScale = theScale;
         }
+    }
+
+
+    SpriteRenderer[] bodySRs;
+    void SetUpBodySR()
+    {
+        bodySRs = new SpriteRenderer[7];
+        bodySRs[0] = transform.FindChild("Body").GetComponent<SpriteRenderer>();
+        bodySRs[1] = transform.FindChild("Body").FindChild("FrontLeg").GetComponent<SpriteRenderer>();
+        bodySRs[2] = transform.FindChild("Body").FindChild("BackLeg").GetComponent<SpriteRenderer>();
+        bodySRs[3] = transform.FindChild("Body").FindChild("Head").GetComponent<SpriteRenderer>();
+        bodySRs[4] = transform.FindChild("Body").FindChild("MainHand").GetComponent<SpriteRenderer>();
+        bodySRs[5] = transform.FindChild("Body").FindChild("OffHand").GetComponent<SpriteRenderer>();
+        bodySRs[6] = transform.FindChild("Body").FindChild("MainHand").FindChild("Gun").GetComponent<SpriteRenderer>();
+    }
+    public void SetAlpha(float alpha)
+    {
+        foreach(SpriteRenderer sr in bodySRs)
+        {
+            Color newColor = sr.color;
+            newColor.a = alpha;
+            sr.color = newColor;
+        }
+    }
+    
+    public void HitByOther(DamageDate damage, Vector2 pos)
+    {
+        
+        Vector2 dir = (Vector2)transform.position - pos;
+        dir.Normalize();
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.AddForce(dir * damage.knockBack);
+
+        buffModule.AddBuff(this, BuffId.Invincible); 
+        this.properties.DealDamage(damage);
     }
 }

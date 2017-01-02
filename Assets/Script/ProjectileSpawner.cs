@@ -22,7 +22,7 @@ public class ProjectileSpawner : MonoBehaviour {
 	
 	}
 
-    public void Shoot(ProjectileType type, GameObject owner, Vector2 position, Vector2 target, float speedScale)
+    public void Shoot(ProjectileType type, GameObject owner, Vector2 position, Vector2 target, float speedScale, DamageDate damage)
     {
         Transform trProjectile = null;
         switch (type)
@@ -36,6 +36,6 @@ public class ProjectileSpawner : MonoBehaviour {
         }
 
         Projectile prScrpit = trProjectile.GetComponent<Projectile>();
-        prScrpit.Shoot(owner, position, target, speedScale);
+        prScrpit.Shoot(owner, position, target, speedScale, damage);
     }
 }
