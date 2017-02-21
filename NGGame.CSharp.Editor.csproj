@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}</ProjectGuid>
+    <ProjectGuid>{3D621567-8D30-00DF-8493-64C6A03DBC0E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.2f2</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -52,43 +52,51 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.EditorTestsRunner">
+      <HintPath>Library\UnityAssemblies\UnityEditor.EditorTestsRunner.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\UnityAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    <Reference Include="UnityEditor.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TreeEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.TreeEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+      <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Buff\BaseBuff.cs" />
-    <Compile Include="Assets\Script\Buff\BuffModule.cs" />
-    <Compile Include="Assets\Script\Buff\InvincibleBuff.cs" />
-    <Compile Include="Assets\Script\FixedPointNumber.cs" />
-    <Compile Include="Assets\Script\FrameControl.cs" />
-    <Compile Include="Assets\Script\GameSetting.cs" />
-    <Compile Include="Assets\Script\Menu\Menu.cs" />
-    <Compile Include="Assets\Script\Monster\BaseMonster.cs" />
-    <Compile Include="Assets\Script\Monster\Slime.cs" />
-    <Compile Include="Assets\Script\NetWork\ClientAgent.cs" />
-    <Compile Include="Assets\Script\NetWork\GameNetWork.cs" />
-    <Compile Include="Assets\Script\NetWork\MessageHelper.cs" />
-    <Compile Include="Assets\Script\NetWork\Protocol.cs" />
-    <Compile Include="Assets\Script\NetWork\ServerAgent.cs" />
-    <Compile Include="Assets\Script\Physic\MyBoxCollider.cs" />
-    <Compile Include="Assets\Script\Physic\MyCircleCollier.cs" />
-    <Compile Include="Assets\Script\Physic\MyCollider.cs" />
-    <Compile Include="Assets\Script\Player.cs" />
-    <Compile Include="Assets\Script\Projectile\Arrow.cs" />
-    <Compile Include="Assets\Script\Projectile\Bullet.cs" />
-    <Compile Include="Assets\Script\Projectile\Projectile.cs" />
-    <Compile Include="Assets\Script\ProjectileSpawner.cs" />
-    <Compile Include="Assets\Script\Properties.cs" />
-    <Compile Include="Assets\Script\Test\AniTest.cs" />
-    <Compile Include="Assets\Script\Test\LookAtPoint.cs" />
-    <Compile Include="Assets\Script\Test\LookAtPointEditor.cs" />
+    <ProjectReference Include="NGGame.CSharp.csproj">
+      <Project>{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}</Project>
+      <Name>NGGame.CSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Editor\FixedPointNumberTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Script\Test\1.txt" />

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGGame.CSharp", "NGGame.CSharp.csproj", "{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGGame.CSharp.Editor", "NGGame.CSharp.Editor.csproj", "{3D621567-8D30-00DF-8493-64C6A03DBC0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8D5487E-BF08-3D0C-F230-192F08F7B2DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D621567-8D30-00DF-8493-64C6A03DBC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D621567-8D30-00DF-8493-64C6A03DBC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D621567-8D30-00DF-8493-64C6A03DBC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D621567-8D30-00DF-8493-64C6A03DBC0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

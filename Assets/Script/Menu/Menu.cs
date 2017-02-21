@@ -12,12 +12,12 @@ public class Menu : MonoBehaviour {
 
         Button btnJoinGame = GameObject.Find("JoinGame").GetComponent<Button>();
         btnJoinGame.onClick.AddListener(this.OnJoinGameClick);
-
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     void OnNewGameClick()
@@ -36,4 +36,5 @@ public class Menu : MonoBehaviour {
         //ip
         SceneManager.LoadScene("GamePlay");
     }
+    
 }

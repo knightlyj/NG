@@ -2,31 +2,14 @@
 using System.Collections;
 using System;
 
-public struct PlayerInput
+public enum PlayerControl_MainState
 {
-    public bool up;
-    public bool down;
-    public bool left;
-    public bool right;
-    public bool jump;
-
-    public Vector2 targetPos;
-}
-
-public enum BoundSide
-{
-    Top,
-    Bottom,
-    Left,
-    Right,
+    OnGround,
+    InAir,
 }
 
 public class Player : MonoBehaviour {
     //role properties
-    float maxHorSpeed = 2.0f;
-    float movForce = 10;
-    float movForceInAir = 10;
-    float jumpSpeed = 4;
     public CharacterProperties properties = new CharacterProperties();
     public BuffModule buffModule = new BuffModule();
 
@@ -46,6 +29,7 @@ public class Player : MonoBehaviour {
         trOffHand = transform.FindChild("Body").FindChild("OffHand");
 
         SetUpBodySR();
+
     }
 
     bool grounded = true;
@@ -53,63 +37,29 @@ public class Player : MonoBehaviour {
 	void Update () {
         if (isLocalPlayer)
         {
-            UpdateInput();
-            CheckShootAndDir();
+            UpdateLocalInput();
         }
-        
-        UpdateFace();
-        UpdateArmDir();
-        grounded = Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Ground"))
-            || Physics2D.Linecast(transform.position, groundCheck2.position, 1 << LayerMask.NameToLayer("Ground"))
-            || Physics2D.Linecast(transform.position, groundCheck1.position, 1 << LayerMask.NameToLayer("Platform"))
-            || Physics2D.Linecast(transform.position, groundCheck2.position, 1 << LayerMask.NameToLayer("Platform"));
 
         //Debug.Log("grounded: " + grounded);
         this.buffModule.UpateBuff(Time.deltaTime);
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (Time.timeScale <= 0.01f)
+                Time.timeScale = 1;
+            else
+                Time.timeScale = 0;
+        }
     }
     
     void FixedUpdate()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
-        //**********************movement*****************************
-        //input
-        if (grounded) { //在地面时,不按左右则立即停下来,或者由摩擦力停下,并且按住左右会有较大的力,摩擦力由物理引擎实现
-            if (!this.input.left && !this.input.right && rb.velocity.y < 0) //有向上的速度,也不会触发立即停止或者摩擦力
-            {
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            }
-            else
-            {
-                if (this.input.left && rb.velocity.x > -maxHorSpeed)
-                        rb.AddForce(new Vector2(-movForce, 0));
-                if (this.input.right && rb.velocity.x < maxHorSpeed)
-                        GetComponent<Rigidbody2D>().AddForce(new Vector2(movForce, 0));
-            }
-        }
-        else
-        {   //在空中时,无摩擦力,按住左右会有较小的力
-            if (this.input.left && rb.velocity.x > -maxHorSpeed)
-                rb.AddForce(new Vector2(-movForceInAir, 0));
-            if (this.input.right && rb.velocity.x < maxHorSpeed)
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(movForceInAir, 0));
-        }
-        //max speed
-        if (rb.velocity.x < -maxHorSpeed)
-            rb.velocity = new Vector2(-maxHorSpeed, rb.velocity.y);
-        else if (rb.velocity.x > maxHorSpeed)
-            rb.velocity = new Vector2(maxHorSpeed, rb.velocity.y);
-
-        
-        CheckJump(); //jump
-        CheckCrossPlatform(); //按住下时,要穿过platform
-
-        UpdateAnimation(rb); //动画状态更新
     }
     
     
 
-    void UpdateInput()
+    void UpdateLocalInput()
     {
         if (isLocalPlayer)
         {   //update input from
@@ -144,50 +94,17 @@ public class Player : MonoBehaviour {
     DateTime jumpTime = DateTime.Now;
     void CheckJump()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (grounded)
-        {
-            if (this.input.jump)
-            {
-                TimeSpan span = DateTime.Now - jumpTime;
-                if (span.TotalMilliseconds > jumpInterval)
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-                    jumpTime = DateTime.Now;
-                }
-            }
-        }
+
     }
 
     bool isCrossPlatform = false;
-    double crossPlatformInterval = 500; //ms
-    DateTime crossPlatformTime = DateTime.Now;
     void CheckCrossPlatform()
     {
-        //由于物理引擎在向下未完全穿过时会弹开collider,故按下后在一个较短时间内保持穿过的layer
-        if (isCrossPlatform)
-        {
-            //Debug.Log("crossing");
-            TimeSpan span = DateTime.Now - crossPlatformTime;
-            if (span.TotalMilliseconds > crossPlatformInterval)
-            {
-                gameObject.layer = LayerMask.NameToLayer("Player");
-                isCrossPlatform = false;
-            }
-        }
-        else
-        {
-            if (input.down && grounded)
-            {
-                gameObject.layer = LayerMask.NameToLayer("PlayerCrossPlatform");
-                crossPlatformTime = DateTime.Now;
-                isCrossPlatform = true;
-            }
-        }
+        
     }
 
     DateTime lastShootTime = DateTime.Now;
-    void CheckShootAndDir()
+    void CheckShoot()
     {
         this.input.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         DamageDate damage = new DamageDate();
@@ -218,7 +135,7 @@ public class Player : MonoBehaviour {
 
     void UpdateAnimation(Rigidbody2D rb)
     {
-        if (grounded)
+        /*if (grounded)
         {
             if (Mathf.Abs(rb.velocity.x) > 0.01f)
                 animator.SetBool("Run", true);
@@ -231,7 +148,8 @@ public class Player : MonoBehaviour {
         {
             animator.SetBool("Run", false);
             animator.SetFloat("VerticleSpeed", rb.velocity.y);
-        }
+        }*/
+
     }
 
     void UpdateArmDir() //武器瞄准方向
@@ -302,8 +220,6 @@ public class Player : MonoBehaviour {
         
         Vector2 dir = (Vector2)transform.position - pos;
         dir.Normalize();
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(dir * damage.knockBack);
 
         buffModule.AddBuff(this, BuffId.Invincible); 
         this.properties.DealDamage(damage);
