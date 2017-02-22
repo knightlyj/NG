@@ -2,13 +2,13 @@
 using System.Collections;
 using System;
 
-public struct FixedPointNumber
+public struct FpNumber
 {
     public Int64 number;
     static readonly int SigOfFraction = 2; //小数部分有效位数
     static readonly double NumberScale = Math.Pow(10, SigOfFraction);
 
-    public FixedPointNumber(double d)
+    public FpNumber(double d)
     {
         this.number = (Int64)Math.Round(d * NumberScale);
     }
@@ -22,71 +22,71 @@ public struct FixedPointNumber
     }
 
     //****************double的类型转换**************************
-    public static implicit operator FixedPointNumber(double d)
+    public static implicit operator FpNumber(double d)
     {
-        FixedPointNumber n = new FixedPointNumber(d);
+        FpNumber n = new FpNumber(d);
         return n;
     }
 
     //**********************四则运算*****************************
     // +
-    public static FixedPointNumber operator +(FixedPointNumber n1, FixedPointNumber n2)
+    public static FpNumber operator +(FpNumber n1, FpNumber n2)
     {
-        FixedPointNumber n = new FixedPointNumber();
+        FpNumber n = new FpNumber();
         n.number = n1.number + n2.number;
         return n;
     }
 
     // -
-    public static FixedPointNumber operator -(FixedPointNumber n1, FixedPointNumber n2)
+    public static FpNumber operator -(FpNumber n1, FpNumber n2)
     {
-        FixedPointNumber n = new FixedPointNumber();
+        FpNumber n = new FpNumber();
         n.number = n1.number - n2.number;
         return n;
     }
 
     // *
-    public static FixedPointNumber operator *(FixedPointNumber n1, FixedPointNumber n2)
+    public static FpNumber operator *(FpNumber n1, FpNumber n2)
     {
-        FixedPointNumber n = new FixedPointNumber();
+        FpNumber n = new FpNumber();
         n.number = n1.number * n2.number / (Int64)NumberScale;
         return n;
     }
 
     // /
-    public static FixedPointNumber operator /(FixedPointNumber n1, FixedPointNumber n2)
+    public static FpNumber operator /(FpNumber n1, FpNumber n2)
     {
-        FixedPointNumber n = new FixedPointNumber();
+        FpNumber n = new FpNumber();
         n.number = n1.number * (Int64)NumberScale / n2.number ;
         return n;
     }
 
     //*************与double的四则运算*******************
     // +
-    public static FixedPointNumber operator +(FixedPointNumber n1, double d)
+    public static FpNumber operator +(FpNumber n1, double d)
     {
-        FixedPointNumber n = n1 + new FixedPointNumber(d);
+        FpNumber n = n1 + new FpNumber(d);
         return n;
     }
 
     // -
-    public static FixedPointNumber operator -(FixedPointNumber n1, double d)
+    public static FpNumber operator -(FpNumber n1, double d)
     {
-        FixedPointNumber n = n1 - new FixedPointNumber(d);
+        FpNumber n = n1 - new FpNumber(d);
         return n;
     }
 
     // *
-    public static FixedPointNumber operator *(FixedPointNumber n1, double d)
+    public static FpNumber operator *(FpNumber n1, double d)
     {
-        FixedPointNumber n = n1 * new FixedPointNumber(d);
+        FpNumber n = n1 * new FpNumber(d);
         return n;
     }
 
     // /
-    public static FixedPointNumber operator /(FixedPointNumber n1, double d)
+    public static FpNumber operator /(FpNumber n1, double d)
     {
-        FixedPointNumber n = n1 / new FixedPointNumber(d);
+        FpNumber n = n1 / new FpNumber(d);
         return n;
     }
 
@@ -132,15 +132,15 @@ public static class TriFunction
                 -0.63,-0.62,-0.60,-0.59,-0.57,-0.56,-0.54,-0.53,-0.52,-0.50,-0.48,-0.47,-0.45,-0.44,-0.42,-0.41,-0.39,-0.37,-0.36,-0.34,
                 -0.33,-0.31,-0.29,-0.28,-0.26,-0.24,-0.22,-0.21,-0.19,-0.17,-0.16,-0.14,-0.12,-0.10,-0.09,-0.07,-0.05,-0.03,-0.02 };
 
-    public static FixedPointNumber Cos(int angle)
+    public static FpNumber Cos(int angle)
     {
         double res = CosTable[angle % 360];
-        return new FixedPointNumber(res);
+        return new FpNumber(res);
     }
 
-    public static FixedPointNumber Sin(int angle)
+    public static FpNumber Sin(int angle)
     {
         double res = SinTable[angle % 360];
-        return new FixedPointNumber(res);
+        return new FpNumber(res);
     }
 }
