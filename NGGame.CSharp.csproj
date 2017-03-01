@@ -66,12 +66,14 @@
     <Compile Include="Assets\Script\Buff\BaseBuff.cs" />
     <Compile Include="Assets\Script\Buff\BuffModule.cs" />
     <Compile Include="Assets\Script\Buff\InvincibleBuff.cs" />
-    <Compile Include="Assets\Script\FixedPointNumber.cs" />
+    <Compile Include="Assets\Script\FixedPointNumber\FixedPointNumber.cs" />
+    <Compile Include="Assets\Script\FixedPointNumber\FixedPointVector.cs" />
     <Compile Include="Assets\Script\FrameControl.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
     <Compile Include="Assets\Script\Menu\Menu.cs" />
     <Compile Include="Assets\Script\Monster\BaseMonster.cs" />
     <Compile Include="Assets\Script\Monster\Slime.cs" />
+    <Compile Include="Assets\Script\MyGameObject.cs" />
     <Compile Include="Assets\Script\NetWork\ClientAgent.cs" />
     <Compile Include="Assets\Script\NetWork\GameNetWork.cs" />
     <Compile Include="Assets\Script\NetWork\MessageHelper.cs" />

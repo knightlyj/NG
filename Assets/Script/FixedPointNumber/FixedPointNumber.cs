@@ -21,6 +21,48 @@ public struct FpNumber
         }
     }
 
+    public override string ToString()
+    {
+        return this.Value.ToString("f2");
+    }
+
+    public static FpNumber MinValue()
+    {
+        FpNumber n = new FpNumber();
+        n.number = Int64.MinValue;
+        return n;
+    }
+
+    public static FpNumber Small()
+    {
+        FpNumber n = new FpNumber();
+        n.number = 1;
+        return n;
+    }
+
+    public static FpNumber MaxValue()
+    {
+        FpNumber n = new FpNumber();
+        n.number = Int64.MaxValue;
+        return n;
+    }
+
+    public static FpNumber Sqrt(FpNumber n)
+    {
+        if (n.number < 0)
+            throw new Exception("sqrt invalid number");
+        FpNumber root = new FpNumber();
+        root.number = (Int64)Math.Round(Math.Sqrt(n.number) * 10);
+        return root;
+    }
+
+    public static FpNumber Abs(FpNumber n)
+    {
+        FpNumber abs = new FpNumber();
+        abs.number = Math.Abs(n.number);
+        return abs;
+    }
+
     //****************double的类型转换**************************
     public static implicit operator FpNumber(double d)
     {
@@ -58,6 +100,35 @@ public struct FpNumber
     {
         FpNumber n = new FpNumber();
         n.number = n1.number * (Int64)NumberScale / n2.number ;
+        return n;
+    }
+
+    //**************比较运算*******************
+    public static bool operator < (FpNumber n1, FpNumber n2)
+    {
+        return n1.number < n2.number;
+    }
+
+    public static bool operator > (FpNumber n1, FpNumber n2)
+    {
+        return n1.number > n2.number;
+    }
+
+    public static bool operator <= (FpNumber n1, FpNumber n2)
+    {
+        return n1.number <= n2.number;
+    }
+
+    public static bool operator >= (FpNumber n1, FpNumber n2)
+    {
+        return n1.number >= n2.number;
+    }
+
+    //负数
+    public static FpNumber operator -(FpNumber n1)
+    {
+        FpNumber n = new FpNumber();
+        n.number = -n1.number;
         return n;
     }
 
@@ -134,12 +205,16 @@ public static class TriFunction
 
     public static FpNumber Cos(int angle)
     {
+        if (angle < 0)
+            angle += (angle / 360) * 360 + 360;
         double res = CosTable[angle % 360];
         return new FpNumber(res);
     }
 
     public static FpNumber Sin(int angle)
     {
+        if (angle < 0)
+            angle += (angle / 360) * 360 + 360;
         double res = SinTable[angle % 360];
         return new FpNumber(res);
     }

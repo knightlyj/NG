@@ -96,6 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\ColliderTest.cs" />
     <Compile Include="Assets\Editor\FixedPointNumberTest.cs" />
   </ItemGroup>
   <ItemGroup>
