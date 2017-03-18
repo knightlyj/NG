@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wtfShooter.CSharp", "wtfShooter.CSharp.csproj", "{6B9D9E51-57E3-50CC-C709-998ADFB6934D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wtfShooter.CSharp.Editor", "wtfShooter.CSharp.Editor.csproj", "{51F23C4D-5A4A-D4CB-5A64-F59777FFC338}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B9D9E51-57E3-50CC-C709-998ADFB6934D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B9D9E51-57E3-50CC-C709-998ADFB6934D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B9D9E51-57E3-50CC-C709-998ADFB6934D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B9D9E51-57E3-50CC-C709-998ADFB6934D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F23C4D-5A4A-D4CB-5A64-F59777FFC338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F23C4D-5A4A-D4CB-5A64-F59777FFC338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F23C4D-5A4A-D4CB-5A64-F59777FFC338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F23C4D-5A4A-D4CB-5A64-F59777FFC338}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

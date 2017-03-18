@@ -67,7 +67,7 @@ public class Arrow : MonoBehaviour, Projectile
     protected void OnTriggerEnter2D(Collider2D other)
     {
         GameObject go = other.gameObject;
-        if (go.layer == LayerMask.NameToLayer("Player") || go.layer == LayerMask.NameToLayer("PlayerCrossPlatform"))
+        if (go.layer == LayerMask.NameToLayer("Entity") || go.layer == LayerMask.NameToLayer("ECP"))
         {   //hit player
             OnHitEventArg e = new OnHitEventArg();
             RaiseHitEvent(e);
@@ -75,20 +75,17 @@ public class Arrow : MonoBehaviour, Projectile
             {
                 Explode();
                 Player p = other.gameObject.GetComponent<Player>();
-                p.HitByOther(this.damage, transform.position);
             }
         }
-        else if( go.layer == LayerMask.NameToLayer("Monster"))
-        {
-            OnHitEventArg e = new OnHitEventArg();
-            RaiseHitEvent(e);
-            if (go != owner)
-            {
-                Explode();
-                BaseMonster m = other.gameObject.GetComponent<BaseMonster>();
-                m.HitByOther(this.damage, transform.position);
-            }
-        }
+        //else if( go.layer == LayerMask.NameToLayer("Monster"))
+        //{
+        //    OnHitEventArg e = new OnHitEventArg();
+        //    RaiseHitEvent(e);
+        //    if (go != owner)
+        //    {
+        //        Explode();
+        //    }
+        //}
         else if(go.layer == LayerMask.NameToLayer("Ground"))
         {
             OnHitEventArg e = new OnHitEventArg();
