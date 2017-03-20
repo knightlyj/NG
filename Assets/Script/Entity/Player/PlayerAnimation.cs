@@ -25,7 +25,6 @@ public partial class Player{
         UpdateAim();
         UpateBody();
     }
-
     
     void UpdateAim()
     {
@@ -39,8 +38,8 @@ public partial class Player{
             angle = -angle;
         
         trHead.rotation = Quaternion.Euler(0, 0, angle/2);
-        trMainHand.rotation = Quaternion.Euler(0, 0, angle - 30);
-        trOffHand.rotation = Quaternion.Euler(0, 0, angle - 15);
+        trMainHand.rotation = Quaternion.Euler(0, 0, angle);
+        trOffHand.rotation = Quaternion.Euler(0, 0, angle);
         //待补充
         //Debug.Log("angle " + angle);
     }

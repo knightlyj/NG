@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Tiled2Unity;
-using UnityEditor;
 using System;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 public class CameraFollow : MonoBehaviour {
     public delegate void CameraResizeCB(object sender);
     public event CameraResizeCB CameraResizeEvent;
@@ -26,7 +25,6 @@ public class CameraFollow : MonoBehaviour {
         else
         {
             FollowPlayer();
-            MoveBackGround();
         }
     }
 
@@ -67,16 +65,26 @@ public class CameraFollow : MonoBehaviour {
             mapSize = new Vector2(map.MapWidthInPixels * map.ExportScale, map.MapHeightInPixels * map.ExportScale);
         }
     }
-    
+
+    //float followSpeed = 15.0f;
     void FollowPlayer()
     {
+        //Vector2 dist = player.position - transform.position;
+        //float length = dist.magnitude;
+        //float followLength = followSpeed * Time.deltaTime;
+        //if (length <= followLength)
+        //{
+        //    transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
+        //}
+        //else
+        //{
+        //    dist.Normalize();
+        //    dist *= followLength;
+        //    transform.position += (Vector3)dist;
+        //}
         transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
     }
-
-    void MoveBackGround()
-    {
-
-    }
+    
 
     public Vector2 GetUvInMap()
     {

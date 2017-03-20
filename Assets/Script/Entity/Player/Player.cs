@@ -18,11 +18,25 @@ public struct PlayerSta
 
 public partial class Player : Entity
 {
+    public Player()
+    {
+        //hpbar偏移,base.Start会使用,需要先设置
+        this.hpBarOffset = -0.35f;
+    }
+
     public PlayerSta state;
     // Use this for initialization
     protected override void Start()
     {
         base.Start();
+
+        //物理效果参数
+        _maxHorSpeed = 2.0f;
+        _movForce = 3;
+        _movForceInAir = 0.2f;
+        _jumpSpeed = 6f;
+
+        //
         SetUpBodySR();
         InitAnimation();
     }
@@ -31,14 +45,24 @@ public partial class Player : Entity
     protected override void Update()
     {
         base.Update();
-        
+
         state.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         UpdateAnimation();
 
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    this.buffModule.AddBuff(this, BuffId.Invincible);
-        //}
+        if (Input.GetMouseButtonDown(0))
+        {
+            //this.buffModule.AddBuff(this, BuffId.Invincible);
+
+            BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
+            battle.AddDamageText(transform.position, 100, DamageText.DamageStyle.Critical);
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            //this.buffModule.AddBuff(this, BuffId.Invincible);
+
+            BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
+            battle.AddDamageText(transform.position, 100, DamageText.DamageStyle.Heal);
+        }
     }
 
 
@@ -61,7 +85,7 @@ public partial class Player : Entity
     void AddBodyPart(Transform t)
     {
         SpriteRenderer sr = t.GetComponent<SpriteRenderer>();
-        if(sr != null)
+        if (sr != null)
         {
             bodySRs.Add(sr);
         }
@@ -88,9 +112,5 @@ public partial class Player : Entity
 
         }
     }
-
     
-
 }
-
-

@@ -3,43 +3,36 @@ using System.Collections;
 using System;
 
 public partial class Player {
-    enum SimualteState
-    {
-        Nothing,
-        OnGround,
-        OnLadder,
-        InAir,
-    }
+    //enum SimualteState
+    //{
+    //    Nothing,
+    //    OnGround,
+    //    OnLadder,
+    //    InAir,
+    //}
     
     bool onGround = false;
     bool onPlatform = false;
     public Transform groundCheck;
     public LayerMask groundLayerMask;
     public LayerMask platformLayerMask;
-    SimualteState simuState = SimualteState.Nothing;
+    
 
-    float maxHorSpeed = 2.0f;
-    float movForce = 10;
-    float movForceInAir = 10;
-    float jumpSpeed = 6f;
     DateTime jumpTime = DateTime.Now;
     DateTime crossPlatformTime = DateTime.Now;
     bool isCrossPlatform = false;
     void Simualte()
     {
         CircleCollider2D col = GetComponent<CircleCollider2D>();
-        Vector2 box = new Vector2((col.radius * 2 - 0.05f)*transform.localScale.x, 0.01f);
+        Vector2 box = new Vector2(Mathf.Abs((col.radius * 2 - 0.1f) * transform.localScale.x), 0.01f);
         onGround = Physics2D.OverlapBox(groundCheck.position, box, 0, groundLayerMask);
         onPlatform = Physics2D.OverlapBox(groundCheck.position, box, 0, platformLayerMask);
-
         if (onLadder)
         {
             SimulateOnLadder();
-            //Debug.Log("ladder");
         }
         else
         {
-            //Debug.Log("free");
             SimulateFree();
         }
     }
@@ -54,10 +47,10 @@ public partial class Player {
             }
             else
             {
-                if (state.left && rb.velocity.x > -maxHorSpeed)
-                    rb.AddForce(new Vector2(-movForce, 0));
-                if (state.right && rb.velocity.x < maxHorSpeed)
-                    GetComponent<Rigidbody2D>().AddForce(new Vector2(movForce, 0));
+                if (state.left && rb.velocity.x > -MaxHorSpeed)
+                    rb.AddForce(new Vector2(-MovForce, 0));
+                if (state.right && rb.velocity.x < MaxHorSpeed)
+                    GetComponent<Rigidbody2D>().AddForce(new Vector2(MovForce, 0));
             }
 
             if (state.down)
@@ -86,7 +79,7 @@ public partial class Player {
                 TimeSpan span = DateTime.Now - jumpTime;
                 if (span.TotalMilliseconds > 500)
                 {
-                    rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                    rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
                     jumpTime = DateTime.Now;
                     GetOffLadder();
                 }
@@ -94,10 +87,10 @@ public partial class Player {
         }
         else
         {   //在空中时,无摩擦力,按住左右会有较小的力
-            if (state.left && rb.velocity.x > -maxHorSpeed)
-                rb.AddForce(new Vector2(-movForceInAir, 0));
-            if (state.right && rb.velocity.x < maxHorSpeed)
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(movForceInAir, 0));
+            if (state.left && rb.velocity.x > -MaxHorSpeed)
+                rb.AddForce(new Vector2(-MovFroceInAir, 0));
+            if (state.right && rb.velocity.x < MaxHorSpeed)
+                rb.AddForce(new Vector2(MovFroceInAir, 0));
 
             if (state.down)
             {
@@ -111,10 +104,10 @@ public partial class Player {
             }
         }
         //max speed
-        if (rb.velocity.x < -maxHorSpeed)
-            rb.velocity = new Vector2(-maxHorSpeed, rb.velocity.y);
-        else if (rb.velocity.x > maxHorSpeed)
-            rb.velocity = new Vector2(maxHorSpeed, rb.velocity.y);
+        if (rb.velocity.x < -MaxHorSpeed)
+            rb.velocity = new Vector2(-MaxHorSpeed, rb.velocity.y);
+        else if (rb.velocity.x > MaxHorSpeed)
+            rb.velocity = new Vector2(MaxHorSpeed, rb.velocity.y);
 
         if (isCrossPlatform)
         {
@@ -126,6 +119,7 @@ public partial class Player {
                 isCrossPlatform = false;
             }
         }
+        
         //else
         //{
         //    RaycastHit2D stuckOnPlatform = Physics2D.Raycast(platformCheck1.position, Vector2.down, platformCheck1.position.y - platformCheck2.position.y, 1 << LayerMask.NameToLayer("Platform"));
@@ -142,8 +136,6 @@ public partial class Player {
         //    }
         //}
     }
-    public Transform platformCheck1;
-    public Transform platformCheck2;
 
     float climeSpeed = 1.0f;
     float slideDownSpeed = 2.0f;
@@ -181,7 +173,7 @@ public partial class Player {
             TimeSpan span = DateTime.Now - jumpTime;
             if (span.TotalMilliseconds > 500)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
                 jumpTime = DateTime.Now;
                 jumpFromLadderTime = DateTime.Now;
                 GetOffLadder();

@@ -3,6 +3,14 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+struct defaultScreen
+{
+    public static float width = 1280;
+    public static float height = 720;
+
+    public static float damageFontSize = 26f;
+}
+
 public class Menu : MonoBehaviour {
 
 	// Use this for initialization
@@ -17,8 +25,8 @@ public class Menu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-	}
+        
+    }
 
     void OnNewGameClick()
     {

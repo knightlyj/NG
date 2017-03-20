@@ -3,22 +3,26 @@ using System.Collections;
 using System;
 
 public class Slime : Entity {
-    
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    protected override void Start () {
         base.Start();
+        _movForce = 8.0f;
+        _jumpSpeed = 3.0f;
     }
 
-    Vector2 groundCheck1 = new Vector2(-0.5f, -0.52f);
-    Vector2 groundCheck2 = new Vector2(0.5f, -0.52f);
-    bool grounded = false;
+    bool onGround = false;
+    bool onPlatform = false;
+    public Transform groundCheck;
+    public LayerMask groundLayerMask;
+    public LayerMask platformLayerMask;
     // Update is called once per frame
-    void Update () {
+    protected override void Update () {
         base.Update();
-        grounded = Physics2D.Linecast(transform.position, (Vector2)transform.position + groundCheck1, 1 << LayerMask.NameToLayer("Ground"))
-            || Physics2D.Linecast(transform.position, (Vector2)transform.position + groundCheck2, 1 << LayerMask.NameToLayer("Ground"))
-            || Physics2D.Linecast(transform.position, (Vector2)transform.position + groundCheck1, 1 << LayerMask.NameToLayer("Platform"))
-            || Physics2D.Linecast(transform.position, (Vector2)transform.position + groundCheck2, 1 << LayerMask.NameToLayer("Platform"));
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        Vector2 box = new Vector2(Mathf.Abs((col.size.x - 0.06f) * transform.localScale.x), 0.01f);
+        onGround = Physics2D.OverlapBox(groundCheck.position, box, 0, groundLayerMask);
+        onPlatform = Physics2D.OverlapBox(groundCheck.position, box, 0, platformLayerMask);
     }
 
     void FixedUpdate()
@@ -28,12 +32,22 @@ public class Slime : Entity {
             Simulate();
         }
     }
+    
+    void UpdateFace(Transform target)
+    {
+        Vector2 direction = target.position - this.transform.position;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (direction.x >= 0)
+            sr.flipX = true;
+        else if (direction.x < 0)
+            sr.flipX = false;
+    }
 
     DateTime groundTime = DateTime.Now;
     bool groundedBefore = false;
     void Simulate()
     {
-        if (grounded)
+        if (onGround || onPlatform)
         {
             if(groundedBefore == false)
             {
@@ -48,12 +62,13 @@ public class Slime : Entity {
                 Transform target = FindTarget();
                 if(target != null)
                 {
+                    UpdateFace(target);
                     JumpToTarget(target);
                 }
             }
         }
 
-        groundedBefore = grounded;
+        groundedBefore = onGround || onPlatform;
     }
 
     Transform FindTarget()
@@ -84,16 +99,18 @@ public class Slime : Entity {
         }
         return closest;
     }
-
+    
     void JumpToTarget(Transform tar)
     {
         //Debug.Log("jump");
         Vector3 dir = tar.transform.position - transform.position;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (dir.x > 0)
-            rb.AddForce(new Vector2(80, 200));
+            rb.AddForce(new Vector2(MovForce, 0));
         else
-            rb.AddForce(new Vector2(-80, 200));
+            rb.AddForce(new Vector2(-MovForce, 0));
+
+        rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
     }
 
     void OnCollisionEnter2D(Collision2D coll)
