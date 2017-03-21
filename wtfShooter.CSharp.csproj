@@ -80,8 +80,8 @@
     <Compile Include="Assets\Script\Network\MessageHelper.cs" />
     <Compile Include="Assets\Script\Network\Protocol.cs" />
     <Compile Include="Assets\Script\Network\ServerAgent.cs" />
-    <Compile Include="Assets\Script\Projectile\Arrow.cs" />
     <Compile Include="Assets\Script\Projectile\Projectile.cs" />
+    <Compile Include="Assets\Script\Projectile\ProjectileSpawner.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />

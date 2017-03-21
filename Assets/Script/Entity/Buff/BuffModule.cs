@@ -56,6 +56,15 @@ public class BuffModule{
         return true;
     }
 
+    public void ClearBuff()
+    {
+        foreach(KeyValuePair<BuffId, BaseBuff> pair in buffDict)
+        {
+            pair.Value.Stop();
+        }
+        buffDict.Clear();
+    }
+
     List<BuffId> deleteBuffList = new List<BuffId>();
     public void UpateBuff(float deltaTime)
     {
@@ -74,4 +83,6 @@ public class BuffModule{
         }
         deleteBuffList.Clear();
     }
+
+    
 }

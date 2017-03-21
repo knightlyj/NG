@@ -15,10 +15,7 @@ public class InvincibleBuff : BaseBuff
         this.duration = invincibleDuration;
         //Debug.Log("buff start");
         Player p = this.buffTarget as Player;
-        //if (p.gameObject.layer == LayerMask.NameToLayer("Entity"))
-        //    p.gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
-        //else if (p.gameObject.layer == LayerMask.NameToLayer("PlayerCrossPlatform"))
-        //    p.gameObject.layer = LayerMask.NameToLayer("PCIP");
+        p.SetInvincible(true);
     }
 
     // Update is called once per frame
@@ -51,11 +48,6 @@ public class InvincibleBuff : BaseBuff
         Player p = this.buffTarget as Player;
         p.SetAlpha(1f);
 
-        //if (p.gameObject.layer == LayerMask.NameToLayer("PlayerInvincible"))
-        //    p.gameObject.layer = LayerMask.NameToLayer("Entity");
-        //else if (p.gameObject.layer == LayerMask.NameToLayer("PCIP"))
-        //    p.gameObject.layer = LayerMask.NameToLayer("PlayerCrossPlatform");
-        //else
-        //    p.gameObject.layer = LayerMask.NameToLayer("Player");
+        p.SetInvincible(false);
     }
 }

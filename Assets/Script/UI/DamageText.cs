@@ -66,37 +66,37 @@ public class DamageText : MonoBehaviour {
 
 
     Vector2 position;
-    public void SetDamage(Vector2 pos, int damage, DamageStyle style)
+    public void SetDamage(Vector2 pos, int damage, bool critical)
     {
         this.position = pos + new Vector2(0, 0.3f);
         Text txt = GetComponent<Text>();
         if (txt == null)
             return;
 
-        txt.text = damage.ToString();
-        
-        transform.localScale = new Vector3(minScale, minScale, minScale);
-        //txt.rectTransform.localScale = new Vector3(1, 1, 1); //不知道为什么会出现scale为0的情况
-        switch (style)
-        {
-            case DamageStyle.Normal:
-                txt.color = new Color(0.5f, 0, 0);
-                maxScale = 1.0f;
-                break;
-            case DamageStyle.Critical:
-                txt.text += "!";
-                txt.color = Color.red;
-                maxScale = 1.5f;
-                break;
-            case DamageStyle.Heal:
-                txt.color = Color.green;
-                maxScale = 1.0f;
-                break;
-            default:
-                return;
+        txt.text = damage.ToString(); //伤害数字
+        if (damage < 0)
+        {   // 伤害
+            txt.color = Color.green;
         }
+        else
+        {   //治疗
+            txt.color = new Color(0.5f, 0, 0);
+        }
+        if (critical)
+        {   //暴击
+            txt.text += "!";
+            maxScale = 1.5f;
+        }
+        else
+        {   //普通伤害
+            maxScale = 1.0f;
+        }
+
+        //开始运行的初值
         lifeTime = maxLifeTime;
         scaleTime = 0;
+        transform.localScale = new Vector3(minScale, minScale, minScale);
+
         this.gameObject.SetActive(true);
     }
 }

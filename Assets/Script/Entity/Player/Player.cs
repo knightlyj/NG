@@ -39,8 +39,12 @@ public partial class Player : Entity
         //
         SetUpBodySR();
         InitAnimation();
+
+        atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
+                       1 << LayerMask.NameToLayer("Ground");
     }
-    
+
+    int atkLayerMask;
     // Update is called once per frame
     protected override void Update()
     {
@@ -51,18 +55,14 @@ public partial class Player : Entity
 
         if (Input.GetMouseButtonDown(0))
         {
-            //this.buffModule.AddBuff(this, BuffId.Invincible);
-
-            BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
-            battle.AddDamageText(transform.position, 100, DamageText.DamageStyle.Critical);
+            ProjectileSpawner spawner = GameObject.FindWithTag("Spawner").GetComponent<ProjectileSpawner>();
+            spawner.Shoot(ProjectileSpawner.ProjectileType.Rocket, this.Properties, transform.position, state.targetPos, 1, atkLayerMask);
         }
         if (Input.GetMouseButtonDown(1))
         {
-            //this.buffModule.AddBuff(this, BuffId.Invincible);
 
-            BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
-            battle.AddDamageText(transform.position, 100, DamageText.DamageStyle.Heal);
         }
+        
     }
 
 
@@ -112,5 +112,15 @@ public partial class Player : Entity
 
         }
     }
-    
+
+    public override void HitByOther(EntityProperties other)
+    {
+        base.HitByOther(other);
+        if (this.buffModule != null)
+        {
+            buffModule.AddBuff(this, BuffId.Invincible);
+        }
+    }
+
+
 }

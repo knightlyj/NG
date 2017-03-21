@@ -18,7 +18,7 @@ public class GameNetWork : MonoBehaviour {
 	void Update () {
         if (!initialized)
         {
-            if (GameSetting.isLocalServer)
+            if (GameSetting.isHost)
             {
                 if (prepared)
                 {

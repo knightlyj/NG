@@ -5,8 +5,8 @@ public class EntityProperties
 {
     public int hp = 100;
     public int maxHp = 100;
-    public int minAttack = 1;
-    public int maxAttack = 2;
+    public int minAttack = 10;
+    public int maxAttack = 20;
     public int defense = 0;
     public float speedScale = 1.0f;
     public float jumpScale = 1.0f;
@@ -16,8 +16,9 @@ public class EntityProperties
     public float criticalRate = 2.0f;
     public float cdr = 0;
     public float rcr = 0;
+    public bool invincible = false;
 
-    public static int CalcDamage(EntityProperties from, EntityProperties to)
+    public static int CalcDamage(EntityProperties from, EntityProperties to, out bool critical)
     {
         //减去防御
         int damage = Random.Range(from.minAttack, from.maxAttack) - to.defense;
@@ -25,9 +26,16 @@ public class EntityProperties
             damage = 1;
 
         //计算暴击
-        float r = Random.Range(0, 1);
+        float r = Random.Range(0.0f, 1f);
         if (r <= from.criticalChance)
+        {
             damage = (int)(damage * from.criticalRate);
+            critical = true;
+        }
+        else
+        {
+            critical = false;
+        }
 
         return damage;
     }
@@ -47,7 +55,8 @@ public class Entity : MonoBehaviour {
     // Update is called once per frame
     protected virtual void Update () {
         //buff模块
-        this.buffModule.UpateBuff(Time.deltaTime);
+        if(buffModule != null)
+            buffModule.UpateBuff(Time.deltaTime);
         
         //血条更新 
         if(hpBar)
@@ -61,6 +70,10 @@ public class Entity : MonoBehaviour {
             hpBar.Delete();
             hpBar = null;
         }
+
+        //
+        buffModule.ClearBuff();
+        buffModule = null;
     }
 
     protected HpBar hpBar = null;
@@ -73,6 +86,21 @@ public class Entity : MonoBehaviour {
     public virtual void SetAlpha(float a)
     {
 
+    }
+    
+    public virtual void HitByOther(EntityProperties other)
+    {
+        if (Properties.invincible || !GameSetting.isHost)
+            return;
+        bool critical;
+        int damage = EntityProperties.CalcDamage(other, this.Properties, out critical);
+        Properties.hp -= damage;
+        BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
+        info.AddDamageText(transform.position, damage, critical);
+        if(Properties.hp <= 0)
+        {   //die
+            Destroy(this.gameObject);
+        }
     }
 
     //最大移动速度

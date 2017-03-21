@@ -32,11 +32,11 @@ public class BattleInfo : MonoBehaviour {
     Transform[] damageTextPool;
     readonly int damagePoolSize = 30;
     int damagePoolCount;
-    public void AddDamageText(Vector2 pos, int damage, DamageText.DamageStyle style)
+    public void AddDamageText(Vector2 pos, int damage, bool critical)
     {
         if (damagePoolCount <= 0)
         {
-            NewDamageText(pos, damage, style);
+            NewDamageText(pos, damage, critical);
         }
         else
         {
@@ -45,7 +45,7 @@ public class BattleInfo : MonoBehaviour {
             damagePoolCount--;
             DamageText txt = d.GetComponent<DamageText>();
             if (txt != null)
-                txt.SetDamage(pos, damage, style);
+                txt.SetDamage(pos, damage, critical);
             else
                 Debug.LogError("BattleInfo.AddDamageText >> no DamageText component");
         }
@@ -63,11 +63,11 @@ public class BattleInfo : MonoBehaviour {
         }
     }
 
-    public void NewDamageText(Vector2 pos, int damage, DamageText.DamageStyle style)
+    public void NewDamageText(Vector2 pos, int damage, bool critical)
     {
         Transform d = Instantiate(damageTextPrefab, this.transform) as Transform;
         DamageText txt = d.GetComponent<DamageText>();
-        txt.SetDamage(pos, damage, style);
+        txt.SetDamage(pos, damage, critical);
     }
 
     //生命条

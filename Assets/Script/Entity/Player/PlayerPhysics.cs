@@ -61,7 +61,7 @@ public partial class Player {
                 }
                 else
                 {
-                    gameObject.layer = LayerMask.NameToLayer("ECP");
+                    SetCrossPlatform(true);
                     crossPlatformTime = DateTime.Now;
                     isCrossPlatform = true;
                 }
@@ -115,26 +115,10 @@ public partial class Player {
             TimeSpan span = DateTime.Now - crossPlatformTime;
             if (span.TotalMilliseconds > 500 && !onLadder)
             {
-                gameObject.layer = LayerMask.NameToLayer("Entity");
+                SetCrossPlatform(false);
                 isCrossPlatform = false;
             }
         }
-        
-        //else
-        //{
-        //    RaycastHit2D stuckOnPlatform = Physics2D.Raycast(platformCheck1.position, Vector2.down, platformCheck1.position.y - platformCheck2.position.y, 1 << LayerMask.NameToLayer("Platform"));
-        //    if(stuckOnPlatform.collider != null)
-        //    {
-        //        gameObject.layer = LayerMask.NameToLayer("ECP");
-        //        crossPlatformTime = DateTime.Now;
-        //        isCrossPlatform = true;
-        //        Debug.Log("stuck");
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("ok");
-        //    }
-        //}
     }
 
     float climeSpeed = 1.0f;
@@ -188,7 +172,7 @@ public partial class Player {
         {
             onLadder = true;
             rb.gravityScale = 0;
-            gameObject.layer = LayerMask.NameToLayer("ECP");
+            SetCrossPlatform(true);
         }
         
         //Debug.Log("get on ladder");
@@ -198,7 +182,7 @@ public partial class Player {
     {
         onLadder = false;
         rb.gravityScale = 1;
-        gameObject.layer = LayerMask.NameToLayer("Entity");
+        SetCrossPlatform(false);
         //Debug.Log("get off ladder");
     }
 
@@ -220,12 +204,57 @@ public partial class Player {
         }
     }
 
-        void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
         {
             inLadderArea = false;
             GetOffLadder();
+        }
+    }
+
+
+    public void SetInvincible(bool invincible)
+    {
+        if (invincible)
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("Player"))
+                gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
+            else if (gameObject.layer == LayerMask.NameToLayer("PCP"))
+                gameObject.layer = LayerMask.NameToLayer("PICP");
+        }
+        else
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("PlayerInvincible"))
+                gameObject.layer = LayerMask.NameToLayer("Player");
+            else if (gameObject.layer == LayerMask.NameToLayer("PICP"))
+                gameObject.layer = LayerMask.NameToLayer("PCP");
+        }
+        Properties.invincible = invincible;
+    }
+
+    bool GetInvincible()
+    {
+        return Properties.invincible;
+    }
+
+
+    void SetCrossPlatform(bool cross)
+    {
+        if (cross)
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("Player"))
+                gameObject.layer = LayerMask.NameToLayer("PCP");
+            else if (gameObject.layer == LayerMask.NameToLayer("PlayerInvincible"))
+                gameObject.layer = LayerMask.NameToLayer("PICP");
+        }
+
+        else
+        {
+            if (gameObject.layer == LayerMask.NameToLayer("PCP"))
+                gameObject.layer = LayerMask.NameToLayer("Player");
+            else if (gameObject.layer == LayerMask.NameToLayer("PICP"))
+                gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
         }
     }
 }

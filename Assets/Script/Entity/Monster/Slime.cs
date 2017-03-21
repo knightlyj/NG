@@ -115,12 +115,10 @@ public class Slime : Entity {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        //if (coll.gameObject.layer == LayerMask.NameToLayer("Player") || coll.gameObject.layer == LayerMask.NameToLayer("PlayerCrossPlatform"))
-        //{   //hit player
-        //    Player p = coll.gameObject.GetComponent<Player>();
-        //    DamageDate damage = new DamageDate();
-        //    damage.knockBack = 100;
-        //    p.HitByOther(damage, transform.position);
-        //}
+        if (coll.gameObject.tag == "Player")
+        {   //hit player
+            Player p = coll.gameObject.GetComponent<Player>();
+            p.HitByOther(this.Properties);
+        }
     }
 }

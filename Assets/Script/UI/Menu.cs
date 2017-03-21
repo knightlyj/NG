@@ -32,7 +32,7 @@ public class Menu : MonoBehaviour {
     {
         Debug.Log("new");
         //local host
-        GameSetting.isLocalServer = true;
+        GameSetting.isHost = true;
         SceneManager.LoadScene("GamePlay");
     }
 
@@ -40,7 +40,7 @@ public class Menu : MonoBehaviour {
     {
         Debug.Log("join");
         //remote host
-        GameSetting.isLocalServer = false;
+        GameSetting.isHost = false;
         //ip
         SceneManager.LoadScene("GamePlay");
     }
