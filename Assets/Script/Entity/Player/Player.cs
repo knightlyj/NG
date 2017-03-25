@@ -42,6 +42,8 @@ public partial class Player : Entity
 
         atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
                        1 << LayerMask.NameToLayer("Ground");
+
+        ChangeWeapon(); 
     }
 
     int atkLayerMask;
@@ -52,23 +54,13 @@ public partial class Player : Entity
 
         state.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         UpdateAnimation();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            ProjectileSpawner spawner = GameObject.FindWithTag("Spawner").GetComponent<ProjectileSpawner>();
-            spawner.Shoot(ProjectileSpawner.ProjectileType.Rocket, this.Properties, transform.position, state.targetPos, 1, atkLayerMask);
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-
-        }
+        CheckShoot();
         
     }
 
 
     void FixedUpdate()
     {
-
         if (isLocal)
         {
             state.up = Input.GetKey(GameSetting.up);
@@ -122,5 +114,5 @@ public partial class Player : Entity
         }
     }
 
-
+    
 }

@@ -41,7 +41,7 @@ public class Projectile : MonoBehaviour
         }
 
         if(gravity != 0)
-        DirectionWithVelocity(); //调整方向
+            DirectionWithVelocity(); //调整方向
     }
 
     //射击时的初始参数
@@ -102,6 +102,8 @@ public class Projectile : MonoBehaviour
         //direction
         Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
         Vector2 dir = rb.velocity;
+        if (Mathf.Abs(dir.magnitude) <= 0.001f) //范数为0时不要计算,会产生除0错误
+            return;
         dir.Normalize();
         float angle = Mathf.Acos(dir.x) / Mathf.PI * 180;
         if (dir.y < 0)
