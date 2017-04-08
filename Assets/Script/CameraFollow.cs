@@ -3,7 +3,7 @@ using System.Collections;
 using Tiled2Unity;
 using System;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class CameraFollow : MonoBehaviour {
     public delegate void CameraResizeCB(object sender);
     public event CameraResizeCB CameraResizeEvent;

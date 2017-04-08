@@ -27,4 +27,18 @@ public static class Helper {
         tile.y = Mathf.Ceil(pos.y / TileSize);
         return tile;
     }
+
+    public static Player FindLocalPlayer()
+    {
+        Player player = null;
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject go in players)
+        {
+            Player p = go.GetComponent<Player>();
+            if (p.isLocal)
+                player = p;
+        }
+
+        return player;
+    }
 }

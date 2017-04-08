@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.2f2</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -74,10 +72,12 @@
     <Compile Include="Assets\Script\Entity\Monster\Slime.cs" />
     <Compile Include="Assets\Script\Entity\Player\Player.cs" />
     <Compile Include="Assets\Script\Entity\Player\PlayerAnimation.cs" />
-    <Compile Include="Assets\Script\Entity\Player\PlayerEquipment.cs" />
+    <Compile Include="Assets\Script\Entity\Player\PlayerItem.cs" />
     <Compile Include="Assets\Script\Entity\Player\PlayerPhysics.cs" />
+    <Compile Include="Assets\Script\Entity\Player\PlayerWeapon.cs" />
     <Compile Include="Assets\Script\Equipment\Equipment.cs" />
     <Compile Include="Assets\Script\Equipment\Item.cs" />
+    <Compile Include="Assets\Script\Equipment\Items.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
@@ -88,11 +88,12 @@
     <Compile Include="Assets\Script\Projectile\Projectile.cs" />
     <Compile Include="Assets\Script\Projectile\ShootTrail.cs" />
     <Compile Include="Assets\Script\Projectile\Spawner.cs" />
-    <Compile Include="Assets\Script\Projectile\Weapon.cs" />
+    <Compile Include="Assets\Script\Projectile\WeaponObj.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
+    <Compile Include="Assets\Script\UI\Package.cs" />
     <Compile Include="Assets\Tiled2Unity\MapHelper.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\CircleObject.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\GroupLayer.cs" />

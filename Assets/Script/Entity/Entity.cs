@@ -3,20 +3,53 @@ using System.Collections;
 
 public class EntityProperties
 {
-    public int hp = 100;
-    public int maxHp = 100;
-    public int minAttack = 10;
-    public int maxAttack = 20;
-    public int defense = 0;
-    public float speedScale = 1.0f;
-    public float jumpScale = 1.0f;
-    public float atkInterval = 1.0f;
-    public float atkSpeed = 1.0f;
-    public float criticalChance = 0.05f;
-    public float criticalRate = 2.0f;
-    public float cdr = 0;
-    public float rcr = 0;
+    public float hp;
+    public int maxHp;
+    public int minAttack;
+    public int maxAttack;
+    public int defense;
+    public float speedScale;
+    public float jumpScale;
+    public float atkInterval;
+    public float atkSpeed;
+    public float criticalChance;
+    public float criticalRate;
+    //public float cdr;  //cdr和rcr属性暂时不用
+    //public float rcr;
+
     public bool invincible = false;
+
+    public EntityProperties()
+    {
+        hp = 100;
+        maxHp = 100;
+        minAttack = 10;
+        maxAttack = 20;
+        defense = 0;
+        speedScale = 1.0f;
+        jumpScale = 1.0f;
+        atkSpeed = 1.0f;
+        criticalChance = 0.05f;
+        criticalRate = 2.0f;
+        //cdr = 0;  //cdr和rcr属性暂时不用
+        //rcr = 0;
+    }
+
+    public void Reset() //全部设置为初值
+    {
+        hp = 100;
+        maxHp = 100;
+        minAttack = 10;
+        maxAttack = 20;
+        defense = 0;
+        speedScale = 1.0f;
+        jumpScale = 1.0f;
+        atkSpeed = 1.0f;
+        criticalChance = 0.05f;
+        criticalRate = 2.0f;
+        //cdr = 0;  //cdr和rcr属性暂时不用
+        //rcr = 0;
+    }
 
     public static int CalcDamage(EntityProperties from, EntityProperties to, out bool critical)
     {

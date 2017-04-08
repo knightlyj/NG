@@ -43,7 +43,7 @@ public partial class Player : Entity
         atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
                        1 << LayerMask.NameToLayer("Ground");
 
-        ChangeWeapon(); 
+        PackageInit();
     }
 
     int atkLayerMask;
