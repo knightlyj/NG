@@ -23,6 +23,7 @@ public class BattleInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //本机玩家弹药和血条更新
+        localPlayer = Helper.FindLocalPlayer(); //每次都查找,在helper内部有localpalyer缓存
         LocalHpBarUpdate();
         LocalAmmoUpdate();
     }
@@ -105,7 +106,6 @@ public class BattleInfo : MonoBehaviour {
         if(localPlayer == null)
         { //血条设置为空,并寻找本地玩家
             localHpBar.localScale = new Vector3(0, 1, 1);
-            localPlayer = Helper.FindLocalPlayer();
         }
         else
         {
@@ -131,9 +131,8 @@ public class BattleInfo : MonoBehaviour {
     void LocalAmmoUpdate()
     {
         if (localPlayer == null)
-        { //血条设置为空,并寻找本地玩家
-            localAmmoBar.localScale = new Vector3(0, 1, 1);
-            localPlayer = Helper.FindLocalPlayer();
+        { //没有本地玩家,不更新弹药显示
+            //localAmmoBar.localScale = new Vector3(0, 1, 1);
         }
         else
         {

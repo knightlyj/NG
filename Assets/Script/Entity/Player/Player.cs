@@ -107,10 +107,25 @@ public partial class Player : Entity
 
     public override void HitByOther(EntityProperties other)
     {
-        base.HitByOther(other);
+        if (Properties.invincible || !GameSetting.isHost) //无敌状态或者不是主机,则不产生击中效果
+            return;
+        //伤害计算
+        bool critical;
+        int damage = EntityProperties.CalcDamage(other, this.Properties, out critical);
+        Properties.hp -= damage;
+        BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
+        info.AddDamageText(transform.position, damage, critical);
+
+        //击中后添加无敌buff
         if (this.buffModule != null)
         {
             buffModule.AddBuff(this, BuffId.Invincible);
+        }
+
+        //空血处理
+        if (Properties.hp <= 0)
+        {   //隐藏,不销毁
+            this.gameObject.SetActive(false);
         }
     }
 

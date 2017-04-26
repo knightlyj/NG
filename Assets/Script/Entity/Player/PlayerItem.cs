@@ -6,10 +6,6 @@ using System;
 
 public partial class Player : Entity
 {
-    //属性改变事件
-    public delegate void PropChanged(Player p);
-    public event PropChanged PropChangedEvent = null;
-
     //物品栏
     public const int packSize = 4 * 10;
     Item[] _package = null;
@@ -36,6 +32,7 @@ public partial class Player : Entity
                 if(Package[i].Type == item.Type)
                 {
                     Package[i].amount += item.amount;
+                    RaisePackChanged();
                     return true;
                 }
             }
@@ -47,6 +44,7 @@ public partial class Player : Entity
             if(Package[i] == null)
             {
                 Package[i] = item;
+                RaisePackChanged();
                 return true;
             }
         }
@@ -66,8 +64,15 @@ public partial class Player : Entity
             preItem = Package[idx];
         }
         Package[idx] = item;
-
+        RaisePackChanged();
         return true;
+    }
+
+    //放入垃圾箱
+    public void PackPutInTrash(Item item)
+    {
+        trashItem = item;
+        RaisePackChanged();
     }
 
     //根据索引移除物品 
@@ -77,7 +82,7 @@ public partial class Player : Entity
             return false;
 
         Package[idx] = null;
-
+        RaisePackChanged();
         return true;
     }
 
@@ -108,6 +113,7 @@ public partial class Player : Entity
             else if(idx < 0 && a > 0)
             {   //之前有判断数量是足够的,不应该运行到这里,报错,并假装已扣除足够数量,继续运行
                 Debug.LogError("PackageRemoveAmount >> amount error");
+                RaisePackChanged();
                 return true;
             }
             else //这里只有 a <= 0的情况了,说明已扣除足够数量,跳出循环即可
@@ -115,7 +121,7 @@ public partial class Player : Entity
                 break;
             }
         }
-
+        RaisePackChanged();
         return true;    
     }
 
@@ -152,6 +158,7 @@ public partial class Player : Entity
             return false;
 
         Package[idx] = null;
+        RaisePackChanged();
         return true;   
     }
 
@@ -211,7 +218,7 @@ public partial class Player : Entity
         Armors[idx] = a; //加入已装备护甲列表
 
         ShowArmor(a.Properties.armorType, a.Properties.sprite); //显示新装备
-        
+
         return true;
     }
 
@@ -391,9 +398,24 @@ public partial class Player : Entity
         return newPorp;
     }
 
+    //属性改变事件
+    public delegate void PropChanged(Player p);
+    public event PropChanged PropChangedEvent = null;
     void RaisePropChanged()
     {
         if (this.PropChangedEvent != null)
             PropChangedEvent(this);
     }
+
+    //背包改变事件
+    public delegate void OnPackChanged();
+    public event OnPackChanged PackChangedEvent;
+    void RaisePackChanged()
+    {
+        if (!isLocal)
+            return;
+        if (PackChangedEvent != null)
+            PackChangedEvent();
+    }
+    
 }

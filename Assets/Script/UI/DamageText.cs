@@ -9,13 +9,19 @@ public class DamageText : MonoBehaviour {
         fontSize = (int)((float)Screen.height / defaultScreen.height * defaultScreen.damageFontSize);
         Text txt = GetComponent<Text>();
         txt.fontSize = (int)this.fontSize;
+        
     }
 
     //向上飘的速度
-    float upSpeed = 0.5f;
+    float upSpeed = defaultUpSpd;
+    const float defaultUpSpd = 1f;
+    float horSpeed = defaultHorSpd;
+    const float defaultHorSpd = 0.5f;
     //持续生命期,最后一段时间fade out
-    float lifeTime = 2;
+    float lifeTime = 2; //生命期
     const float maxLifeTime = 2;
+    float floatTime = 0.5f; //上浮时间
+    const float maxFloatTime = 0.5f;
     const float fadeTime = 0.5f;
     //伤害数字跳出效果,在maxScaleTime内从最小scale放大到最大scale
     float scaleTime = 0;
@@ -33,7 +39,12 @@ public class DamageText : MonoBehaviour {
             return;
         }
 
-        position.y += upSpeed * Time.deltaTime;
+        if (floatTime > 0)
+        {
+            position.y += upSpeed * Time.deltaTime;
+            position.x += horSpeed * Time.deltaTime;
+            floatTime -= Time.deltaTime;
+        }
         Vector2 screenPos = Camera.main.WorldToScreenPoint(position);
         RectTransform rec = this.transform as RectTransform;
         rec.position = screenPos;
@@ -94,7 +105,10 @@ public class DamageText : MonoBehaviour {
 
         //开始运行的初值
         lifeTime = maxLifeTime;
+        floatTime = maxFloatTime;
         scaleTime = 0;
+        upSpeed = defaultUpSpd * Random.Range(0.5f, 1.3f);
+        horSpeed = defaultHorSpd * Random.Range(-1f, 1f);
         transform.localScale = new Vector3(minScale, minScale, minScale);
 
         this.gameObject.SetActive(true);

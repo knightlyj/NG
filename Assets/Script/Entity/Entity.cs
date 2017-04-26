@@ -104,12 +104,19 @@ public class Entity : MonoBehaviour {
             hpBar = null;
         }
 
+        if(EntityDestroyEvent != null)
+        {
+            EntityDestroyEvent();
+        }
+
         //
         buffModule.ClearBuff();
         buffModule = null;
+        
     }
 
     protected HpBar hpBar = null;
+    [SerializeField]
     protected float hpBarOffset = -0.5f;
 
     EntityProperties _properties = new EntityProperties();
@@ -123,18 +130,23 @@ public class Entity : MonoBehaviour {
     
     public virtual void HitByOther(EntityProperties other)
     {
-        if (Properties.invincible || !GameSetting.isHost)
+        if (Properties.invincible || !GameSetting.isHost) //无敌状态或者不是主机,则不产生击中效果
             return;
+        //伤害计算
         bool critical;
         int damage = EntityProperties.CalcDamage(other, this.Properties, out critical);
         Properties.hp -= damage;
         BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
         info.AddDamageText(transform.position, damage, critical);
-        if(Properties.hp <= 0)
+        //空血时销毁
+        if (Properties.hp <= 0)
         {   //die
             Destroy(this.gameObject);
         }
     }
+
+    public delegate void OnEntityDestory();
+    public event OnEntityDestory EntityDestroyEvent;
 
     //最大移动速度
     public float _maxHorSpeed = 2.0f;
