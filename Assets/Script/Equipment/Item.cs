@@ -33,15 +33,15 @@ public partial struct ItemType
         this.typeBit = type;
     }
 
-    public override bool Equals(object obj)
-    {
-        return obj is ItemType && this == (ItemType)obj;
-    }
+    //public override bool Equals(object obj)
+    //{
+    //    return obj is ItemType && this == (ItemType)obj;
+    //}
 
-    public override int GetHashCode()
-    {
-        return (this.typeBit << 5) + (int)type;
-    }
+    //public override int GetHashCode()
+    //{
+    //    return (this.typeBit << 5) + (int)type;
+    //}
 
     static public bool operator == (ItemType t1, ItemType t2)
     {

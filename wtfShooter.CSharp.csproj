@@ -91,9 +91,12 @@
     <Compile Include="Assets\Script\Projectile\WeaponObj.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />
+    <Compile Include="Assets\Script\UI\EquipPanel.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />
+    <Compile Include="Assets\Script\UI\ItemSlot.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
-    <Compile Include="Assets\Script\UI\Package.cs" />
+    <Compile Include="Assets\Script\UI\PackPanel.cs" />
+    <Compile Include="Assets\Script\UI\PlayerInfo.cs" />
     <Compile Include="Assets\Tiled2Unity\MapHelper.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\CircleObject.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\GroupLayer.cs" />

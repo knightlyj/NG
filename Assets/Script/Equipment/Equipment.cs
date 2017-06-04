@@ -6,9 +6,14 @@ using System.Collections;
 //***********************************************
 public enum ArmorType
 {
-    Nothing,
-    Armor,
-    Helmet,
+    Helmet, //头盔
+    Armor, //护甲
+    Glove, //手套
+    Boot, //鞋子
+    Accessory0, //饰品0
+    Accessory1, //饰品1
+    Accessory2, //饰品2
+    Accessory3, //饰品3
 }
 //护甲属性
 public class ArmorProperties

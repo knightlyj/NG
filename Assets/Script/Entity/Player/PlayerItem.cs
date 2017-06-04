@@ -407,6 +407,15 @@ public partial class Player : Entity
             PropChangedEvent(this);
     }
 
+    //装备改变事件
+    public delegate void EquipChanged();
+    public event EquipChanged EquipChangedEvent = null;
+    void RaiseEquipChanged()
+    {
+        if (this.EquipChangedEvent != null)
+            EquipChangedEvent();
+    }
+
     //背包改变事件
     public delegate void OnPackChanged();
     public event OnPackChanged PackChangedEvent;
