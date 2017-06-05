@@ -77,7 +77,7 @@
     <Compile Include="Assets\Script\Entity\Player\PlayerWeapon.cs" />
     <Compile Include="Assets\Script\Equipment\Equipment.cs" />
     <Compile Include="Assets\Script\Equipment\Item.cs" />
-    <Compile Include="Assets\Script\Equipment\Items.cs" />
+    <Compile Include="Assets\Script\Equipment\ItemTypeTable.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
@@ -94,6 +94,7 @@
     <Compile Include="Assets\Script\UI\EquipPanel.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />
     <Compile Include="Assets\Script\UI\ItemSlot.cs" />
+    <Compile Include="Assets\Script\UI\ItemTips.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
     <Compile Include="Assets\Script\UI\PackPanel.cs" />
     <Compile Include="Assets\Script\UI\PlayerInfo.cs" />

@@ -89,10 +89,10 @@ public partial class Player{
                 newState = BodyAnimationState.Stand;
             }
         }
-        else
-        {
-            newState = BodyAnimationState.InAir;
-        }
+        //else
+        //{
+        //    newState = BodyAnimationState.InAir;
+        //}
         if (newState != bodyAnimationState)
         {   //动画不同,切换 待补充
             bodyAnimationState = newState;

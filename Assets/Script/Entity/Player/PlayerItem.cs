@@ -25,7 +25,7 @@ public partial class Player : Entity
     //-----------------捡东西的逻辑,先看是否可以叠加,不能叠加则放入新的空位
     public bool PackPickUpItem(Item item)
     {
-        if (item.Type.IsMaterail || item.Type.IsConsumable)
+        if (item.Type.IsMaterial || item.Type.IsConsumable)
         {
             for(int i = 0; i < packSize; i++)
             {

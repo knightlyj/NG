@@ -39,7 +39,7 @@ public class ArmorProperties
 public class Armor : Item {
     ArmorProperties _properties = new ArmorProperties();
     public ArmorProperties Properties { get { return this._properties; } }
-    
+
     public Armor(ItemType type) : base(type, 1)
     {
 
@@ -77,8 +77,7 @@ public class Weapon : Item
     WeaponProperties _properties = new WeaponProperties();
     public WeaponProperties Properties { get { return this._properties; } }
 
-    public Weapon(ItemType type) : base(type, 1)
-    {
+    public Weapon(ItemType type) : base(type, 1) { 
 
     }
 }

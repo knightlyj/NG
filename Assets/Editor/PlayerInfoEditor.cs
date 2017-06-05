@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UI;
+using System.IO;
 
 [CustomEditor(typeof(PlayerInfo))]
 class PlayerInfoEditor : Editor
@@ -35,6 +36,35 @@ class PlayerInfoEditor : Editor
         {
             Layout();
         }
+
+        //if(GUILayout.Button("create asset"))
+        //{
+        //    // 实例化类  Bullet
+        //    ScriptableObject itemTalbe = ScriptableObject.CreateInstance<ItemTypeTable>();
+
+        //    // 如果实例化 Bullet 类为空，返回
+        //    if (!itemTalbe)
+        //    {
+        //        Debug.LogWarning("itemTalbe not found");
+        //        return;
+        //    }
+
+        //    // 自定义资源保存路径
+        //    string path = Application.dataPath;
+        //    Debug.Log(path);
+        //    //如果项目总不包含该路径，创建一个
+        //    if (!Directory.Exists(path))
+        //    {
+        //        Directory.CreateDirectory(path);
+        //    }
+
+        //    //将类名 Bullet 转换为字符串
+        //    //拼接保存自定义资源（.asset） 路径
+        //    path = string.Format("Assets/{0}.asset", (typeof(ItemTypeTable).ToString()));
+        //    Debug.Log(path);
+        //    // 生成自定义资源到指定路径
+        //    AssetDatabase.CreateAsset(itemTalbe, path);
+        //}
     }
 
     //各个界面的布局

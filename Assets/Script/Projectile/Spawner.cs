@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Spawner : MonoBehaviour {
+    public ItemTypeTable table;
 	// Use this for initialization
 	void Start () {
 	

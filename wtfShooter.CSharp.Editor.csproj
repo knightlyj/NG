@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\EquipPanelEditor.cs" />
+    <Compile Include="Assets\Editor\ItemTypeEditor.cs" />
     <Compile Include="Assets\Editor\MapHelperEditor.cs" />
     <Compile Include="Assets\Editor\PackPanelEditor.cs" />
     <Compile Include="Assets\Editor\PlayerInfoEditor.cs" />

@@ -47,7 +47,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             
             string strCnt = "";
-            if (item.Type.IsConsumable || item.Type.IsMaterail) //材料和消耗品显示叠加数量
+            if (item.Type.IsConsumable || item.Type.IsMaterial) //材料和消耗品显示叠加数量
             {
                 strCnt = String.Format("{0}", item.amount);
             }

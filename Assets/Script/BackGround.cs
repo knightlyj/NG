@@ -38,8 +38,8 @@ public class BackGround : MonoBehaviour {
                 Vector2 cameraUv = cameraFollow.GetUvInMap();
                 float rateX = cameraUv.x * slideRangeX + basePosX;
                 float rateY = cameraUv.y * slideRangeY + basePosY;
-                SpriteRenderer sr = far.GetComponent<SpriteRenderer>();
-                Rect textureRect = sr.sprite.textureRect;
+                //SpriteRenderer sr = far.GetComponent<SpriteRenderer>();
+                //Rect textureRect = sr.sprite.textureRect;
                 float offsetX = farSize.x * (0.5f - rateX);
                 float offsetY = farSize.y * (0.5f - rateY);
                 far.position = new Vector2(cameraFollow.transform.position.x + offsetX, farBasePos.y + offsetY * 0.5f);
@@ -64,7 +64,7 @@ public class BackGround : MonoBehaviour {
     Vector2 farBasePos;
     void SetBgSize()
     {
-        Vector2 cameraSize = cameraFollow.CameraSize;
+        //Vector2 cameraSize = cameraFollow.CameraSize;
 
         //远景
         SpriteRenderer sr = far.GetComponent<SpriteRenderer>();
