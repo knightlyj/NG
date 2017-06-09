@@ -53,4 +53,19 @@ public static class Helper {
         localPlayer.EntityDestroyEvent -= OnPlayerDestroy;
         localPlayer = null;
     }
+
+    static public Color HexToColor(int hex)
+    {
+        Color c = new Color();
+        c.r = ((hex & 0xff0000) >> 16) / 255.0f;
+        c.g = ((hex & 0x00ff00) >> 8) / 255.0f;
+        c.b = (hex & 0xff) / 255.0f;
+        c.a = 1.0f;
+        return c;
+    }
+
+    static public bool FloatEqual(float a, float b)
+    {
+        return Mathf.Abs(a - b) < 0.0001f;
+    }
 }
