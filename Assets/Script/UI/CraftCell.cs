@@ -1,44 +1,41 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System;
+using System.Collections;
 
-public interface ListCell
+public class CraftCellInfo
 {
-    float GetHeight();
-    void SetContent(object content);
-    void Seleted(bool sel);
+    public string name;
+    public string icon;
 }
 
-public class ItemCell : MonoBehaviour , ListCell
+public class CraftCell : MonoBehaviour, ListCell
 {
+
 	// Use this for initialization
 	void Start () {
-        
-
-    }
+	
+	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
 
+
     public void SetContent(object content)
     {
-        Item item = content as Item;
-        if(item == null)
+        CraftCellInfo info = content as CraftCellInfo;
+        if (info == null)
         {
-            Debug.LogError("ItemCell.SetContent >> content error");
+            Debug.LogError("CraftCell.SetContent >> content error");
             return;
         }
 
         Image imgIcon = transform.FindChild("Icon").GetComponent<Image>();
         Text txtName = transform.FindChild("Name").GetComponent<Text>();
         
-        imgIcon.sprite = Resources.Load<Sprite>(item.Type.icon);
-        txtName.text = item.Type.itemName;
+        imgIcon.sprite = Resources.Load<Sprite>(info.icon);
+        txtName.text = info.name;
     }
 
     public float GetHeight()

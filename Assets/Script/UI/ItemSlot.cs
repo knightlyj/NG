@@ -52,7 +52,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 strCnt = String.Format("{0}", item.amount);
             }
 
-            itemImg.sprite = Resources.Load<Sprite>(item.icon);
+            itemImg.sprite = Resources.Load<Sprite>(item.Type.icon);
             itemAmount.text = strCnt;
             itemImg.gameObject.SetActive(true);
             itemAmount.gameObject.SetActive(true);

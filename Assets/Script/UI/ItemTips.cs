@@ -85,25 +85,25 @@ public class ItemTips : MonoBehaviour {
         switch (item.Type.quality)
         {
             case ItemQuality.White:
-                build.Append("<color=white>" + item.Type.name);
+                build.Append("<color=white>" + item.Type.itemName);
                 break;
             case ItemQuality.Green:
-                build.Append("<color=green>" + item.Type.name);
+                build.Append("<color=green>" + item.Type.itemName);
                 break;
             case ItemQuality.Blue:
-                build.Append("<color=blue>" + item.Type.name);
+                build.Append("<color=blue>" + item.Type.itemName);
                 break;
             case ItemQuality.Golden:
-                build.Append("<color=orange>" + item.Type.name);
+                build.Append("<color=orange>" + item.Type.itemName);
                 break;
             case ItemQuality.Red:
-                build.Append("<color=red>" + item.Type.name);
+                build.Append("<color=red>" + item.Type.itemName);
                 break;
             case ItemQuality.Purple:
-                build.Append("<color=purple>" + item.Type.name);
+                build.Append("<color=purple>" + item.Type.itemName);
                 break;
             default:
-                build.Append("<color=white>" + item.Type.name); //默认用白色
+                build.Append("<color=white>" + item.Type.itemName); //默认用白色
                 break;
         }
         

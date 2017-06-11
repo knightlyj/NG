@@ -23,11 +23,18 @@ public enum ItemId
     Max,
 }
 
+public struct RawMaterial
+{
+    public ItemId id;
+    public uint amount;
+}
+
 [Serializable]
-public class ItemType
+public class ItemType : UnityEngine.Object
 {
     public ItemId id; //id
-    public string name; //名字
+    public string itemName; //名字
+    public string icon; //图标
     public ItemQuality quality; //品质,决定物品名的颜色
     public string comment; //注释
     public int typeBit; //识别材料,消耗品等
@@ -36,13 +43,27 @@ public class ItemType
     const int consumableOffset = 1;
     const int armorOffset = 2;
     const int weaponOffset = 3;
+    const int canCraftOffset = 4;
 
     public bool IsMaterial { get { return (typeBit & materialOffset) != 0; } }
     public bool IsConsumable { get { return (typeBit & consumableOffset) != 0; } }
     public bool IsArmor { get { return (typeBit & armorOffset) != 0; } }
     public bool IsWeapon { get { return (typeBit & weaponOffset) != 0; } }
 
+    public bool CanCraft { get { return (typeBit & canCraftOffset) != 0; } }
     public bool CanStack {get { return IsMaterial || IsConsumable; } }
+
+    public RawMaterial[] rawMats = null;
+
+    public ItemType()
+    {
+        this.id = ItemId.Wood;
+        this.typeBit = 0;
+        quality = ItemQuality.White;
+        comment = "";
+        itemName = "";
+        icon = "";
+    }
 
     public ItemType(ItemId id, int typeBit)
     {
@@ -50,29 +71,19 @@ public class ItemType
         this.typeBit = typeBit;
         quality = ItemQuality.White;
         comment = "";
-        name = "";
+        itemName = "";
+        icon = "";
     }
 
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
+    //public override bool Equals(object obj)
+    //{
+    //    return base.Equals(obj);
+    //}
 
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    static public bool operator == (ItemType t1, ItemType t2)
-    {
-        return t1.id == t2.id;
-    }
-
-    static public bool operator != (ItemType t1, ItemType t2)
-    {
-        return t1.id != t2.id;
-    }
-    
+    //public override int GetHashCode()
+    //{
+    //    return base.GetHashCode();
+    //}
 }
 
 
@@ -82,7 +93,7 @@ public class Item {
     public ItemType Type { get { return _type; } }
     
     public uint amount = 0; //为消耗品或材料时,可以堆叠
-    public string icon = null;
+    //public string icon = null;
 
     public Item(ItemType type, uint a)
     {

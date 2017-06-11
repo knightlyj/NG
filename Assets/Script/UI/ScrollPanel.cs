@@ -21,7 +21,7 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         List<Item> test = new List<Item>();
         Spawner sp = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 10; i++)
         {
             test.Add(new Item(sp.table.GetItemType(ItemId.Gold), 1));
         }
@@ -52,18 +52,18 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         mouseIn = false;
     }
 
-    public delegate void CellSelectEvent(ItemCell cell);
+    public delegate void CellSelectEvent(ListCell cell);
     public event CellSelectEvent OnCellSelected;
-    ItemCell selCell = null;
+    ListCell selCell = null;
     public void OnPointerDown(PointerEventData eventData)
     {
         RectTransform rect = transform as RectTransform;
         Vector2 localPos = eventData.position - new Vector2(0, Screen.height) - rect.anchoredPosition;
-        Debug.Log(localPos);
+        //Debug.Log(localPos);
         if (localPos.x <= rectList.offsetMax.x)
         {   //在list区域内
             int idx = (int)((rectList.offsetMax.y - localPos.y) / cellHeight);
-            ItemCell newSelCell = cellList[idx].GetComponent<ItemCell>();
+            ListCell newSelCell = cellList[idx].GetComponent<ListCell>();
             newSelCell.Seleted(true);
             if (selCell != null)
             {
@@ -121,7 +121,7 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             RectTransform rectCell = GameObject.Instantiate(CellPrefab, rectList) as RectTransform;
             cellList.Add(rectCell);
             //设置内容
-            ItemCell cell = rectCell.GetComponent<ItemCell>();
+            ListCell cell = rectCell.GetComponent<ListCell>();
             cell.SetContent(t);
             //摆放位置
             cellHeight = cell.GetHeight();
@@ -139,9 +139,15 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         float panelHeight = rect.offsetMax.y - rect.offsetMin.y;
         float scrollSize = panelHeight / listHeight;
         if (scrollSize >= 1)
+        {   //不需要滚动,隐藏滚动条
             bar.size = 1;
+            bar.gameObject.SetActive(false);
+        }
         else
+        {
             bar.size = scrollSize;
+            bar.gameObject.SetActive(true);
+        }
     }
     
     void ClearList()

@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.2f2</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -92,16 +90,18 @@
     <Compile Include="Assets\Script\Projectile\Spawner.cs" />
     <Compile Include="Assets\Script\Projectile\WeaponObj.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
+    <Compile Include="Assets\Script\UI\CraftCell.cs" />
+    <Compile Include="Assets\Script\UI\CraftWnd.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />
     <Compile Include="Assets\Script\UI\EquipPanel.cs" />
     <Compile Include="Assets\Script\UI\GamePanel.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />
+    <Compile Include="Assets\Script\UI\ItemCell.cs" />
     <Compile Include="Assets\Script\UI\ItemSlot.cs" />
     <Compile Include="Assets\Script\UI\ItemTips.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
     <Compile Include="Assets\Script\UI\PackPanel.cs" />
     <Compile Include="Assets\Script\UI\PlayerInfo.cs" />
-    <Compile Include="Assets\Script\UI\ItemCell.cs" />
     <Compile Include="Assets\Script\UI\ScrollPanel.cs" />
     <Compile Include="Assets\Tiled2Unity\MapHelper.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\CircleObject.cs" />
