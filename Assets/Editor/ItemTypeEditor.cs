@@ -21,6 +21,23 @@ class ItemTypeTableEditor : Editor
     public override void OnInspectorGUI()
     {
         Array a = Enum.GetValues(typeof(ItemId));
+        if (GUILayout.Button("更新物品种类"))
+        {
+            ItemType[] newTable = new ItemType[a.Length - 1];
+            for(int i = 0; i < newTable.Length && i < table.table.Length; i++)
+            {
+                newTable[i] = table.table[i];
+            }
+            table.table = newTable;
+
+            bool[] newShowAtts = new bool[a.Length - 1];
+            for (int i = 0; i < newShowAtts.Length && i < showAttr.Length; i++)
+            {
+                newShowAtts[i] = showAttr[i];
+            }
+            showAttr = newShowAtts;
+        }
+        
         for (int i = 0; i < table.table.Length; i++)
         {
             showAttr[i] = EditorGUILayout.Foldout(showAttr[i], a.GetValue(i).ToString());
@@ -51,15 +68,6 @@ class ItemTypeTableEditor : Editor
                 }
             }
         }
-
-        //if (GUILayout.Button("test"))
-        //{
-        //    for (int i = 0; i < 4; i++)
-        //    {
-        //        Debug.Log(table.table[i].name);
-        //        Debug.Log(table.table[i].typeBit);
-        //    }
-        //}
     }
 
     [MenuItem("Assets/Create/Item Table")]
@@ -92,47 +100,3 @@ class ItemTypeTableEditor : Editor
         AssetDatabase.CreateAsset(itemTalbe, path);
     }
 }
-
-//string name = EditorGUILayout.TextField("名字", table.table[i].name);
-//                if (!name.Equals(table.table[i].name))
-//                {
-//                    Undo.RecordObject(table.table[i], "name changed");
-//                    table.table[i].name = name;
-//                }
-
-//                string icon = EditorGUILayout.TextField("图标", table.table[i].icon);
-//                if (!icon.Equals(table.table[i].icon))
-//                {
-//                    Undo.RecordObject(table.table[i], "icon changed");
-//                    table.table[i].icon = icon;
-//                }
-
-//                ItemQuality quality = (ItemQuality)EditorGUILayout.EnumPopup("品质", table.table[i].quality);
-//                if (quality != table.table[i].quality)
-//                {
-//                    Undo.RecordObject(table.table[i], "quality changed");
-//                    table.table[i].quality = quality;
-//                }
-
-//                string comment = EditorGUILayout.TextField("注释", table.table[i].comment);
-//                if (!comment.Equals(table.table[i].comment))
-//                {
-//                    Undo.RecordObject(table.table[i], "comment changed");
-//                    table.table[i].comment = comment;
-//                }
-
-//                int typeBit = EditorGUILayout.MaskField("种类", table.table[i].typeBit, typeBitOption);
-//                if (typeBit != table.table[i].typeBit)
-//                {
-//                    Undo.RecordObject(table.table[i], "type bit changed");
-//                    table.table[i].typeBit = typeBit;
-//                }
-
-//                if (table.table[i].CanCraft)
-//                {   //可合成的,显示合成表
-
-//                }
-//                else
-//                {
-//                    table.table[i].rawMats = null;
-//                }

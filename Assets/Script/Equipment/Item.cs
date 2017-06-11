@@ -30,7 +30,7 @@ public struct RawMaterial
 }
 
 [Serializable]
-public class ItemType : UnityEngine.Object
+public class ItemType// : UnityEngine.Object
 {
     public ItemId id; //id
     public string itemName; //名字
@@ -51,7 +51,7 @@ public class ItemType : UnityEngine.Object
     public bool IsWeapon { get { return (typeBit & weaponOffset) != 0; } }
 
     public bool CanCraft { get { return (typeBit & canCraftOffset) != 0; } }
-    public bool CanStack {get { return IsMaterial || IsConsumable; } }
+    public bool CanStack { get { return IsMaterial || IsConsumable; } }
 
     public RawMaterial[] rawMats = null;
 
@@ -88,10 +88,11 @@ public class ItemType : UnityEngine.Object
 
 
 
-public class Item {
+public class Item
+{
     ItemType _type; //这里保存物品的种类信息
     public ItemType Type { get { return _type; } }
-    
+
     public uint amount = 0; //为消耗品或材料时,可以堆叠
     //public string icon = null;
 
