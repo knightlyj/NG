@@ -68,4 +68,17 @@ public static class Helper {
     {
         return Mathf.Abs(a - b) < 0.0001f;
     }
+
+    static public Vector2 UnityUIPos2WindowsPos(Vector2 pos)
+    {
+        Vector2 wndPos = new Vector2();
+        wndPos.x = pos.x;
+        wndPos.y = pos.y - Screen.height;
+        return wndPos;
+    }
+
+    static public UIItemTips GetItemTips()
+    {
+        return GameObject.FindWithTag("PlayerInfo").GetComponent<PlayerInfo>().itemTips.GetComponent<UIItemTips>();
+    }
 }

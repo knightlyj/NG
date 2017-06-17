@@ -2,11 +2,10 @@
 using System.Collections;
 
 public class Spawner : MonoBehaviour {
-    public ItemTypeTable table;
 	// Use this for initialization
 	void Start () {
-	
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

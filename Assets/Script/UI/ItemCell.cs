@@ -16,7 +16,6 @@ public class ItemCell : MonoBehaviour , ListCell
 {
 	// Use this for initialization
 	void Start () {
-        
 
     }
 	
@@ -37,7 +36,7 @@ public class ItemCell : MonoBehaviour , ListCell
         Image imgIcon = transform.FindChild("Icon").GetComponent<Image>();
         Text txtName = transform.FindChild("Name").GetComponent<Text>();
         
-        imgIcon.sprite = Resources.Load<Sprite>(item.Type.icon);
+        imgIcon.sprite = Resources.Load<Sprite>(item.Type.itemName);
         txtName.text = item.Type.itemName;
     }
 

@@ -23,7 +23,7 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Spawner sp = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         for (int i = 0; i < 10; i++)
         {
-            test.Add(new Item(sp.table.GetItemType(ItemId.Gold), 1));
+            //test.Add(new Item(sp.table.GetItemType(ItemId.Gold), 1));
         }
         SetList(test);
     }

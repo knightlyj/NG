@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Text;
 
-public class ItemTips : MonoBehaviour {
+public class UIItemTips : MonoBehaviour {
     Text txt;
 	// Use this for initialization
 	void Start () {
@@ -11,8 +11,8 @@ public class ItemTips : MonoBehaviour {
 
 
         Spawner sp = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-        Item it = new Item(sp.table.GetItemType(ItemId.Gold), 10);
-        ShowTips(it, new Vector2());
+        Item it = new Item(ItemTypeTable.GetItemType(ItemId.Wood), 10);
+        ShowTips(it);
     }
 
     const float maxDim = 1.0f;
@@ -23,6 +23,7 @@ public class ItemTips : MonoBehaviour {
     //Update is called once per frame
     void Update()
     {
+        //明暗变化
         dim += fadeDir * fadeSpeed * Time.deltaTime;
         if (dim > maxDim || dim < minDim)
         {
@@ -30,10 +31,15 @@ public class ItemTips : MonoBehaviour {
         }
         Material material = txt.material;
         material.color = new Color(dim, dim, dim, 1);
+        
+        //跟随鼠标
+        Vector2 pos = Input.mousePosition;
+        pos = Helper.UnityUIPos2WindowsPos(pos);
+        AdaptPos(pos);
     }
 
     public Vector2 offset = new Vector2(10, 10); //加上一个偏移,不被鼠标挡住
-    public void ShowTips(Item item, Vector2 pos)
+    public void ShowTips(Item item)
     {
         //Debug.Log(pos);
         if(item == null)
@@ -44,38 +50,43 @@ public class ItemTips : MonoBehaviour {
         {
             gameObject.SetActive(true);
             GenTips(item); //生成提示
-            //位置选择,优先放在当前位置右下角,不够的话再左边和上面
-            bool right = true, down = true;
-            if(pos.x + txt.preferredWidth + offset.x > Screen.width)
-            {
-                right = false;
-            }
-            if((Screen.height + pos.y - offset.y) < txt.preferredHeight)
-            {
-                down = false;
-            }
-            RectTransform rect = transform as RectTransform;
-            Vector2 min = new Vector2(), max = new Vector2();
-            if (right)
-            {
-                min.x = pos.x + offset.x;
-            }
-            else
-            {
-                min.x = pos.x - txt.preferredWidth - offset.x;
-            }
-            if (down)
-            {
-                min.y = pos.y - txt.preferredHeight - offset.y;
-            }
-            else
-            {
-                min.y = pos.y + offset.y;
-            }
-            max = min + new Vector2(txt.preferredWidth, txt.preferredHeight);
-            rect.offsetMin = min;
-            rect.offsetMax = max;
         }
+    }
+
+    //采用windows窗口坐标系坐标
+    void AdaptPos(Vector2 pos)
+    {
+        //位置选择,优先放在当前位置右下角,不够的话再左边和上面
+        bool right = true, down = true;
+        if (pos.x + txt.preferredWidth + offset.x > Screen.width)
+        {
+            right = false;
+        }
+        if ((Screen.height + pos.y - offset.y) < txt.preferredHeight)
+        {
+            down = false;
+        }
+        RectTransform rect = transform as RectTransform;
+        Vector2 min = new Vector2(), max = new Vector2();
+        if (right)
+        {
+            min.x = pos.x + offset.x;
+        }
+        else
+        {
+            min.x = pos.x - txt.preferredWidth - offset.x;
+        }
+        if (down)
+        {
+            min.y = pos.y - txt.preferredHeight - offset.y;
+        }
+        else
+        {
+            min.y = pos.y + offset.y;
+        }
+        max = min + new Vector2(txt.preferredWidth, txt.preferredHeight);
+        rect.offsetMin = min;
+        rect.offsetMax = max;
     }
 
     void GenTips(Item item)
@@ -123,7 +134,7 @@ public class ItemTips : MonoBehaviour {
         build.Append("\n");
 
         //usability
-        if (item.Type.IsArmor || item.Type.IsWeapon)
+        if (item.Type.IsEquipment)
         {
             build.Append("equipment");
         }
@@ -133,10 +144,10 @@ public class ItemTips : MonoBehaviour {
             build.Append("&consumable");
         }
 
-        if (item.Type.IsMaterial)
-        {
-            build.Append("&material");
-        }
+        //if (item.Type.IsMaterial)
+        //{
+        //    build.Append("&material");
+        //}
         txt.text = build.ToString();
     }
     

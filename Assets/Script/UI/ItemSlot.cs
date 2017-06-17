@@ -47,12 +47,12 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             
             string strCnt = "";
-            if (item.Type.IsConsumable || item.Type.IsMaterial) //材料和消耗品显示叠加数量
+            if (item.Type.CanStack) //材料和消耗品显示叠加数量
             {
                 strCnt = String.Format("{0}", item.amount);
             }
 
-            itemImg.sprite = Resources.Load<Sprite>(item.Type.icon);
+            itemImg.sprite = Resources.Load<Sprite>(item.Type.itemName);
             itemAmount.text = strCnt;
             itemImg.gameObject.SetActive(true);
             itemAmount.gameObject.SetActive(true);

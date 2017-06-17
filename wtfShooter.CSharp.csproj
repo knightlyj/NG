@@ -77,6 +77,7 @@
     <Compile Include="Assets\Script\Entity\Player\PlayerWeapon.cs" />
     <Compile Include="Assets\Script\Equipment\Equipment.cs" />
     <Compile Include="Assets\Script\Equipment\Item.cs" />
+    <Compile Include="Assets\Script\Equipment\ItemIds.cs" />
     <Compile Include="Assets\Script\Equipment\ItemTypeTable.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
@@ -98,11 +99,12 @@
     <Compile Include="Assets\Script\UI\HpBar.cs" />
     <Compile Include="Assets\Script\UI\ItemCell.cs" />
     <Compile Include="Assets\Script\UI\ItemSlot.cs" />
-    <Compile Include="Assets\Script\UI\ItemTips.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
     <Compile Include="Assets\Script\UI\PackPanel.cs" />
     <Compile Include="Assets\Script\UI\PlayerInfo.cs" />
     <Compile Include="Assets\Script\UI\ScrollPanel.cs" />
+    <Compile Include="Assets\Script\UI\UIItemTips.cs" />
+    <Compile Include="Assets\Script\UI\UIMatSlot.cs" />
     <Compile Include="Assets\Tiled2Unity\MapHelper.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\CircleObject.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\GroupLayer.cs" />

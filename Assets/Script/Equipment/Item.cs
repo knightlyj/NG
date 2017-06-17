@@ -12,78 +12,48 @@ public enum ItemQuality
     Golden,
 }
 
-public enum ItemId
+public class RawMaterial
 {
-    Wood,
-    Iron,
-    Copper,
-    Gold,
-    TestGun,
-    TestHealthPotion,
-    Max,
-}
-
-public struct RawMaterial
-{
-    public ItemId id;
+    public int id;
     public uint amount;
 }
 
 [Serializable]
 public class ItemType// : UnityEngine.Object
 {
-    public ItemId id; //id
-    public string itemName; //名字
-    public string icon; //图标
+    public int id; //id
+    public string itemName; //名字,要与资源文件夹的名字一致
     public ItemQuality quality; //品质,决定物品名的颜色
     public string comment; //注释
-    public int typeBit; //识别材料,消耗品等
+    public int equipId = 0; //装备id,为0时表示不是装备
+    public int consumId = 0; //消耗品id,为0时表示不是消耗品
 
-    const int materialOffset = 0;
-    const int consumableOffset = 1;
-    const int armorOffset = 2;
-    const int weaponOffset = 3;
-    const int canCraftOffset = 4;
+    //public bool IsMaterial { get { return (typeBit & materialOffset) != 0; } }
+    public bool IsConsumable { get { return consumId != 0; } }
+    public bool IsEquipment { get { return equipId != 0; } }
 
-    public bool IsMaterial { get { return (typeBit & materialOffset) != 0; } }
-    public bool IsConsumable { get { return (typeBit & consumableOffset) != 0; } }
-    public bool IsArmor { get { return (typeBit & armorOffset) != 0; } }
-    public bool IsWeapon { get { return (typeBit & weaponOffset) != 0; } }
+    public bool CanCraft { get { return false; } }
+    public bool CanStack { get { return equipId == 0; } }
 
-    public bool CanCraft { get { return (typeBit & canCraftOffset) != 0; } }
-    public bool CanStack { get { return IsMaterial || IsConsumable; } }
-
-    public RawMaterial[] rawMats = null;
+    public const int maxRawMatSorts = 6; //最多6种材料
+    public RawMaterial[] rawMats = new RawMaterial[maxRawMatSorts]; //按表格填写位置存放
+    public int craftOutput = 0;
 
     public ItemType()
     {
-        this.id = ItemId.Wood;
-        this.typeBit = 0;
+        this.id = 0;// ItemId.Wood;
         quality = ItemQuality.White;
         comment = "";
         itemName = "";
-        icon = "";
     }
 
-    public ItemType(ItemId id, int typeBit)
+    public ItemType(int id)
     {
         this.id = id;
-        this.typeBit = typeBit;
         quality = ItemQuality.White;
         comment = "";
         itemName = "";
-        icon = "";
     }
-
-    //public override bool Equals(object obj)
-    //{
-    //    return base.Equals(obj);
-    //}
-
-    //public override int GetHashCode()
-    //{
-    //    return base.GetHashCode();
-    //}
 }
 
 
