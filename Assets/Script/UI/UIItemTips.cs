@@ -9,10 +9,7 @@ public class UIItemTips : MonoBehaviour {
 	void Start () {
         txt = GetComponent<Text>();
 
-
-        Spawner sp = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-        Item it = new Item(ItemTypeTable.GetItemType(ItemId.Wood), 10);
-        ShowTips(it);
+        this.gameObject.SetActive(false);
     }
 
     const float maxDim = 1.0f;

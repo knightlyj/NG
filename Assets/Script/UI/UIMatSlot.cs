@@ -55,11 +55,12 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         Init();
         itemType = type;
-        if (type == null)
+        if (type == null || amount == 0) //数量为0也视为空
         {
             itemImg.gameObject.SetActive(false);
             itemAmount.gameObject.SetActive(false);
             showItem = null;
+            itemType = null;
         }
         else
         {
@@ -70,10 +71,11 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                 strCnt = String.Format("{0}", amount);
             }
 
-            itemImg.sprite = Resources.Load<Sprite>(type.itemName);
+            itemImg.sprite = Resources.Load<Sprite>("ItemIcon/" + type.icon);
             itemAmount.text = strCnt;
             itemImg.gameObject.SetActive(true);
             itemAmount.gameObject.SetActive(true);
+            itemImg.SetNativeSize();
 
             showItem = new Item(type, amount);
         }

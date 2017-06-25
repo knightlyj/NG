@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 4b4159ae339a973429e905022ae6dd53
-timeCreated: 1497688771
+timeCreated: 1497752086
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,7 @@ TextureImporter:
     21300002: panelBg
     21300004: panelArrow
     21300006: bluePanel
+    21300008: blueArrow
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -61,7 +62,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 20
+        y: 28
         width: 157
         height: 59
       alignment: 0
@@ -74,7 +75,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 159
-        y: 24
+        y: 32
         width: 52
         height: 54
       alignment: 0
@@ -87,7 +88,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1
+        y: 9
         width: 9
         height: 18
       alignment: 0
@@ -100,12 +101,25 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 213
-        y: 24
+        y: 32
         width: 52
         height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 19, y: 20, z: 20, w: 21}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: blueArrow
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 3
+        width: 34
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     outline: []

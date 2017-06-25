@@ -2,17 +2,22 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class CraftCellInfo
+public class CraftClassCellInfo
 {
     public string name;
     public string icon;
 }
 
-public class CraftCell : MonoBehaviour, ListCell
+public class CraftClassCell : MonoBehaviour, ListCell
 {
-
-	// Use this for initialization
-	void Start () {
+    int _idx = -1;
+    public int index
+    {
+        get { return _idx; }
+        set { _idx = value; }
+    }
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -24,7 +29,7 @@ public class CraftCell : MonoBehaviour, ListCell
 
     public void SetContent(object content)
     {
-        CraftCellInfo info = content as CraftCellInfo;
+        CraftClassCellInfo info = content as CraftClassCellInfo;
         if (info == null)
         {
             Debug.LogError("CraftCell.SetContent >> content error");
@@ -34,7 +39,8 @@ public class CraftCell : MonoBehaviour, ListCell
         Image imgIcon = transform.FindChild("Icon").GetComponent<Image>();
         Text txtName = transform.FindChild("Name").GetComponent<Text>();
         
-        imgIcon.sprite = Resources.Load<Sprite>(info.icon);
+        imgIcon.sprite = Resources.Load<Sprite>("ItemIcon/" + info.icon);
+        imgIcon.SetNativeSize();
         txtName.text = info.name;
     }
 

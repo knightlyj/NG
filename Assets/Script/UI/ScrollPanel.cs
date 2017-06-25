@@ -9,23 +9,18 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Transform CellPrefab;
     Scrollbar bar;
     RectTransform rectList;
+    float listToSide = 5;
+    float scrollWidth = 15;
+    
     // Use this for initialization
     void Start () {
         RectTransform rect = transform as RectTransform;
         bar = transform.FindChild("Scrollbar").GetComponent<Scrollbar>();
         bar.onValueChanged.AddListener(OnScrollChanged);
         rectList = transform.FindChild("ListView") as RectTransform;
-        rectList.offsetMin = new Vector2(0, -10);
-        rectList.offsetMax = new Vector2(rect.offsetMax.x - rect.offsetMin.x - 15, 0);
+        rectList.offsetMin = new Vector2(listToSide, -10);
+        rectList.offsetMax = new Vector2(rect.rect.xMax - rect.rect.xMin - listToSide - scrollWidth, 0);
         
-
-        List<Item> test = new List<Item>();
-        Spawner sp = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-        for (int i = 0; i < 10; i++)
-        {
-            //test.Add(new Item(sp.table.GetItemType(ItemId.Gold), 1));
-        }
-        SetList(test);
     }
 	
 	// Update is called once per frame
@@ -54,25 +49,35 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public delegate void CellSelectEvent(ListCell cell);
     public event CellSelectEvent OnCellSelected;
-    ListCell selCell = null;
+    ListCell selCell = null; //记录已选中的cell
+    //click
     public void OnPointerDown(PointerEventData eventData)
     {
         RectTransform rect = transform as RectTransform;
-        Vector2 localPos = eventData.position - new Vector2(0, Screen.height) - rect.anchoredPosition;
+        Vector3[] corners = new Vector3[4]; //顺序为 左下 左上 右上 右下
+        rect.GetWorldCorners(corners);
+        Vector2 localPos = eventData.position - (Vector2)corners[1]; //这里y是负的
         //Debug.Log(localPos);
         if (localPos.x <= rectList.offsetMax.x)
         {   //在list区域内
             int idx = (int)((rectList.offsetMax.y - localPos.y) / cellHeight);
-            ListCell newSelCell = cellList[idx].GetComponent<ListCell>();
-            newSelCell.Seleted(true);
-            if (selCell != null)
+            if (idx >= cellList.Count || idx < 0)
             {
-                selCell.Seleted(false);
+                return;
             }
-            selCell = newSelCell;
-            if(OnCellSelected != null)
+            ListCell newSelCell = cellList[idx].GetComponent<ListCell>();
+            if (newSelCell != selCell)
             {
-                OnCellSelected(selCell);
+                newSelCell.Seleted(true);
+                if (selCell != null)
+                {
+                    selCell.Seleted(false);
+                }
+                selCell = newSelCell;
+                if (OnCellSelected != null)
+                {
+                    OnCellSelected(selCell);
+                }
             }
         }
     }
@@ -82,10 +87,11 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         FitScrollBar();
     }
 
+    //根据滚动条调整ListView的位置
     void FitScrollBar()
     {
         RectTransform rect = transform as RectTransform;
-        float panelHeight = rect.offsetMax.y - rect.offsetMin.y;
+        float panelHeight = rect.rect.yMax - rect.rect.yMin;
         if (Helper.FloatEqual(bar.value, 1))
         {   //最低处比panel底部要高,直接移动到底部
             rectList.offsetMin = new Vector2(rectList.offsetMin.x, -panelHeight);
@@ -95,33 +101,36 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         else if (Helper.FloatEqual(bar.value, 0))
         {   //最高处比panel顶部要低,直接移动到顶部
             rectList.offsetMax = new Vector2(rectList.offsetMax.x, 0);
-            rectList.offsetMin = new Vector2(0, -cellHeight * cellList.Count);
+            rectList.offsetMin = new Vector2(rectList.offsetMin.x, -cellHeight * cellList.Count);
             bar.value = 0;
         }
         else
         {
-            float topValue = bar.value * (1 - bar.size);
+            float topValue = bar.value * (1 - bar.size) / bar.size;
             rectList.offsetMax = new Vector2(rectList.offsetMax.x, topValue * panelHeight);
-            rectList.offsetMin = new Vector2(0, rectList.offsetMax.y - cellHeight * cellList.Count);
+            rectList.offsetMin = new Vector2(rectList.offsetMin.x, rectList.offsetMax.y - cellHeight * cellList.Count);
         }
     }
 
     bool filled = false;
     List<Transform> cellList = new List<Transform>();
     float cellHeight;
-    public void SetList(List<Item> list)
+    //用List<>初始化
+    public void SetList(List<System.Object> list)
     {
         ClearList();
         
         RectTransform rect = transform as RectTransform;
         float width = rectList.offsetMax.x - rectList.offsetMin.x; 
         float minY = 0;
-        foreach (Item t in list)
+        int idx = 0;
+        foreach (System.Object t in list)
         {
             RectTransform rectCell = GameObject.Instantiate(CellPrefab, rectList) as RectTransform;
             cellList.Add(rectCell);
             //设置内容
             ListCell cell = rectCell.GetComponent<ListCell>();
+            cell.index = idx++;
             cell.SetContent(t);
             //摆放位置
             cellHeight = cell.GetHeight();
@@ -135,9 +144,10 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         
         rectList.offsetMin = new Vector2(rectList.offsetMin.x, minY);
         //计算bar的size
-        float listHeight = rectList.offsetMax.y - rectList.offsetMin.y;
-        float panelHeight = rect.offsetMax.y - rect.offsetMin.y;
+        float listHeight = rectList.rect.yMax - rectList.rect.yMin;
+        float panelHeight = rect.rect.yMax - rect.rect.yMin;
         float scrollSize = panelHeight / listHeight;
+        bar.value = 0;
         if (scrollSize >= 1)
         {   //不需要滚动,隐藏滚动条
             bar.size = 1;
@@ -149,13 +159,60 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             bar.gameObject.SetActive(true);
         }
     }
-    
+
+    //用数组初始化
+    public void SetList(System.Object[] list)
+    {
+        ClearList();
+
+        RectTransform rect = transform as RectTransform;
+        float width = rectList.offsetMax.x - rectList.offsetMin.x;
+        float minY = 0;
+        int idx = 0;
+        foreach (System.Object t in list)
+        {
+            RectTransform rectCell = GameObject.Instantiate(CellPrefab, rectList) as RectTransform;
+            cellList.Add(rectCell);
+            //设置内容
+            ListCell cell = rectCell.GetComponent<ListCell>();
+            cell.index = idx++;
+            cell.SetContent(t);
+            //摆放位置
+            cellHeight = cell.GetHeight();
+            minY -= cellHeight;
+            rectCell.anchorMax = new Vector2(0, 1);
+            rectCell.anchorMin = new Vector2(0, 1);
+            rectCell.offsetMin = new Vector2(0, minY);
+            rectCell.offsetMax = new Vector2(width, minY + cellHeight);
+            filled = true; //标记有填充内容
+        }
+
+        rectList.offsetMax = new Vector2(rectList.offsetMax.x, 0);
+        rectList.offsetMin = new Vector2(rectList.offsetMin.x, minY);
+        //计算bar的size
+        float listHeight = rectList.rect.yMax - rectList.rect.yMin;
+        float panelHeight = rect.rect.yMax - rect.rect.yMin;
+        float scrollSize = panelHeight / listHeight;
+        bar.value = 0;
+        if (scrollSize >= 1)
+        {   //不需要滚动,隐藏滚动条
+            bar.size = 1;
+            bar.gameObject.SetActive(false);
+        }
+        else
+        {
+            bar.size = scrollSize;
+            bar.gameObject.SetActive(true);
+        }
+    }
+
     void ClearList()
     {
         while(cellList.Count > 0){
-            Destroy(cellList[0]);
+            Destroy(cellList[0].gameObject);
             cellList.RemoveAt(0);
         }
+        selCell = null;
         filled = false;
     }
 

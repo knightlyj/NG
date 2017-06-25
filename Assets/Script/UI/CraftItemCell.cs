@@ -10,24 +10,34 @@ public interface ListCell
     float GetHeight();
     void SetContent(object content);
     void Seleted(bool sel);
+    int index { get; set; }
 }
 
-public class ItemCell : MonoBehaviour , ListCell
+public class CraftItemCell : MonoBehaviour, ListCell
 {
-	// Use this for initialization
-	void Start () {
+    int _idx = -1;
+    public int index
+    {
+        get { return _idx; }
+        set { _idx = value; }
+    }
+    // Use this for initialization
+    void Start()
+    {
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public CraftFormula formula = null;
     public void SetContent(object content)
     {
-        Item item = content as Item;
-        if(item == null)
+        formula = content as CraftFormula;
+        if (formula == null)
         {
             Debug.LogError("ItemCell.SetContent >> content error");
             return;
@@ -35,9 +45,11 @@ public class ItemCell : MonoBehaviour , ListCell
 
         Image imgIcon = transform.FindChild("Icon").GetComponent<Image>();
         Text txtName = transform.FindChild("Name").GetComponent<Text>();
-        
-        imgIcon.sprite = Resources.Load<Sprite>(item.Type.itemName);
-        txtName.text = item.Type.itemName;
+
+        ItemType type = ItemTypeTable.GetItemType((ItemId)formula.outputId);
+        imgIcon.sprite = Resources.Load<Sprite>("ItemIcon/" + type.icon);
+        imgIcon.SetNativeSize();
+        txtName.text = type.itemName;
     }
 
     public float GetHeight()

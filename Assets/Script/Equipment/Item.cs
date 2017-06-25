@@ -12,19 +12,13 @@ public enum ItemQuality
     Golden,
 }
 
-public class RawMaterial
-{
-    public int id;
-    public uint amount;
-}
-
-[Serializable]
 public class ItemType// : UnityEngine.Object
 {
     public int id; //id
     public string itemName; //名字,要与资源文件夹的名字一致
     public ItemQuality quality; //品质,决定物品名的颜色
     public string comment; //注释
+    public string icon; //图标 
     public int equipId = 0; //装备id,为0时表示不是装备
     public int consumId = 0; //消耗品id,为0时表示不是消耗品
 
@@ -35,9 +29,7 @@ public class ItemType// : UnityEngine.Object
     public bool CanCraft { get { return false; } }
     public bool CanStack { get { return equipId == 0; } }
 
-    public const int maxRawMatSorts = 6; //最多6种材料
-    public RawMaterial[] rawMats = new RawMaterial[maxRawMatSorts]; //按表格填写位置存放
-    public int craftOutput = 0;
+    public CraftFormula craftItem = null;
 
     public ItemType()
     {
@@ -56,6 +48,27 @@ public class ItemType// : UnityEngine.Object
     }
 }
 
+public class RawMaterial
+{
+    public int id;
+    public uint amount;
+}
+
+public class CraftFormula
+{
+    public const int maxRawMatSorts = 6; //最多6种材料
+    public int matCount = 0; //实际所需材料种类
+    public RawMaterial[] rawMats = new RawMaterial[maxRawMatSorts]; //材料表
+    public int outputId = -1;
+    public uint outputAmount = 0;
+
+    public void AddMaterial(RawMaterial mat)
+    {
+        if (matCount >= maxRawMatSorts)
+            return;
+        rawMats[matCount++] = mat;
+    }
+}
 
 
 public class Item

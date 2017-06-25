@@ -162,11 +162,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000012737885440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44197a5bfa7729e408cdbea4af0639ce, type: 3}
+  m_Script: {fileID: 11500000, guid: 502cc388685c1b1438b2dbda248c4a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CellPrefab: {fileID: 224000010036064472, guid: 8bd10943065dfb447b948bbb98f92252,
-    type: 2}
+  CellPrefab: {fileID: 0}
 --- !u!114 &114000012498922594
 MonoBehaviour:
   m_ObjectHideFlags: 1

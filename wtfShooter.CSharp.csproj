@@ -91,13 +91,13 @@
     <Compile Include="Assets\Script\Projectile\Spawner.cs" />
     <Compile Include="Assets\Script\Projectile\WeaponObj.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
-    <Compile Include="Assets\Script\UI\CraftCell.cs" />
+    <Compile Include="Assets\Script\UI\CraftClassCell.cs" />
+    <Compile Include="Assets\Script\UI\CraftItemCell.cs" />
     <Compile Include="Assets\Script\UI\CraftWnd.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />
     <Compile Include="Assets\Script\UI\EquipPanel.cs" />
     <Compile Include="Assets\Script\UI\GamePanel.cs" />
     <Compile Include="Assets\Script\UI\HpBar.cs" />
-    <Compile Include="Assets\Script\UI\ItemCell.cs" />
     <Compile Include="Assets\Script\UI\ItemSlot.cs" />
     <Compile Include="Assets\Script\UI\Menu.cs" />
     <Compile Include="Assets\Script\UI\PackPanel.cs" />
