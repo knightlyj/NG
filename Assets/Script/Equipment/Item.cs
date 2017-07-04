@@ -83,8 +83,15 @@ public class Item
     {
         this._type = type;
         this.amount = a;
-
     }
+
+    public Item(ItemId id, uint a)
+    {
+        this._type = ItemTypeTable.GetItemType(id);
+        this.amount = a;
+    }
+
+    public bool valid { get { return this._type != null; } }
     //public Item(ItemType type, uint a)
     //{
     //    this._type = type;

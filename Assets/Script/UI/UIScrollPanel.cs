@@ -5,22 +5,26 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
+public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
     public Transform CellPrefab;
     Scrollbar bar;
     RectTransform rectList;
     float listToSide = 5;
     float scrollWidth = 15;
     
-    // Use this for initialization
-    void Start () {
+    void Awake()
+    {
         RectTransform rect = transform as RectTransform;
         bar = transform.FindChild("Scrollbar").GetComponent<Scrollbar>();
         bar.onValueChanged.AddListener(OnScrollChanged);
         rectList = transform.FindChild("ListView") as RectTransform;
         rectList.offsetMin = new Vector2(listToSide, -10);
         rectList.offsetMax = new Vector2(rect.rect.xMax - rect.rect.xMin - listToSide - scrollWidth, 0);
-        
+    }
+
+    // Use this for initialization
+    void Start () {
+
     }
 	
 	// Update is called once per frame
@@ -53,6 +57,8 @@ public class ScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     //click
     public void OnPointerDown(PointerEventData eventData)
     {
+        Helper.MoveWndToFront(this.transform);//窗口移动到最前面
+
         RectTransform rect = transform as RectTransform;
         Vector3[] corners = new Vector3[4]; //顺序为 左下 左上 右上 右下
         rect.GetWorldCorners(corners);

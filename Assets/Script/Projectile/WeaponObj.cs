@@ -69,7 +69,7 @@ public class WeaponObj : MonoBehaviour {
                 hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ||
                 hit.collider.gameObject.tag == "Player")
             {   //击中单位
-                Spawner spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+                Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
                 spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Ground, start, hit.point);
 
                 Entity e = hit.collider.GetComponent<Entity>();
@@ -77,13 +77,13 @@ public class WeaponObj : MonoBehaviour {
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {   //击中地面
-                Spawner spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+                Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
                 spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Ground, start, hit.point);
             }
         }
         else
         { //没击中任何碰撞体,不显示击中效果
-            Spawner spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+            Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
             spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Nothing, start, start+dir*5);
         }
     }
@@ -95,7 +95,7 @@ public class WeaponObj : MonoBehaviour {
 
     void FireProjectile(Spawner.ProjectileType type, EntityProperties ownerProp, Vector2 start, Vector2 target, float speedScale, int hitLayerMask)
     {
-        Spawner spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
         spawner.ShootProjectile(type, ownerProp, start, target, 1, hitLayerMask);
     }
 }

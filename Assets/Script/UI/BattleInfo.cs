@@ -136,15 +136,15 @@ public class BattleInfo : MonoBehaviour {
         }
         else
         {
-            Weapon w = localPlayer.CurWeapon;
-            float ammoRate = 0;
-            if (w != null && w.Properties.maxAmmo != 0)
-            {
-                ammoRate = (float)w.Properties.curAmmor / w.Properties.maxAmmo;
-            }
-            if (ammoRate > 1)
-                ammoRate = 1;
-            localAmmoBar.localScale = new Vector3(ammoRate, 1, 1);
+            //Weapon w = localPlayer.CurWeapon;
+            //float ammoRate = 0;
+            //if (w != null && w.Properties.maxAmmo != 0)
+            //{
+            //    ammoRate = (float)w.Properties.curAmmor / w.Properties.maxAmmo;
+            //}
+            //if (ammoRate > 1)
+            //    ammoRate = 1;
+            //localAmmoBar.localScale = new Vector3(ammoRate, 1, 1);
         }
     }
 }

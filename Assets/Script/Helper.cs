@@ -28,6 +28,8 @@ public static class Helper {
         return tile;
     }
     
+
+    //找到本地玩家
     static Player localPlayer = null;
     public static Player FindLocalPlayer()
     {
@@ -54,6 +56,7 @@ public static class Helper {
         localPlayer = null;
     }
 
+    //十六进制颜色转Color
     static public Color HexToColor(int hex)
     {
         Color c = new Color();
@@ -81,4 +84,29 @@ public static class Helper {
     {
         return GameObject.FindWithTag("PlayerInfo").GetComponent<PlayerInfo>().itemTips.GetComponent<UIItemTips>();
     }
+
+    //找到gamewindow类,并将窗口移动到前面
+    static public void MoveWndToFront(Transform transform)
+    {
+        GameWindow wnd = null;
+        Transform tr = transform;
+        do
+        {
+            wnd = tr.GetComponent<GameWindow>();
+            if(wnd != null)
+            {
+                wnd.transform.SetAsLastSibling();
+                break;
+            }
+            else
+            {
+                tr = tr.parent;
+            }
+        }
+        while (tr != null);
+    }
+
+
+    //for test
+    static public PlayerPackage playerPackage = new PlayerPackage(40);
 }

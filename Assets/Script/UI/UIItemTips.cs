@@ -8,8 +8,8 @@ public class UIItemTips : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         txt = GetComponent<Text>();
-
         this.gameObject.SetActive(false);
+
     }
 
     const float maxDim = 1.0f;
@@ -71,7 +71,7 @@ public class UIItemTips : MonoBehaviour {
         }
         else
         {
-            min.x = pos.x - txt.preferredWidth - offset.x;
+            min.x = pos.x - txt.preferredWidth;
         }
         if (down)
         {
@@ -79,7 +79,7 @@ public class UIItemTips : MonoBehaviour {
         }
         else
         {
-            min.y = pos.y + offset.y;
+            min.y = pos.y;
         }
         max = min + new Vector2(txt.preferredWidth, txt.preferredHeight);
         rect.offsetMin = min;

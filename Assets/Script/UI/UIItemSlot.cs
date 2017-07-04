@@ -4,37 +4,62 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     Image itemImg = null;
     Text itemAmount = null;
 
-	// Use this for initialization
-	void Start () {
+    void Awake()
+    {
         itemImg = transform.FindChild("Item").GetComponent<Image>();
         itemAmount = transform.FindChild("Amount").GetComponent<Text>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-    
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    UIItemTips tips = null;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("enter " + gameObject.name);
+        if (tips == null)
+            tips = Helper.GetItemTips();
+        tips.ShowTips(showItem);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("exit " + gameObject.name);
+        if (tips == null)
+            tips = Helper.GetItemTips();
+        tips.ShowTips(null);
     }
 
-    Item _item;
+
+    public delegate void OnMouseDown(UIItemSlot slot);
+    public event OnMouseDown MouseDownEvent;
+    //点击物品格
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (MouseDownEvent != null)
+        {
+            MouseDownEvent(this);
+        }
+    }
+
+    public int index = -1;
+    Item showItem;
     public void SetItemInfo(Item item)
     {
-        _item = item;
-        if(item == null)
+        showItem = item;
+        if (item == null)
         {
             itemImg.gameObject.SetActive(false);
             itemAmount.gameObject.SetActive(false);
@@ -45,14 +70,15 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
-            
+
             string strCnt = "";
             if (item.Type.CanStack) //材料和消耗品显示叠加数量
             {
                 strCnt = String.Format("{0}", item.amount);
             }
 
-            itemImg.sprite = Resources.Load<Sprite>(item.Type.itemName);
+            itemImg.sprite = Resources.Load<Sprite>("ItemIcon/" + item.Type.icon);
+            itemImg.SetNativeSize();
             itemAmount.text = strCnt;
             itemImg.gameObject.SetActive(true);
             itemAmount.gameObject.SetActive(true);

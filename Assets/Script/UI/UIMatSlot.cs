@@ -8,21 +8,29 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 {
     Image itemImg = null;
     Text itemAmount = null;
+
+    void Awake()
+    {
+        itemImg = transform.FindChild("Item").GetComponent<Image>();
+        itemAmount = transform.FindChild("Amount").GetComponent<Text>();
+    }
+
     // Use this for initialization
-    void Start () {
-        Init();
+    void Start()
+    {
         SetMaterial(ItemTypeTable.GetItemType(ItemId.Iron), 20);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("enter " + gameObject.name);
-        if(itemType != null)
+        if (itemType != null)
         {
             if (tips == null)
                 tips = Helper.GetItemTips();
@@ -39,21 +47,10 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         tips.ShowTips(null);
     }
 
-    bool initialized = false;
-    void Init()
-    {
-        if (initialized)
-            return;
-        itemImg = transform.FindChild("Item").GetComponent<Image>();
-        itemAmount = transform.FindChild("Amount").GetComponent<Text>();
-        initialized = true;
-    }
-
     Item showItem = null; //用来显示
     ItemType itemType = null;
     public void SetMaterial(ItemType type, uint amount)
     {
-        Init();
         itemType = type;
         if (type == null || amount == 0) //数量为0也视为空
         {

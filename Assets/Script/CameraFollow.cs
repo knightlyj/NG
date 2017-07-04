@@ -26,6 +26,7 @@ public class CameraFollow : MonoBehaviour {
         {
             FollowPlayer();
         }
+        
     }
 
     Transform player = null;

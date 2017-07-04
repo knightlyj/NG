@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UI;
 
-[CustomEditor(typeof(PackPanel))]
-class PackPanelEditor : Editor
+[CustomEditor(typeof(UIPackWnd))]
+class PackWndEditor : Editor
 {
-    PackPanel pack;
+    UIPackWnd pack;
     void OnEnable()
     {
-        pack = target as PackPanel;
+        pack = target as UIPackWnd;
     }
     public override void OnInspectorGUI()
     {
@@ -46,14 +46,14 @@ class PackPanelEditor : Editor
     //生成背包所用格子
     void GenPackSlots()
     {
-        Transform trPack = pack.transform;
+        Transform trPack = pack.transform.FindChild("Bg");
         if (pack.packSlotPrefab == null)
         {
             Debug.LogError("slot prefab 未设置");
             return;
         }
         //40格背包
-        for (int i = 0; i < Player.packSize; i++)
+        for (int i = 0; i < Player.itemPackSize; i++)
         {
             RectTransform slotRect = GameObject.Instantiate(pack.packSlotPrefab, trPack) as RectTransform;
             slotRect.name = "Slot" + i;
@@ -63,24 +63,21 @@ class PackPanelEditor : Editor
         RectTransform trashRect = GameObject.Instantiate(pack.packSlotPrefab, trPack) as RectTransform;
         trashRect.name = "Trash";
         Image trashImg = trashRect.GetComponent<Image>();
-
-        //鼠标物品
-        RectTransform mouseRect = GameObject.Instantiate(pack.packSlotPrefab, trPack) as RectTransform;
-        mouseRect.name = "MouseItem";
-        Image mouseImg = mouseRect.GetComponent<Image>();
-        mouseRect.gameObject.SetActive(false);
     }
 
 
     //删除原来的格子
     void RmPackSlots()
     {
-        Transform trPack = pack.transform;
+        Transform trPack = pack.transform.FindChild("Bg");
         //Debug.Log(pack.transform.childCount);
         List<GameObject> slotList = new List<GameObject>();
         for (int i = 0; i < trPack.childCount; i++)
         {
-            slotList.Add(trPack.GetChild(i).gameObject);
+            Transform tr = trPack.GetChild(i);
+            if (tr.name.StartsWith("Slot") || tr.name.Equals("Trash")) {
+                slotList.Add(tr.gameObject);
+            }
         }
         foreach (GameObject go in slotList)
             GameObject.DestroyImmediate(go);
@@ -91,14 +88,14 @@ class PackPanelEditor : Editor
     //格子布局
     void LayoutSlot()
     {
-        Transform trPack = pack.transform;
+        Transform trPack = pack.transform.FindChild("Bg");
         int slotSize = pack.slotSize;
         int slotGap = pack.slotGap;
         int toSide = pack.slotToSide;
 
-        for (int i = 0; i < Player.packSize; i++)
+        for (int i = 0; i < Player.itemPackSize; i++)
         {
-            RectTransform rect = pack.transform.FindChild("Slot" + i) as RectTransform;
+            RectTransform rect = trPack.FindChild("Slot" + i) as RectTransform;
             if (rect == null)
             {
                 Debug.LogError("no slot");
@@ -115,15 +112,12 @@ class PackPanelEditor : Editor
             rect.offsetMax = max;
         }
 
-        int trashRow = Player.packSize / rowAmout;
-        int trashCol = (Player.packSize - 1) % rowAmout;
-        RectTransform trashRect = pack.transform.FindChild("Trash") as RectTransform;
+        int trashRow = Player.itemPackSize / rowAmout;
+        int trashCol = (Player.itemPackSize - 1) % rowAmout;
+        RectTransform trashRect = trPack.FindChild("Trash") as RectTransform;
         trashRect.anchorMin = new Vector2(0, 1);
         trashRect.anchorMax = new Vector2(0, 1);
         trashRect.offsetMin = new Vector2(toSide + trashCol * (slotSize + slotGap), -(toSide + trashRow * (slotSize + slotGap) + slotSize));
         trashRect.offsetMax = trashRect.offsetMin + new Vector2(slotSize, slotSize);
-
-        pack.width = rowAmout * (slotSize + slotGap) - slotGap + toSide * 2;
-        pack.height = (trashRow + 1) * (slotSize + slotGap) - slotGap + toSide * 2;
     }
 }

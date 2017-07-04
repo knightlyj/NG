@@ -2,10 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class CraftWnd : MonoBehaviour
+public class UICraftWnd : MonoBehaviour
 {
-    ScrollPanel craftClassPanel;
-    ScrollPanel craftItemPanel;
+    UIScrollPanel craftClassPanel;
+    UIScrollPanel craftItemPanel;
     System.Object[] crafgClassInfo;
     UIMatSlot[] matSlot = new UIMatSlot[CraftFormula.maxRawMatSorts];
     UIMatSlot productSlot = null;
@@ -16,7 +16,7 @@ public class CraftWnd : MonoBehaviour
         Button btnCraft = transform.FindChild("Craft").GetComponent<Button>();
         btnCraft.onClick.AddListener(this.OnCraftClick);
         //合成类型
-        craftClassPanel = transform.FindChild("Bg").FindChild("ClassBg").FindChild("ClassPanel").GetComponent<ScrollPanel>();
+        craftClassPanel = transform.FindChild("Bg").FindChild("ClassBg").FindChild("ClassPanel").GetComponent<UIScrollPanel>();
         crafgClassInfo = new System.Object[ItemTypeTable.className.Length];
         for (int i = 0; i < crafgClassInfo.Length; i++)
         {
@@ -29,7 +29,7 @@ public class CraftWnd : MonoBehaviour
         craftClassPanel.OnCellSelected += this.OnClassClick;
 
         //合成物品
-        craftItemPanel = transform.FindChild("Bg").FindChild("ItemBg").FindChild("ItemPanel").GetComponent<ScrollPanel>();
+        craftItemPanel = transform.FindChild("Bg").FindChild("ItemBg").FindChild("ItemPanel").GetComponent<UIScrollPanel>();
         craftItemPanel.OnCellSelected += this.OnItemClick;
 
         //slots
@@ -59,12 +59,13 @@ public class CraftWnd : MonoBehaviour
 
     void OnCraftClick()
     {
+        Helper.MoveWndToFront(this.transform);
         Debug.Log("craft");
     }
 
     void OnClassClick(ListCell cell)
     {
-        CraftClassCell craft = cell as CraftClassCell;
+        UICraftClassCell craft = cell as UICraftClassCell;
         if (craft == null)
         {
             Debug.LogError("CraftWnd.OnClassClick error");
@@ -83,7 +84,7 @@ public class CraftWnd : MonoBehaviour
 
     void OnItemClick(ListCell cell)
     {
-        CraftItemCell craft = cell as CraftItemCell;
+        UICraftItemCell craft = cell as UICraftItemCell;
         if (craft == null)
         {
             Debug.LogError("CraftWnd.OnItemClick error");

@@ -19,11 +19,8 @@ public static class GameSetting
 }
 
 
-public static class GameConstValu
+public static class GlobalVariable
 {
-    public const int MaterialOffset = 0;
-    public const int ConsumableOffset = 10000;
-    public const int WeaponOffset = 20000;
-    public const int ArmorOffset = 30000;
+    public static bool mouseOnUI;  //鼠标停留在UI上
+    public static bool inputFieldActive; //在输入文字状态
 }
-

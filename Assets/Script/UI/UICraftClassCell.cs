@@ -8,7 +8,7 @@ public class CraftClassCellInfo
     public string icon;
 }
 
-public class CraftClassCell : MonoBehaviour, ListCell
+public class UICraftClassCell : MonoBehaviour, ListCell
 {
     int _idx = -1;
     public int index

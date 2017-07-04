@@ -5,13 +5,13 @@ using UnityEditor;
 using UnityEngine.UI;
 using System.IO;
 
-[CustomEditor(typeof(GamePanel))]
-class GamePanelEditor : Editor
+[CustomEditor(typeof(GameWindow))]
+class GameWndEditor : Editor
 {
-    GamePanel wnd;
+    GameWindow wnd;
     void OnEnable()
     {
-        wnd = target as GamePanel;
+        wnd = target as GameWindow;
     }
 
     public override void OnInspectorGUI()
@@ -30,5 +30,12 @@ class GamePanelEditor : Editor
         rectClose.anchorMax = Vector2.one;
         rectClose.offsetMin = closeOffset - closeSize;
         rectClose.offsetMax = closeOffset;
+    }
+
+    [MenuItem("Assets/Game Window")]
+    public static void CreateWindow()
+    {
+        Debug.Log("create");
+        //Instantiate(wnd.transform, Vector3.zero, Quaternion.identity);
     }
 }

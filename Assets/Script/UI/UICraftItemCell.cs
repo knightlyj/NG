@@ -13,7 +13,7 @@ public interface ListCell
     int index { get; set; }
 }
 
-public class CraftItemCell : MonoBehaviour, ListCell
+public class UICraftItemCell : MonoBehaviour, ListCell
 {
     int _idx = -1;
     public int index

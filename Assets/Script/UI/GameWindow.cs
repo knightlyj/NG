@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class GamePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     RectTransform rect;
     // Use this for initialization
