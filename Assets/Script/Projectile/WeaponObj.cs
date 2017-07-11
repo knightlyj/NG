@@ -20,7 +20,7 @@ public class WeaponObj : MonoBehaviour {
     //通过设置以上属性和sprite,决定武器原型,但不影响武器属性                                           
 
 
-    Weapon weaponItem = null;
+    Item weaponItem = null;
 
     // Use this for initialization
     void Start () {
@@ -32,12 +32,12 @@ public class WeaponObj : MonoBehaviour {
 	
 	}
 
-    public void SetWeaponItem(Weapon w)
+    public void SetWeaponItem(Item w)
     {
         this.weaponItem = w;
     }
 
-    public Weapon GetWeaponItem()
+    public Item GetWeaponItem()
     {
         return this.weaponItem;
     }

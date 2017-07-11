@@ -7,12 +7,17 @@ using System;
 public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     RectTransform rect;
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
         rect = transform as RectTransform;
         Button btnClose = transform.FindChild("Close").GetComponent<Button>();
         btnClose.onClick.AddListener(this.OnCloseClicked);
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -50,7 +55,25 @@ public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void OnCloseClicked()
     {
+        HideWnd();
+    }
+
+    public void ShowWnd()
+    {
+        this.gameObject.SetActive(true);
+        rect.SetAsLastSibling();
+    }
+
+    public void HideWnd()
+    {
         this.gameObject.SetActive(false);
     }
 
+    public void SwitchShowAndHide()
+    {
+        if (this.gameObject.activeInHierarchy == false)
+            ShowWnd();
+        else if (this.gameObject.activeInHierarchy == true)
+            HideWnd();
+    }
 }

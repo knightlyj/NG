@@ -15,11 +15,6 @@ public class ItemPackage
         _content = new Item[packSize];
     }
 
-    public void Close()
-    {
-        this.PackClosedEvent();
-    }
-
     //-----------------捡东西的逻辑,先看是否可以叠加,不能叠加则放入新的空位
     public bool PickUpItem(Item item)
     {
@@ -171,9 +166,15 @@ public class ItemPackage
         int cnt = 0;
         for (int i = 0; i < packSize; i++)
         {
-            if (content[i].Type.id == id)
+            if (content[i] != null)
             {
-                found[cnt++] = i;
+                if (content[i].Type == null) {
+                    Debug.Log("PackageFindIdcs 物品类型为空");
+                }
+                else if (content[i].Type.id == id)
+                {
+                    found[cnt++] = i;
+                }
             }
         }
         return found;
@@ -195,17 +196,6 @@ public class ItemPackage
     {
         if (PackChangedEvent != null)
             PackChangedEvent();
-    }
-
-    //背包关闭事件
-    public delegate void OnPackClosed();
-    public event OnPackClosed PackClosedEvent;
-    void RaisePackClosed()
-    {
-        if(PackClosedEvent != null)
-        {
-            PackClosedEvent();
-        }
     }
 
     //背包序列化
@@ -242,7 +232,6 @@ public class Trash
         _item = null;
         return it;
     }
-
     
 }
 
@@ -259,6 +248,7 @@ public class MouseItem
     {
         Item temp = this._item;
         this._item = it;
+        EventManager.RaiseEvent(EventId.MouseItemChange, this);
         return temp;
     }
 
@@ -267,13 +257,13 @@ public class MouseItem
     {
         Item it = _item;
         _item = null;
+        EventManager.RaiseEvent(EventId.MouseItemChange, this);
         return it;
     }
-    
 }
 
 //这里包括背包的格子,垃圾箱,以及鼠标拖拽的物品
-public class PlayerPackage
+public class PlayerBag
 {
     /// <summary>
     /// 物品包
@@ -298,13 +288,10 @@ public class PlayerPackage
     /// </summary>
     public int money = 0;
 
-    public PlayerPackage(int size)
+    public PlayerBag(int size)
     {
         _itemPack = new ItemPackage(size);
         _trash = new Trash();
         _mouseItem = new MouseItem();
     }
-
-    public delegate void OnPlayerPackClosed();
-    public event OnPlayerPackClosed PlayerPackClosedEvent;
 }

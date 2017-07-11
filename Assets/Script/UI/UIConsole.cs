@@ -68,13 +68,12 @@ public class UIConsole : MonoBehaviour {
             Item newItem = new Item(id, amount);
             if (newItem.valid)
             {
-                //Player localPlayer = Helper.FindLocalPlayer();
-                //if (localPlayer != null)
+                Player localPlayer = Helper.FindLocalPlayer();
+                if (localPlayer != null)
                 {
                     //获取背包
-                    //PlayerPackage playerPack = localPlayer.playerPack;
-                    PlayerPackage playerPack = Helper.playerPackage; //测试用背包
-                    ItemPackage pack = playerPack.itemPack;//获取背包内容
+                    PlayerBag playerBag = localPlayer.bag;
+                    ItemPackage pack = playerBag.itemPack;//获取背包内容
                     pack.PickUpItem(newItem); //捡起物品
                 }
             }
@@ -93,13 +92,12 @@ public class UIConsole : MonoBehaviour {
             money = 0;
         }
 
-        //Player localPlayer = Helper.FindLocalPlayer();
-        //if (localPlayer != null)
+        Player localPlayer = Helper.FindLocalPlayer();
+        if (localPlayer != null)
         {
             //获取背包
-            //PlayerPackage playerPack = localPlayer.playerPack;
-            PlayerPackage playerPack = Helper.playerPackage; //测试用背包
-            playerPack.money += money;
+            PlayerBag playerBag = localPlayer.bag;
+            playerBag.money += money;
         }
 
     }

@@ -19,15 +19,19 @@ public class ItemType// : UnityEngine.Object
     public ItemQuality quality; //品质,决定物品名的颜色
     public string comment; //注释
     public string icon; //图标 
-    public int equipId = 0; //装备id,为0时表示不是装备
+    public int weaponId = 0; //装备id
+    public int armorId = 0;//护甲id
     public int consumId = 0; //消耗品id,为0时表示不是消耗品
+    public int originalPrice = 0; //原始价格,不考虑装备加成等
 
     //public bool IsMaterial { get { return (typeBit & materialOffset) != 0; } }
     public bool IsConsumable { get { return consumId != 0; } }
-    public bool IsEquipment { get { return equipId != 0; } }
-
-    public bool CanCraft { get { return false; } }
-    public bool CanStack { get { return equipId == 0; } }
+    public bool IsWeapon { get { return weaponId != 0; } }
+    public bool IsArmor { get { return armorId != 0; } }
+    public bool IsEquipment { get { return IsWeapon || IsArmor; } }
+    
+    //public bool CanCraft { get { return false; } }
+    public bool CanStack { get { return !IsEquipment; } }
 
     public CraftFormula craftItem = null;
 
@@ -92,9 +96,32 @@ public class Item
     }
 
     public bool valid { get { return this._type != null; } }
-    //public Item(ItemType type, uint a)
-    //{
-    //    this._type = type;
-    //    this.amount = a;
-    //}
+
+    virtual public int buyPrice { get { return Type.originalPrice * (int)this.amount; } }
+    virtual public int sellPrice { get { return (int)(Type.originalPrice * this.amount * GameSetting.SellPriceRate); } }
+}
+
+
+public static class ItemGenerator
+{
+    //生成物品的档次
+    public enum GenItemLvl
+    {
+        Normal, 
+
+    }
+
+    static Item GenItem(ItemId id, uint amount, GenItemLvl level = GenItemLvl.Normal)
+    {
+        Item item = null;
+        ItemType type = ItemTypeTable.GetItemType(id);
+        if(type != null)
+        {
+            if (type.weaponId != 0)
+            {
+                item = new Item(type, amount);
+            }
+        }
+        return item;
+    }
 }

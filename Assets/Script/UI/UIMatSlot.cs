@@ -32,19 +32,14 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         //Debug.Log("enter " + gameObject.name);
         if (itemType != null)
         {
-            if (tips == null)
-                tips = Helper.GetItemTips();
-            tips.ShowTips(showItem);
+            Helper.ShowTips(showItem);
         }
     }
+    
 
-    UIItemTips tips = null;
     public void OnPointerExit(PointerEventData eventData)
     {
-        //Debug.Log("exit " + gameObject.name);
-        if (tips == null)
-            tips = Helper.GetItemTips();
-        tips.ShowTips(null);
+        Helper.ShowTips(null);
     }
 
     Item showItem = null; //用来显示
@@ -75,6 +70,18 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             itemImg.SetNativeSize();
 
             showItem = new Item(type, amount);
+        }
+    }
+
+    public void SetMatEnough(bool enough)
+    {
+        if (enough)
+        {
+            itemImg.color = Color.white;
+        }
+        else
+        { //不够时,半透明
+            itemImg.color = new Color(1, 1, 1, 0.5f);
         }
     }
 }

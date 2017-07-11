@@ -17,24 +17,18 @@ public class UIMouseItem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //SetItem(ItemTypeTable.GetItemType(ItemId.Wood), 10);
+        EventManager.AddListener(EventId.MouseItemChange, this.OnMouseItemChanged);
+    }
+
+    void OnDestroy()
+    {
+        EventManager.RemoveListener(EventId.MouseItemChange, this.OnMouseItemChanged);
     }
 
     Item showItem = null;
     // Update is called once per frame
     void Update()
     {
-        //Player localPlayer = Helper.FindLocalPlayer();
-        //if (localPlayer != null)
-        {
-            //获取背包
-            //PlayerPackage playerPack = localPlayer.playerPack;
-            PlayerPackage playerPack = Helper.playerPackage; //测试用背包
-            //获取背包内容
-            MouseItem mouseItem = playerPack.mouseItem;
-            SetItemInfo(mouseItem.item);
-        }
-
         if (showItem != null)
         {
             //跟随鼠标
@@ -67,5 +61,14 @@ public class UIMouseItem : MonoBehaviour
             itemAmount.gameObject.SetActive(true);
             itemImg.SetNativeSize();
         }
+    }
+
+    public bool hasItem { get { return this.showItem != null; } }
+
+    void OnMouseItemChanged(System.Object sender)
+    {
+        MouseItem mouseItem = sender as MouseItem;
+        if(mouseItem != null)
+            SetItemInfo(mouseItem.item);
     }
 }

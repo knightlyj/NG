@@ -80,9 +80,22 @@ public static class Helper {
         return wndPos;
     }
 
-    static public UIItemTips GetItemTips()
+    static UIItemTips GetUIItemTips()
     {
-        return GameObject.FindWithTag("PlayerInfo").GetComponent<PlayerInfo>().itemTips.GetComponent<UIItemTips>();
+        return GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().itemTips;
+    }
+
+    static public UIMouseItem GetUIMouseItem()
+    {
+        return GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().mouseItem;
+    }
+
+    static UIItemTips tips = null;
+    static public void ShowTips(Item item, UIItemTips.ShowPrice showPrice = UIItemTips.ShowPrice.None)
+    {
+        if (tips == null)
+            tips = Helper.GetUIItemTips();
+        tips.ShowTips(item, showPrice);
     }
 
     //找到gamewindow类,并将窗口移动到前面
@@ -106,7 +119,16 @@ public static class Helper {
         while (tr != null);
     }
 
+    //东西丢到玩家旁边
+    static public void DropItemByPlayer(Item item)
+    {
+
+    }
 
     //for test
-    static public PlayerPackage playerPackage = new PlayerPackage(40);
+    static public PlayerBag playerPackage = new PlayerBag(40);
+    static public PlayerEquipment playerEquip = new PlayerEquipment();
 }
+
+
+

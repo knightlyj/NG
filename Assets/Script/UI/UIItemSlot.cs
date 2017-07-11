@@ -6,56 +6,52 @@ using System;
 
 public class UIItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    Image itemImg = null;
-    Text itemAmount = null;
+    protected Image itemImg = null;
+    protected Text itemAmount = null;
 
-    void Awake()
+    protected void Awake()
     {
         itemImg = transform.FindChild("Item").GetComponent<Image>();
         itemAmount = transform.FindChild("Amount").GetComponent<Text>();
     }
 
     // Use this for initialization
-    void Start()
+    protected void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
 
     }
-
-    UIItemTips tips = null;
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (tips == null)
-            tips = Helper.GetItemTips();
-        tips.ShowTips(showItem);
+        Helper.ShowTips(showItem, UIItemTips.ShowPrice.Sell);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (tips == null)
-            tips = Helper.GetItemTips();
-        tips.ShowTips(null);
+        Helper.ShowTips(null);
     }
 
 
-    public delegate void OnMouseDown(UIItemSlot slot);
+    public delegate void OnMouseDown(UIItemSlot slot, PointerEventData eventData);
     public event OnMouseDown MouseDownEvent;
     //点击物品格
     public void OnPointerDown(PointerEventData eventData)
     {
         if (MouseDownEvent != null)
         {
-            MouseDownEvent(this);
+            MouseDownEvent(this, eventData);
         }
     }
 
+    [HideInInspector]
     public int index = -1;
-    Item showItem;
+    protected Item showItem;
     public void SetItemInfo(Item item)
     {
         showItem = item;
@@ -63,10 +59,6 @@ public class UIItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             itemImg.gameObject.SetActive(false);
             itemAmount.gameObject.SetActive(false);
-            //if (itemImg == null)
-            //    Debug.Log("null 1");
-            //if (itemAmount == null)
-            //    Debug.Log("null 2");
         }
         else
         {

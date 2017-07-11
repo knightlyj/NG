@@ -28,7 +28,7 @@ public partial class Player{
     
     void UpdateAim()
     {
-        Vector2 direction = state.targetPos - (Vector2)this.transform.position;
+        Vector2 direction = syncState.targetPos - (Vector2)this.transform.position;
         direction.Normalize();
         float angle = Mathf.Abs(Mathf.Acos(Mathf.Abs(direction.x)) / Mathf.PI * 180);
         if (direction.y < 0)
@@ -47,7 +47,7 @@ public partial class Player{
     bool faceRight = true;
     void UpdateFace()
     {
-        Vector2 direction = state.targetPos - (Vector2)this.transform.position;
+        Vector2 direction = syncState.targetPos - (Vector2)this.transform.position;
         bool change = false;
         if (direction.x >= 0 && !faceRight)
             change = true;

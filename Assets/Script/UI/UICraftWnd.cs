@@ -9,15 +9,41 @@ public class UICraftWnd : MonoBehaviour
     System.Object[] crafgClassInfo;
     UIMatSlot[] matSlot = new UIMatSlot[CraftFormula.maxRawMatSorts];
     UIMatSlot productSlot = null;
+    Button btnCraft;
+
+    void Awake()
+    {
+        //制造按钮
+        btnCraft = transform.FindChild("Craft").GetComponent<Button>();
+        btnCraft.onClick.AddListener(this.OnCraftClick);
+
+        //合成类型
+        craftClassPanel = transform.FindChild("Bg").FindChild("ClassBg").FindChild("ClassPanel").GetComponent<UIScrollPanel>();
+        //合成物品
+        craftItemPanel = transform.FindChild("Bg").FindChild("ItemBg").FindChild("ItemPanel").GetComponent<UIScrollPanel>();
+        //slots
+        for (int i = 0; i < CraftFormula.maxRawMatSorts; i++)
+        {
+            matSlot[i] = transform.FindChild("Bg").FindChild("MatBg").FindChild("MatSlot" + i).GetComponent<UIMatSlot>();
+        }
+        productSlot = transform.FindChild("Bg").FindChild("Product").GetComponent<UIMatSlot>();
+
+        
+    }
+
     // Use this for initialization
     void Start()
     {
-        //制造按钮
-        Button btnCraft = transform.FindChild("Craft").GetComponent<Button>();
-        btnCraft.onClick.AddListener(this.OnCraftClick);
-        //合成类型
-        craftClassPanel = transform.FindChild("Bg").FindChild("ClassBg").FindChild("ClassPanel").GetComponent<UIScrollPanel>();
-        crafgClassInfo = new System.Object[ItemTypeTable.className.Length];
+        Player localPlayer = Helper.FindLocalPlayer();
+        if (localPlayer != null)
+            BindBag(localPlayer.bag);
+        //订阅本地玩家创建事件
+        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
+        //订阅本地玩家销毁事件
+        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+
+        //合成类型列表
+        crafgClassInfo = new System.Object[ItemTypeTable.className.Count];
         for (int i = 0; i < crafgClassInfo.Length; i++)
         {
             CraftClassCellInfo info = new CraftClassCellInfo();
@@ -27,17 +53,9 @@ public class UICraftWnd : MonoBehaviour
         }
         craftClassPanel.SetList(crafgClassInfo);
         craftClassPanel.OnCellSelected += this.OnClassClick;
-
-        //合成物品
-        craftItemPanel = transform.FindChild("Bg").FindChild("ItemBg").FindChild("ItemPanel").GetComponent<UIScrollPanel>();
+        //合成物品列表
         craftItemPanel.OnCellSelected += this.OnItemClick;
-
-        //slots
-        for (int i = 0; i < CraftFormula.maxRawMatSorts; i++)
-        {
-            matSlot[i] = transform.FindChild("Bg").FindChild("MatBg").FindChild("MatSlot" + i).GetComponent<UIMatSlot>();
-        }
-        productSlot = transform.FindChild("Bg").FindChild("Product").GetComponent<UIMatSlot>();
+        
     }
 
     // Update is called once per frame
@@ -49,24 +67,25 @@ public class UICraftWnd : MonoBehaviour
     void OnDestroy()
     {
         //制造按钮
-        Button btnCraft = transform.FindChild("Craft").GetComponent<Button>();
+        btnCraft = transform.FindChild("Craft").GetComponent<Button>();
         btnCraft.onClick.RemoveAllListeners();
         //类型选择列表
         craftClassPanel.OnCellSelected -= this.OnClassClick;
         //合成物品
         craftItemPanel.OnCellSelected -= this.OnItemClick;
+
+        UnbindBag();
+        //退订本地玩家创建事件
+        EventManager.RemoveListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
+        //退订本地玩家销毁事件
+        EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
     }
 
-    void OnCraftClick()
-    {
-        Helper.MoveWndToFront(this.transform);
-        Debug.Log("craft");
-    }
-
+    //选中分类
     void OnClassClick(ListCell cell)
     {
-        UICraftClassCell craft = cell as UICraftClassCell;
-        if (craft == null)
+        UICraftClassCell craftClass = cell as UICraftClassCell;
+        if (craftClass == null)
         {
             Debug.LogError("CraftWnd.OnClassClick error");
             return;
@@ -82,15 +101,17 @@ public class UICraftWnd : MonoBehaviour
         craftItemPanel.SetList(list);
     }
 
+    //选中物品
+    UICraftItemCell selCraftItem = null;
     void OnItemClick(ListCell cell)
     {
-        UICraftItemCell craft = cell as UICraftItemCell;
-        if (craft == null)
+        UICraftItemCell craftItem = cell as UICraftItemCell;
+        if (craftItem == null)
         {
             Debug.LogError("CraftWnd.OnItemClick error");
             return;
         }
-        if(craft.formula == null || craft.formula.rawMats == null)
+        if (craftItem.formula == null || craftItem.formula.rawMats == null)
         {
             for (int i = 0; i < CraftFormula.maxRawMatSorts; i++)
             {
@@ -101,17 +122,122 @@ public class UICraftWnd : MonoBehaviour
 
         for (int i = 0; i < CraftFormula.maxRawMatSorts; i++)
         {
-            if (craft.formula.rawMats[i] != null)
+            if (craftItem.formula.rawMats[i] != null)
             {
-                ItemType matType = ItemTypeTable.GetItemType((ItemId)craft.formula.rawMats[i].id);
-                matSlot[i].SetMaterial(matType, craft.formula.rawMats[i].amount);
+                ItemType matType = ItemTypeTable.GetItemType((ItemId)craftItem.formula.rawMats[i].id);
+                matSlot[i].SetMaterial(matType, craftItem.formula.rawMats[i].amount);
             }
             else
             {
                 matSlot[i].SetMaterial(null, 0);
             }
-            ItemType productType = ItemTypeTable.GetItemType((ItemId)craft.formula.outputId);
-            productSlot.SetMaterial(productType, craft.formula.outputAmount);
+            ItemType productType = ItemTypeTable.GetItemType((ItemId)craftItem.formula.outputId);
+            productSlot.SetMaterial(productType, craftItem.formula.outputAmount);
         }
+        selCraftItem = craftItem;
+        ShowMatEnough();
+    }
+
+    //点击制造
+    void OnCraftClick()
+    {
+        Helper.MoveWndToFront(this.transform); //窗口移动到前面
+
+        //获取当前使用的合成公式
+        CraftFormula formula = GetCurFormula();
+        if (formula == null)
+            return;
+
+        for (int i = 0; i < formula.matCount; i++)
+        {
+            if (!bindBag.itemPack.ItemEnough(formula.rawMats[i].id, formula.rawMats[i].amount))
+            {   //有一种材料不够
+                return;
+            }
+        }
+
+        for (int i = 0; i < formula.matCount; i++)
+        {
+            bindBag.itemPack.RemoveAmount(formula.rawMats[i].id, formula.rawMats[i].amount);
+        }
+
+        Item product = new Item((ItemId)formula.outputId, formula.outputAmount);
+        if (!bindBag.itemPack.PickUpItem(product))
+        { //如果捡东西失败,丢到地上
+            Helper.DropItemByPlayer(product);
+        }
+    }
+
+    PlayerBag bindBag = null;
+    void BindBag(PlayerBag bag)
+    {
+        //先解绑
+        UnbindBag();
+        if (bag == null)
+            return;
+        //绑定到新的package
+        bindBag = bag;
+        //暂时没考虑背包关闭的问题
+        bindBag.itemPack.PackChangedEvent += this.OnPackChanged; //item包改变
+    }
+
+    void UnbindBag()
+    {
+        if (bindBag != null)
+        {
+            bindBag.itemPack.PackChangedEvent -= this.OnPackChanged;
+            bindBag = null;
+        }
+    }
+
+    //背包物品有变化时的回调
+    void OnPackChanged()
+    {
+        ShowMatEnough();
+    }
+
+    /// <summary>
+    /// 根据材料是否足够,改变材料和按钮显示
+    /// </summary>
+    void ShowMatEnough()
+    {
+        //获取当前使用的合成公式
+        CraftFormula formula = GetCurFormula();
+        if (formula == null)
+            return;
+        
+        for (int i = 0; i < formula.matCount; i++)
+        {
+            if (bindBag.itemPack.ItemEnough(formula.rawMats[i].id, formula.rawMats[i].amount))
+            {   //材料足够
+                matSlot[i].SetMatEnough(true);
+            }
+            else
+            {  //材料不够
+                matSlot[i].SetMatEnough(false);
+            }
+        }
+    }
+
+    CraftFormula GetCurFormula()
+    {
+        if (selCraftItem == null || bindBag == null)
+            return null;
+
+        return selCraftItem.formula;
+    }
+
+    void OnLocalPlayerCreate(System.Object sender)
+    {
+        Player localPlayer = sender as Player;
+        if(localPlayer != null)
+        {
+            BindBag(localPlayer.bag);
+        }
+    }
+
+    void OnLocalPlayerDestroy(System.Object sender)
+    {
+        UnbindBag();
     }
 }

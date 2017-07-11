@@ -41,19 +41,19 @@ public partial class Player {
     {
         if (onGround || onPlatform)
         { //在地面时,不按左右则立即停下来,或者由摩擦力停下,并且按住左右会有较大的力,摩擦力由物理引擎实现
-            if (!state.left && !state.right && rb.velocity.y <= 0) //有向上的速度,也不会触发立即停止或者摩擦力
+            if (!syncState.left && !syncState.right && rb.velocity.y <= 0) //有向上的速度,也不会触发立即停止或者摩擦力
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
             else
             {
-                if (state.left && rb.velocity.x > -MaxHorSpeed)
+                if (syncState.left && rb.velocity.x > -MaxHorSpeed)
                     rb.AddForce(new Vector2(-MovForce, 0));
-                if (state.right && rb.velocity.x < MaxHorSpeed)
+                if (syncState.right && rb.velocity.x < MaxHorSpeed)
                     GetComponent<Rigidbody2D>().AddForce(new Vector2(MovForce, 0));
             }
 
-            if (state.down)
+            if (syncState.down)
             {
                 if (inLadderArea)
                 {
@@ -66,7 +66,7 @@ public partial class Player {
                     isCrossPlatform = true;
                 }
             }
-            else if (state.up)
+            else if (syncState.up)
             {
                 if (inLadderArea)
                 {
@@ -74,7 +74,7 @@ public partial class Player {
                 }
             }
 
-            if (state.jump)
+            if (syncState.jump)
             {
                 TimeSpan span = DateTime.Now - jumpTime;
                 if (span.TotalMilliseconds > 500)
@@ -87,17 +87,17 @@ public partial class Player {
         }
         else
         {   //在空中时,无摩擦力,按住左右会有较小的力
-            if (state.left && rb.velocity.x > -MaxHorSpeed)
+            if (syncState.left && rb.velocity.x > -MaxHorSpeed)
                 rb.AddForce(new Vector2(-MovFroceInAir, 0));
-            if (state.right && rb.velocity.x < MaxHorSpeed)
+            if (syncState.right && rb.velocity.x < MaxHorSpeed)
                 rb.AddForce(new Vector2(MovFroceInAir, 0));
 
-            if (state.down)
+            if (syncState.down)
             {
                 if (inLadderArea)
                     GetOnLadder();
             }
-            else if (state.up)
+            else if (syncState.up)
             {
                 if (inLadderArea)
                     GetOnLadder();
@@ -126,11 +126,11 @@ public partial class Player {
     DateTime jumpFromLadderTime = DateTime.Now;
     void SimulateOnLadder()
     {
-        if (state.up)
+        if (syncState.up)
         {
             rb.velocity = new Vector2(rb.velocity.x, climeSpeed);
         }
-        else if (state.down)
+        else if (syncState.down)
         {
             rb.velocity = new Vector2(rb.velocity.x, -slideDownSpeed);
         }
@@ -139,11 +139,11 @@ public partial class Player {
             rb.velocity = new Vector2(rb.velocity.x, 0);
         }
 
-        if (state.left)
+        if (syncState.left)
         {
             rb.velocity = new Vector2(-climeSpeed, rb.velocity.y);
         }
-        else if (state.right)
+        else if (syncState.right)
         {
             rb.velocity = new Vector2(climeSpeed, rb.velocity.y);
         }
@@ -152,7 +152,7 @@ public partial class Player {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
-        if (state.jump)
+        if (syncState.jump)
         {
             TimeSpan span = DateTime.Now - jumpTime;
             if (span.TotalMilliseconds > 500)

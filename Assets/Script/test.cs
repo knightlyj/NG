@@ -7,8 +7,7 @@ public class test : MonoBehaviour, IPointerClickHandler {
 
 	// Use this for initialization
 	void Start () {
-        InputField mainInputField = GetComponent<InputField>();
-        mainInputField.onValueChange.AddListener(delegate { ValueChangeCheck(); });
+
     }
 	
 	// Update is called once per frame

@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UI;
 
-[CustomEditor(typeof(UIPackWnd))]
-class PackWndEditor : Editor
+[CustomEditor(typeof(UIBagWnd))]
+class BagWndEditor : Editor
 {
-    UIPackWnd pack;
+    UIBagWnd bag;
     void OnEnable()
     {
-        pack = target as UIPackWnd;
+        bag = target as UIBagWnd;
     }
     public override void OnInspectorGUI()
     {
-        pack.packSlotPrefab = EditorGUILayout.ObjectField("pack slot", pack.packSlotPrefab, typeof(Transform), false) as Transform;
+        bag.packSlotPrefab = EditorGUILayout.ObjectField("pack slot", bag.packSlotPrefab, typeof(Transform), false) as Transform;
 
         //背包格子太多,用程序生成
         if (GUILayout.Button("生成背包slot"))
@@ -23,20 +23,20 @@ class PackWndEditor : Editor
             GenPackSlots();
         }
 
-        int slotSize = EditorGUILayout.IntField("slot size", pack.slotSize);
+        int slotSize = EditorGUILayout.IntField("slot size", bag.slotSize);
         if (slotSize < 20)
             slotSize = 20;
-        pack.slotSize = slotSize;
+        bag.slotSize = slotSize;
 
-        int slotGap = EditorGUILayout.IntField("slot gap", pack.slotGap);
+        int slotGap = EditorGUILayout.IntField("slot gap", bag.slotGap);
         if (slotGap < 1)
             slotGap = 1;
-        pack.slotGap = slotGap;
+        bag.slotGap = slotGap;
 
-        int toSide = EditorGUILayout.IntField("to side", pack.slotToSide);
+        int toSide = EditorGUILayout.IntField("to side", bag.slotToSide);
         if (toSide < 1)
             toSide = 1;
-        pack.slotToSide = toSide;
+        bag.slotToSide = toSide;
         if (GUILayout.Button("layout"))
         {
             LayoutSlot();
@@ -46,8 +46,8 @@ class PackWndEditor : Editor
     //生成背包所用格子
     void GenPackSlots()
     {
-        Transform trPack = pack.transform.FindChild("Bg");
-        if (pack.packSlotPrefab == null)
+        Transform trPack = bag.transform.FindChild("Bg");
+        if (bag.packSlotPrefab == null)
         {
             Debug.LogError("slot prefab 未设置");
             return;
@@ -55,12 +55,12 @@ class PackWndEditor : Editor
         //40格背包
         for (int i = 0; i < Player.itemPackSize; i++)
         {
-            RectTransform slotRect = GameObject.Instantiate(pack.packSlotPrefab, trPack) as RectTransform;
+            RectTransform slotRect = GameObject.Instantiate(bag.packSlotPrefab, trPack) as RectTransform;
             slotRect.name = "Slot" + i;
         }
 
         //垃圾箱
-        RectTransform trashRect = GameObject.Instantiate(pack.packSlotPrefab, trPack) as RectTransform;
+        RectTransform trashRect = GameObject.Instantiate(bag.packSlotPrefab, trPack) as RectTransform;
         trashRect.name = "Trash";
         Image trashImg = trashRect.GetComponent<Image>();
     }
@@ -69,7 +69,7 @@ class PackWndEditor : Editor
     //删除原来的格子
     void RmPackSlots()
     {
-        Transform trPack = pack.transform.FindChild("Bg");
+        Transform trPack = bag.transform.FindChild("Bg");
         //Debug.Log(pack.transform.childCount);
         List<GameObject> slotList = new List<GameObject>();
         for (int i = 0; i < trPack.childCount; i++)
@@ -88,10 +88,10 @@ class PackWndEditor : Editor
     //格子布局
     void LayoutSlot()
     {
-        Transform trPack = pack.transform.FindChild("Bg");
-        int slotSize = pack.slotSize;
-        int slotGap = pack.slotGap;
-        int toSide = pack.slotToSide;
+        Transform trPack = bag.transform.FindChild("Bg");
+        int slotSize = bag.slotSize;
+        int slotGap = bag.slotGap;
+        int toSide = bag.slotToSide;
 
         for (int i = 0; i < Player.itemPackSize; i++)
         {

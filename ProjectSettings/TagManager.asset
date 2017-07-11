@@ -9,7 +9,7 @@ TagManager:
   - Spawner
   - Items
   - Trash
-  - PlayerInfo
+  - GamePlayUI
   layers:
   - Default
   - TransparentFX

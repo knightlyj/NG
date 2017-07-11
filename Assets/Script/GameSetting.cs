@@ -14,8 +14,15 @@ public static class GameSetting
     public static KeyCode left = KeyCode.A;
     public static KeyCode right = KeyCode.D;
     public static KeyCode jump = KeyCode.Space;
-    public static double CPInterval = 500; //ms
-    
+
+
+    public static double CPInterval = 500; //穿过platform的持续时间
+    public static float SellPriceRate = 0.33f; //卖出价格比例
+        
+    public static KeyCode openCraftWnd = KeyCode.K;
+    public static KeyCode openBagWnd = KeyCode.B;
+    public static KeyCode openEquipWnd = KeyCode.C;
+    public static KeyCode openConsole = KeyCode.F10;
 }
 
 
@@ -23,4 +30,32 @@ public static class GlobalVariable
 {
     public static bool mouseOnUI;  //鼠标停留在UI上
     public static bool inputFieldActive; //在输入文字状态
+    
+}
+
+public static class TextResources
+{
+    //gameobect所用字符串
+    public const string gamePlayUITag = "GamePlayUI"; //游戏场景UI的tag
+
+    //资源名
+    public const string defaultCraftClassIcon = "wood"; //默认合成分类图标
+
+    //表格文件名
+    public const string itemTable = "item.csv"; //物品表名
+    public const string craftClassTable = "craftClass.csv"; //合成分类表名字
+    public const string armorTable = "armor.csv"; //护甲属性表
+    public const string weaponTable = "weapon.csv"; //武器属性表 
+
+    //物品信息格式化
+    public const string atkFormat = "攻击: {0} - {1}\n";
+    public const string atkInvervalFormat = "速率: {0:N}\n";
+    public const string atkSpdFormat = "攻速: {0:N}\n";
+    public const string crtlChanceFormat = "暴击率: {0}%\n";
+    public const string crtlRateFormat = "暴击伤害: {0}%\n";
+    public const string rcrFormat = "{0}%几率不消耗弹药\n";
+    public const string hpFormat = "血量: {0}\n";
+    public const string defFormat = "防御 : {0}\n";
+    public const string spdFormat = "速度: {0}%\n";
+    public const string jmpFormat = "跳跃: {0}%\n";
 }

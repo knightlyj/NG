@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public struct PlayerSta
+public struct PlayerSyncState
 {
     public bool up;
     public bool down;
@@ -24,7 +24,9 @@ public partial class Player : Entity
         this.hpBarOffset = -0.35f;
     }
 
-    public PlayerSta state;
+    public PlayerSyncState syncState; //同步所需状态
+    bool _alive = true;
+    public bool alive { get { return this._alive; } }
     // Use this for initialization
     protected override void Start()
     {
@@ -42,7 +44,16 @@ public partial class Player : Entity
 
         atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
                        1 << LayerMask.NameToLayer("Ground");
-        
+
+        PlayerItemInit();
+        EventManager.RaiseEvent(EventId.LocalPlayerCreate, this);
+
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        EventManager.RaiseEvent(EventId.LocalPlayerDestroy, this);
     }
 
     int atkLayerMask;
@@ -51,7 +62,7 @@ public partial class Player : Entity
     {
         base.Update();
 
-        state.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        syncState.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         UpdateAnimation();
         CheckShoot();
         
@@ -62,11 +73,11 @@ public partial class Player : Entity
     {
         if (isLocal)
         {
-            state.up = Input.GetKey(GameSetting.up);
-            state.down = Input.GetKey(GameSetting.down);
-            state.left = Input.GetKey(GameSetting.left);
-            state.right = Input.GetKey(GameSetting.right);
-            state.jump = Input.GetKey(GameSetting.jump);
+            syncState.up = Input.GetKey(GameSetting.up);
+            syncState.down = Input.GetKey(GameSetting.down);
+            syncState.left = Input.GetKey(GameSetting.left);
+            syncState.right = Input.GetKey(GameSetting.right);
+            syncState.jump = Input.GetKey(GameSetting.jump);
 
             Simualte();
         }
