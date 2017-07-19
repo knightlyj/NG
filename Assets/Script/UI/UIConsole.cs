@@ -2,10 +2,12 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Text;
 
 public class UIConsole : MonoBehaviour {
     InputField itemId, itemAmount;
     InputField moneyInput;
+    Text txtProp;
     void Awake()
     {
         //物品
@@ -20,16 +22,28 @@ public class UIConsole : MonoBehaviour {
 
         Button addMoney = transform.FindChild("Bg").FindChild("AddMoney").GetComponent<Button>();
         addMoney.onClick.AddListener(this.OnAddMoneyClick);
+
+        //属性
+        txtProp = transform.FindChild("Bg").FindChild("Properties").GetComponent<Text>();
+
+        Button btnSave = transform.FindChild("Bg").FindChild("Save").GetComponent<Button>();
+        btnSave.onClick.AddListener(this.Save);
+        Button btnLoad = transform.FindChild("Bg").FindChild("Load").GetComponent<Button>();
+        btnLoad.onClick.AddListener(this.Load);
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 	
 	}
-	
+
+    int propUpateCnt = 0;
 	// Update is called once per frame
 	void Update () {
-	
+	    if(++propUpateCnt >= 20)
+        {
+            UpdateProperties();
+        }
 	}
 
     void OnDestroy()
@@ -41,6 +55,12 @@ public class UIConsole : MonoBehaviour {
         //钱
         Button addMoney = transform.FindChild("Bg").FindChild("AddMoney").GetComponent<Button>();
         addMoney.onClick.RemoveListener(this.OnAddMoneyClick);
+
+
+        Button btnSave = transform.FindChild("Bg").FindChild("Save").GetComponent<Button>();
+        btnSave.onClick.RemoveListener(this.Save);
+        Button btnLoad = transform.FindChild("Bg").FindChild("Load").GetComponent<Button>();
+        btnLoad.onClick.RemoveListener(this.Load);
     }
 
     void OnAddItemClick()
@@ -50,12 +70,18 @@ public class UIConsole : MonoBehaviour {
         try
         {
             intId = Int32.Parse(itemId.text);
-            amount = UInt32.Parse(itemAmount.text);
         }
         catch
         {
             intId = -1;
-            amount = 0;
+        }
+        try
+        {
+            amount = UInt32.Parse(itemAmount.text);
+        }
+        catch
+        {
+            amount = 1;
         }
 
         if (amount == 0)
@@ -64,7 +90,7 @@ public class UIConsole : MonoBehaviour {
         }
         else
         {
-            ItemId id = (ItemId)intId;
+            int id = intId;
             Item newItem = new Item(id, amount);
             if (newItem.valid)
             {
@@ -99,6 +125,38 @@ public class UIConsole : MonoBehaviour {
             PlayerBag playerBag = localPlayer.bag;
             playerBag.money += money;
         }
+    }
 
+    const string propFormat = "";
+    void UpdateProperties()
+    {
+        Player localPlayer = Helper.FindLocalPlayer();
+        if (localPlayer != null)
+        {
+            PlayerProperties prop = localPlayer.Properties;
+            txtProp.text = string.Format("血量: {0}/{1}, 攻击: {2}-{3},防御: {4}\n攻击间隔: {5:N}, 攻速: {6}%\n暴击率: {7}%, 暴击伤害: {8}%\nrcr: {9}%,  速度: {10}%, 跳跃: {11}%", 
+                prop.hp, prop.maxHp, prop.minAttack, prop.maxAttack, prop.defense,
+                prop.atkInterval, Mathf.Round(prop.atkSpeed * 100),
+                Mathf.Round(prop.criticalChance * 100), Mathf.Round(prop.criticalRate * 100),
+                Mathf.Round(prop.rcr * 100), Mathf.Round(prop.speedScale * 100), Mathf.Round(prop.jumpScale * 100));
+        }
+    }
+
+    void Save()
+    {
+        GameManager manager = Helper.GetManager();
+        if(manager != null)
+        {
+            manager.SaveGame();
+        }
+    }
+
+    void Load()
+    {
+        GameManager manager = Helper.GetManager();
+        if (manager != null)
+        {
+            manager.LoadGame("local player", null);
+        }
     }
 }

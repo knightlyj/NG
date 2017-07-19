@@ -30,23 +30,21 @@ public static class Helper {
     
 
     //找到本地玩家
-    static Player localPlayer = null;
-    public static Player FindLocalPlayer()
+    static LocalPlayer localPlayer = null;
+    public static LocalPlayer FindLocalPlayer()
     {
         if (localPlayer != null)
             return localPlayer;
 
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject go in players)
+        GameObject goPlayer = GameObject.FindGameObjectWithTag("LocalPlayer");
+        if (goPlayer != null)
         {
-            Player p = go.GetComponent<Player>();
-            if (p.isLocal)
+            localPlayer = goPlayer.GetComponent<LocalPlayer>();
+            if (localPlayer != null)
             {
-                localPlayer = p;
                 localPlayer.EntityDestroyEvent += OnPlayerDestroy;
             }
         }
-
         return localPlayer;
     }
 
@@ -119,15 +117,19 @@ public static class Helper {
         while (tr != null);
     }
 
+    //找到manager
+    static public GameManager GetManager()
+    {
+        GameObject goManager = GameObject.FindGameObjectWithTag("Manager");
+        return goManager.GetComponent<GameManager>();
+    }
+
     //东西丢到玩家旁边
     static public void DropItemByPlayer(Item item)
     {
 
     }
-
-    //for test
-    static public PlayerBag playerPackage = new PlayerBag(40);
-    static public PlayerEquipment playerEquip = new PlayerEquipment();
+    
 }
 
 

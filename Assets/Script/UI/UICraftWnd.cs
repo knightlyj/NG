@@ -29,6 +29,12 @@ public class UICraftWnd : MonoBehaviour
         productSlot = transform.FindChild("Bg").FindChild("Product").GetComponent<UIMatSlot>();
 
         
+        //订阅本地玩家创建事件
+        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
+        //订阅本地玩家销毁事件
+        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //读取存档事件,背包数据会改变
+        EventManager.AddListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
 
     // Use this for initialization
@@ -37,10 +43,6 @@ public class UICraftWnd : MonoBehaviour
         Player localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
-        //订阅本地玩家创建事件
-        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
-        //订阅本地玩家销毁事件
-        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
 
         //合成类型列表
         crafgClassInfo = new System.Object[ItemTypeTable.className.Count];
@@ -79,6 +81,8 @@ public class UICraftWnd : MonoBehaviour
         EventManager.RemoveListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
         //退订本地玩家销毁事件
         EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //退订读取存档事件,背包数据会改变
+        EventManager.RemoveListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
 
     //选中分类
@@ -124,14 +128,14 @@ public class UICraftWnd : MonoBehaviour
         {
             if (craftItem.formula.rawMats[i] != null)
             {
-                ItemType matType = ItemTypeTable.GetItemType((ItemId)craftItem.formula.rawMats[i].id);
+                ItemType matType = ItemTypeTable.GetItemType(craftItem.formula.rawMats[i].id);
                 matSlot[i].SetMaterial(matType, craftItem.formula.rawMats[i].amount);
             }
             else
             {
                 matSlot[i].SetMaterial(null, 0);
             }
-            ItemType productType = ItemTypeTable.GetItemType((ItemId)craftItem.formula.outputId);
+            ItemType productType = ItemTypeTable.GetItemType(craftItem.formula.outputId);
             productSlot.SetMaterial(productType, craftItem.formula.outputAmount);
         }
         selCraftItem = craftItem;
@@ -161,7 +165,7 @@ public class UICraftWnd : MonoBehaviour
             bindBag.itemPack.RemoveAmount(formula.rawMats[i].id, formula.rawMats[i].amount);
         }
 
-        Item product = new Item((ItemId)formula.outputId, formula.outputAmount);
+        Item product = new Item(formula.outputId, formula.outputAmount);
         if (!bindBag.itemPack.PickUpItem(product))
         { //如果捡东西失败,丢到地上
             Helper.DropItemByPlayer(product);
@@ -178,20 +182,20 @@ public class UICraftWnd : MonoBehaviour
         //绑定到新的package
         bindBag = bag;
         //暂时没考虑背包关闭的问题
-        bindBag.itemPack.PackChangedEvent += this.OnPackChanged; //item包改变
+        bindBag.itemPack.PackChangedEvent += this.OnBagChanged; //item包改变
     }
 
     void UnbindBag()
     {
         if (bindBag != null)
         {
-            bindBag.itemPack.PackChangedEvent -= this.OnPackChanged;
+            bindBag.itemPack.PackChangedEvent -= this.OnBagChanged;
             bindBag = null;
         }
     }
 
     //背包物品有变化时的回调
-    void OnPackChanged()
+    void OnBagChanged()
     {
         ShowMatEnough();
     }
@@ -229,8 +233,8 @@ public class UICraftWnd : MonoBehaviour
 
     void OnLocalPlayerCreate(System.Object sender)
     {
-        Player localPlayer = sender as Player;
-        if(localPlayer != null)
+        LocalPlayer localPlayer = sender as LocalPlayer;
+        if (localPlayer != null)
         {
             BindBag(localPlayer.bag);
         }
@@ -239,5 +243,14 @@ public class UICraftWnd : MonoBehaviour
     void OnLocalPlayerDestroy(System.Object sender)
     {
         UnbindBag();
+    }
+
+    void OnLocalPlayerLoad(System.Object sender)
+    {
+        LocalPlayer localPlayer = sender as LocalPlayer;
+        if (localPlayer != null)
+        {
+            BindBag(localPlayer.bag);
+        }
     }
 }

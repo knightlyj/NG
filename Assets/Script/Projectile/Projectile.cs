@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     public ExplodeType explodeType = ExplodeType.OnHit;
     public Transform explodePrefab;
 
-    EntityProperties ownerProp = null; //射击者属性
+    PlayerProperties ownerProp = null; //射击者属性
     public float lifeTime = 10; //生命期
     public float baseSpeed = 5; //基本速度
     public float speedScale = 1; //速度scale
@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
     }
 
     //射击时的初始参数
-    public void Shoot(EntityProperties ownerProp, Vector2 position, Vector2 target, float speedScale, int hitLayerMask)
+    public void Shoot(PlayerProperties ownerProp, Vector2 position, Vector2 target, float speedScale, int hitLayerMask)
     {
         //保存参数
         this.ownerProp = ownerProp;

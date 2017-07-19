@@ -63,6 +63,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\DragonBones\DragonBones\MiniJSON.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\Animation.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\AnimationState.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\BaseTimelineState.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\IAnimateble.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\TimelineState.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\animation\WorldClock.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\armature\Armature.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\armature\Bone.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\armature\IArmatureProxy.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\armature\Slot.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\armature\TransformObject.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\core\BaseObject.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\core\DragonBones.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\event\EventObject.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\event\IEventDispatcher.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\factory\BaseFactory.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\geom\Geom.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\AnimationConfig.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\AnimationData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\ArmatureData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\DragonBonesData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\FrameData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\model\TimelineData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\parser\DataParser.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\parser\ObjectDataParser.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\texture\TextureData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityArmatureComponent.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityBone.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityCombineMesh.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityDragonBonesData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityEventDispatcher.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityFactory.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnitySlot.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityTextureData.cs" />
+    <Compile Include="Assets\DragonBones\DragonBones\unity\UnityUGUIDisplay.cs" />
     <Compile Include="Assets\Script\BackGround.cs" />
     <Compile Include="Assets\Script\CameraFollow.cs" />
     <Compile Include="Assets\Script\Entity\Buff\BaseBuff.cs" />
@@ -71,6 +107,7 @@
     <Compile Include="Assets\Script\Entity\Entity.cs" />
     <Compile Include="Assets\Script\Entity\Monster\Slime.cs" />
     <Compile Include="Assets\Script\Entity\Package.cs" />
+    <Compile Include="Assets\Script\Entity\Player\LocalPlayer.cs" />
     <Compile Include="Assets\Script\Entity\Player\Player.cs" />
     <Compile Include="Assets\Script\Entity\Player\PlayerAnimation.cs" />
     <Compile Include="Assets\Script\Entity\Player\PlayerItem.cs" />
@@ -91,9 +128,9 @@
     <Compile Include="Assets\Script\Network\MessageHelper.cs" />
     <Compile Include="Assets\Script\Network\Protocol.cs" />
     <Compile Include="Assets\Script\Network\ServerAgent.cs" />
+    <Compile Include="Assets\Script\Projectile\GameManager.cs" />
     <Compile Include="Assets\Script\Projectile\Projectile.cs" />
     <Compile Include="Assets\Script\Projectile\ShootTrail.cs" />
-    <Compile Include="Assets\Script\Projectile\Spawner.cs" />
     <Compile Include="Assets\Script\Projectile\WeaponObj.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\DamageText.cs" />

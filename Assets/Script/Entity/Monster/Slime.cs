@@ -7,7 +7,7 @@ public class Slime : Entity {
     // Use this for initialization
     protected override void Start () {
         base.Start();
-        _movForce = 8.0f;
+        _movForwardForce = 8.0f;
         _jumpSpeed = 3.0f;
     }
 
@@ -106,9 +106,9 @@ public class Slime : Entity {
         Vector3 dir = tar.transform.position - transform.position;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (dir.x > 0)
-            rb.AddForce(new Vector2(MovForce, 0));
+            rb.AddForce(new Vector2(MovForwardForce, 0));
         else
-            rb.AddForce(new Vector2(-MovForce, 0));
+            rb.AddForce(new Vector2(-MovForwardForce, 0));
 
         rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
     }

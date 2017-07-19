@@ -32,7 +32,7 @@ public class UIStoreWnd : MonoBehaviour
         StoreInfo info = new StoreInfo();
         for (int i = 1; i <= 3; i++)
         {
-            info.AddCommodity(new Commodity(new Item((ItemId)i, 5)));
+            info.AddCommodity(new Commodity(new Item(i, 5)));
         }
         this.SetStoreInfo(info);
     }

@@ -19,6 +19,7 @@ public class UIBagWnd : MonoBehaviour
     //金钱显示
     Text money = null;
 
+    //awake会在setactive后立即调用,初始化写在这里
     void Awake()
     {
         Transform trPack = transform.FindChild("Bg");
@@ -37,6 +38,12 @@ public class UIBagWnd : MonoBehaviour
         money = trPack.FindChild("MoneyBg").FindChild("Money").GetComponent<Text>();
 
         
+        //订阅本地玩家创建事件
+        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
+        //订阅本地玩家销毁事件
+        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //读取存档事件,背包数据会改变
+        EventManager.AddListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
 
     // Use this for initialization
@@ -45,10 +52,6 @@ public class UIBagWnd : MonoBehaviour
         Player localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
-        //订阅本地玩家创建事件
-        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
-        //订阅本地玩家销毁事件
-        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
     }
 
     void OnDestroy()
@@ -65,6 +68,8 @@ public class UIBagWnd : MonoBehaviour
         EventManager.RemoveListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
         //退订本地玩家销毁事件
         EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //退订读取存档事件,背包数据会改变
+        EventManager.RemoveListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
     
     // Update is called once per frame
@@ -114,7 +119,18 @@ public class UIBagWnd : MonoBehaviour
             }
             else
             {   //右键,使用
-
+                Item itemInSlot = null; //原来格子里的物品
+                itemInSlot = itemPack.TakeItem(slot.index); //拿出来
+                if (itemInSlot.Type.IsArmor)
+                {   //护甲,装备上,饰品就放在第一个格子里
+                    Player localPlayer = Helper.FindLocalPlayer();
+                    if (localPlayer != null)
+                    {
+                        Item preArmor = null;
+                        localPlayer.equipment.PutOnArmor(itemInSlot, out preArmor); //穿上护甲
+                        itemPack.PutInItem(preArmor, slot.index, out itemInSlot); //脱下的护甲放入这个格子里
+                    }
+                }
             }
             Helper.ShowTips(itemPack.content[slot.index]);
         }
@@ -192,7 +208,7 @@ public class UIBagWnd : MonoBehaviour
 
     void OnLocalPlayerCreate(System.Object sender)
     {
-        Player localPlayer = sender as Player;
+        LocalPlayer localPlayer = sender as LocalPlayer;
         if (localPlayer != null)
         {
             BindBag(localPlayer.bag);
@@ -202,5 +218,14 @@ public class UIBagWnd : MonoBehaviour
     void OnLocalPlayerDestroy(System.Object sender)
     {
         UnbindBag();
+    }
+
+    void OnLocalPlayerLoad(System.Object sender)
+    {
+        LocalPlayer localPlayer = sender as LocalPlayer;
+        if (localPlayer != null)
+        {
+            BindBag(localPlayer.bag);
+        }
     }
 }

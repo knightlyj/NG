@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Runtime.Serialization;
 
 //***********************************************
 //                  护甲
@@ -9,11 +10,9 @@ public enum ArmorType
 {
     Helmet, //头盔
     Armor, //护甲
-    Glove, //手套
     Boot, //鞋子
-    Accessory0, //饰品0
-    Accessory1, //饰品1
-    Accessory2, //饰品2
+    Glove, //手套
+    Accessory, //饰品0
 }
 //护甲属性
 public class ArmorProperties
@@ -38,9 +37,17 @@ public class ArmorProperties
 //***********************************************
 //                  武器
 //***********************************************
+public enum GunType
+{
+    Normal,
+    Projectile,
+
+}
 //武器属性
 public class WeaponProperties
 {
+    public GunType gunType;
+
     public int minAtkBonus; //攻击
     public int maxAtkBonus;
     public float atkInterval; //攻击间隔
@@ -52,84 +59,131 @@ public class WeaponProperties
     public string appearance;
 }
 
-public class PlayerEquipment
+[Serializable]
+public class PlayerEquipment : ISerializable
 {
-    public PlayerEquipment()
+    public PlayerEquipment(PlayerProperties bindProp)
     {
+        bindProperties = bindProp;
         ArmorInit();
         WeaponInit();
     }
+    PlayerProperties bindProperties = null;
     ////////////////////////////////////////////////////////
     //******************装备栏*****************************
     ////////////////////////////////////////////////////
     Item[] _armors = null;
+    public static readonly ArmorType[] armorTypes = {ArmorType.Helmet, ArmorType.Armor, ArmorType.Boot, ArmorType.Glove,
+                        ArmorType.Accessory, ArmorType.Accessory, ArmorType.Accessory };
     public Item[] Armors { get { return this._armors; } }
     void ArmorInit()
     {
-        Array a = Enum.GetValues(typeof(ArmorType));
-        _armors = new Item[a.Length];
+        _armors = new Item[armorTypes.Length];
     }
 
-    //穿上装备,如果之前格子里有装备,会移除掉
+    //根据类型穿装备,饰品就放在第一个格子里
     public bool PutOnArmor(Item armor, out Item preArmor)
     {
         preArmor = null;
-        //int idx = (int)armor.Properties.armorType;
+        if (armor != null && armor.Type.IsArmor)
+        {
+            ArmorProperties armorProp = EquipTable.GetArmorProp(armor.Type.armorId);
+            for (int i = 0; i < armorTypes.Length; i++)
+            {
+                if (armorProp.armorType == armorTypes[i])
+                {
+                    PutOnArmor(armor, i, out preArmor);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-        //preArmor = Armors[idx];
-        //Armors[idx] = armor; //加入已装备护甲列表
+    //穿上装备,如果之前格子里有装备,会移除掉
+    public bool PutOnArmor(Item armor, int idx, out Item preArmor)
+    {
+        preArmor = null;
+        if (armor == null || !armor.Type.IsArmor)
+            return false;
+        ArmorProperties armorProp = EquipTable.GetArmorProp(armor.Type.armorId);
+        if (armorProp != null && armorProp.armorType == armorTypes[idx])
+        {  //存在装备配置,且类型相同
+            preArmor = Armors[idx];
+            Armors[idx] = armor; //加入已装备护甲列表
 
+            if (preArmor != null)
+            {
+                ArmorProperties preProp = EquipTable.GetArmorProp(preArmor.Type.armorId);
+                if (preProp != null)
+                    RemoveArmorProp(bindProperties, preProp);
+            }
+            AddArmorProp(bindProperties, armorProp);
+            RaiseEquipChanged();
+        }
         return true;
     }
 
     //脱下装备
-    public Item TakeOffArmor(ArmorType type)
+    public Item TakeOffArmor(int idx)
     {
-        int idx = (int)type;
-        Item a = Armors[idx];
+        Item preArmor = Armors[idx];
         Armors[idx] = null; //从已装备列表中移除
 
-        return a;
-    }
-
-    void AddArmorProp(Item a)
-    {
-        //prop.maxHp += a.Properties.hpBonus; //生命上限
-        //prop.minAttack += a.Properties.minAtkBonus; //最小攻击
-        //prop.maxAttack += a.Properties.maxAtkBonus; //最大攻击
-        //prop.defense += a.Properties.defBonus; //防御
-        //prop.speedScale += a.Properties.spdScaleBonus; //速度
-        //prop.jumpScale += a.Properties.jmpScaleBonus; //跳跃
-        //prop.atkSpeed += a.Properties.atkSpdBonus; //攻速
-        //prop.criticalChance += a.Properties.crtlChanceBonus; //暴击几率
-        //prop.criticalRate += a.Properties.crtlRateBonus; //暴击伤害
-
+        //修改属性
+        if (preArmor != null)
+        {
+            ArmorProperties preProp = EquipTable.GetArmorProp(preArmor.Type.armorId);
+            if (preProp != null)
+                RemoveArmorProp(bindProperties, preProp);
+        }
         RaiseEquipChanged();
+        return preArmor;
     }
 
-    void RemoveArmorProp(Item a)
+    //加上装备属性
+    void AddArmorProp(PlayerProperties playerProp, ArmorProperties armorProp)
     {
-        //减掉装备加成
-        //prop.maxHp -= a.Properties.hpBonus; //生命上限
-        //if (prop.hp > prop.maxHp)
-        //    prop.hp = prop.maxHp;
+        if (playerProp != null && armorProp != null)
+        {
+            playerProp.maxHp += armorProp.hpBonus; //生命上限
+            if (playerProp.hp > playerProp.maxHp)
+                playerProp.hp = playerProp.maxHp;
+            playerProp.minAttack += armorProp.minAtkBonus; //最小攻击
+            playerProp.maxAttack += armorProp.maxAtkBonus; //最大攻击
+            playerProp.defense += armorProp.defBonus; //防御
+            playerProp.speedScale += armorProp.spdScaleBonus; //速度
+            playerProp.jumpScale += armorProp.jmpScaleBonus; //跳跃
+            playerProp.atkSpeed += armorProp.atkSpdBonus; //攻速
+            playerProp.criticalChance += armorProp.crtlChanceBonus; //暴击几率
+            playerProp.criticalRate += armorProp.crtlRateBonus; //暴击伤害
+            playerProp.rcr += armorProp.rcrBonus; //rcr
 
-        //prop.minAttack -= a.Properties.minAtkBonus; //最小攻击
-        //prop.maxAttack -= a.Properties.maxAtkBonus; //最大攻击
-        //prop.defense -= a.Properties.defBonus; //防御
-        //prop.speedScale -= a.Properties.spdScaleBonus; //速度
-        //prop.jumpScale -= a.Properties.jmpScaleBonus; //跳跃
-
-        //prop.atkSpeed -= a.Properties.atkSpdBonus; //攻速
-        //prop.criticalChance -= a.Properties.crtlChanceBonus; //暴击几率
-        //prop.criticalRate -= a.Properties.crtlRateBonus; //暴击伤害
-
-        RaiseEquipChanged();
+        }
     }
 
-    void ShowArmor(ArmorType type, string sprite)
+    //移除装备属性
+    void RemoveArmorProp(PlayerProperties playerProp, ArmorProperties armorProp)
     {
+        if (playerProp != null && armorProp != null)
+        {
+            //减掉装备加成
+            playerProp.maxHp -= armorProp.hpBonus; //生命上限
+            if (playerProp.hp > playerProp.maxHp)
+                playerProp.hp = playerProp.maxHp;
 
+            playerProp.minAttack -= armorProp.minAtkBonus; //最小攻击
+            playerProp.maxAttack -= armorProp.maxAtkBonus; //最大攻击
+            playerProp.defense -= armorProp.defBonus; //防御
+            playerProp.speedScale -= armorProp.spdScaleBonus; //速度
+            playerProp.jumpScale -= armorProp.jmpScaleBonus; //跳跃
+
+            playerProp.atkSpeed -= armorProp.atkSpdBonus; //攻速
+            playerProp.criticalChance -= armorProp.crtlChanceBonus; //暴击几率
+            playerProp.criticalRate -= armorProp.crtlRateBonus; //暴击伤害
+            playerProp.rcr -= armorProp.rcrBonus; //rcr
+
+        }
     }
 
     ////////////////////////////////////////////////////////
@@ -147,73 +201,128 @@ public class PlayerEquipment
         _weapons = new Item[weaponAmount];
     }
 
+    /// <summary>
+    /// 装备武器
+    /// </summary>
+    /// <param name="weapon"></param>
+    /// <param name="idx"></param>
+    /// <param name="preWeapon"></param>
+    /// <returns></returns>
     public bool PutOnWeapon(Item weapon, int idx, out Item preWeapon)
     {
         preWeapon = null;
-        if (idx < 0 || idx >= weaponAmount || weapon == null)
+        if (idx < 0 || idx >= weaponAmount || weapon == null || !weapon.Type.IsWeapon)
             return false;
 
-        //记下原来的武器
-        if (_weapons[idx] != null)
-            preWeapon = _weapons[idx];
+        WeaponProperties weaponProp = EquipTable.GetWeaponProp(weapon.Type.weaponId);
+        if (weaponProp != null)
+        {
+            //记下原来的武器
+            if (_weapons[idx] != null)
+                preWeapon = _weapons[idx];
 
-        //装备新武器
-        _weapons[idx] = weapon;
+            //装备新武器
+            _weapons[idx] = weapon;
 
-        RaiseEquipChanged();
+            if (idx == curWeaponIdx) //如果切换的是当前使用武器,则要计算属性
+            {
+                if (preWeapon != null)
+                {//之前格子里有武器,则移除属性
+                    WeaponProperties preProp = EquipTable.GetWeaponProp(preWeapon.Type.weaponId);
+                    if (preProp != null)
+                        RemoveWeaponProp(bindProperties, preProp);
+                }
+                //加上新武器的属性
+                AddWeaponProp(bindProperties, weaponProp);
+            }
+
+            RaiseEquipChanged();
+        }
         return true;
     }
 
+    /// <summary>
+    /// 取下武器
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
     public Item TakeOffWeapon(int idx)
     {
         if (idx < 0 || idx >= weaponAmount)
             return null;
 
-        Item w = Weapons[idx]; //取下武器
+        Item preWeapon = Weapons[idx]; //之前装备的武器
 
         Weapons[idx] = null; //从已装武器列表中移除
+        if (idx == curWeaponIdx && preWeapon != null)
+        {
+            WeaponProperties weaponProp = EquipTable.GetWeaponProp(preWeapon.Type.weaponId);
+            if (weaponProp != null)
+                RemoveWeaponProp(bindProperties, weaponProp);
+        }
 
         RaiseEquipChanged();
-        return w;
+        return preWeapon;
     }
 
-    void AddWeaponProp(Item w)
+    /// <summary>
+    /// 切换武器
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
+    bool SwitchWeapon(int idx)
     {
-        //prop.minAttack += w.Properties.minAtkBonus; //最小攻击
-        //prop.maxAttack += w.Properties.maxAtkBonus; //最大攻击
-        //prop.atkInterval = w.Properties.atkInterval; //攻击间隔
-        //prop.criticalChance += w.Properties.crtlChanceBonus; //暴击几率
-        //prop.criticalRate += w.Properties.crtlRateBonus; //暴击伤害
+        if (idx < 0 || idx >= weaponAmount)
+            return false;
 
-        RaiseEquipChanged();
+        //移除当前使用武器的属性
+        if (_weapons[curWeaponIdx] != null)
+        {
+            WeaponProperties weaponProp = EquipTable.GetWeaponProp(_weapons[curWeaponIdx].Type.weaponId);
+            if (weaponProp != null)
+                RemoveWeaponProp(bindProperties, weaponProp);
+        }
+
+        //添加要使用的武器的属性
+        if (Weapons[idx] != null)
+        {
+            WeaponProperties weaponProp = EquipTable.GetWeaponProp(_weapons[idx].Type.weaponId);
+            if (weaponProp != null)
+                AddWeaponProp(bindProperties, weaponProp);
+        }
+
+        curWeaponIdx = idx;
+
+        return true;
     }
 
-    void RemoveWeaponProp(Item w)
+    void AddWeaponProp(PlayerProperties playerProp, WeaponProperties weaponProp)
     {
-        //prop.minAttack += w.Properties.minAtkBonus; //最小攻击
-        //prop.maxAttack += w.Properties.maxAtkBonus; //最大攻击
-        //prop.atkInterval = w.Properties.atkInterval; //攻击间隔
-        //prop.criticalChance += w.Properties.crtlChanceBonus; //暴击几率
-        //prop.criticalRate += w.Properties.crtlRateBonus; //暴击伤害
-
-        RaiseEquipChanged();
+        if (playerProp != null && weaponProp != null)
+        {
+            playerProp.minAttack += weaponProp.minAtkBonus; //最小攻击
+            playerProp.maxAttack += weaponProp.maxAtkBonus; //最大攻击
+            playerProp.atkInterval = weaponProp.atkInterval; //攻击间隔
+            playerProp.criticalChance += weaponProp.crtlChanceBonus; //暴击几率
+            playerProp.criticalRate += weaponProp.crtlRateBonus; //暴击伤害
+            playerProp.rcr += weaponProp.rcrBonus; //rcr
+        }
     }
 
-    //bool SwitchWeapon(int idx)
-    //{
-    //    if (idx < 0 || idx >= weaponAmount)
-    //        return false;
+    void RemoveWeaponProp(PlayerProperties playerProp, WeaponProperties weaponProp)
+    {
+        if (playerProp != null && weaponProp != null)
+        {
+            playerProp.minAttack -= weaponProp.minAtkBonus; //最小攻击
+            playerProp.maxAttack -= weaponProp.maxAtkBonus; //最大攻击
+            playerProp.atkInterval = weaponProp.atkInterval; //攻击间隔
+            playerProp.criticalChance -= weaponProp.crtlChanceBonus; //暴击几率
+            playerProp.criticalRate -= weaponProp.crtlRateBonus; //暴击伤害
+            playerProp.rcr -= weaponProp.rcrBonus; //rcr
+        }
+    }
 
-    //    if (Weapons[curWeaponIdx] != null)
-    //        RemoveWeaponProp(Weapons[curWeaponIdx], this.Properties);
 
-    //    if (Weapons[idx] != null)
-    //        AddWeaponProp(Weapons[idx], this.Properties);
-
-    //    curWeaponIdx = idx;
-
-    //    return true;
-    //}
 
     //显示某一把武器
     void ShowWeapon(string spriteName)
@@ -221,29 +330,26 @@ public class PlayerEquipment
 
     }
 
-    //根据装备计算属性
-    EntityProperties CalcProperties()
+    //重新计算数值
+    public void RecalcProperties()
     {
-        if (Armors == null)
+        if (bindProperties != null)
         {
-            Debug.LogError("Player.CalcProperties >> Armors is null");
-            return null;
+            bindProperties.Reset();
+            foreach (Item armor in Armors)
+            {
+                if (armor != null) {
+                    ArmorProperties armorProp = EquipTable.GetArmorProp(armor.Type.armorId);
+                    AddArmorProp(bindProperties, armorProp);
+                }
+            }
+            Item curWeapon = CurWeapon;
+            if(curWeapon != null)
+            {
+                WeaponProperties weaponProp = EquipTable.GetWeaponProp(curWeapon.Type.weaponId);
+                AddWeaponProp(bindProperties, weaponProp);
+            }
         }
-        EntityProperties newPorp = new EntityProperties();
-        newPorp.Reset();
-        foreach (Item a in Armors)
-        {
-            //newPorp.maxHp += a.Properties.hpBonus; //生命上限
-            //newPorp.minAttack += a.Properties.minAtkBonus; //最小攻击
-            //newPorp.maxAttack += a.Properties.maxAtkBonus; //最大攻击
-            //newPorp.defense += a.Properties.defBonus; //防御
-            //newPorp.speedScale += a.Properties.spdScaleBonus; //速度
-            //newPorp.jumpScale += a.Properties.jmpScaleBonus; //跳跃
-            //newPorp.atkSpeed += a.Properties.atkSpdBonus; //攻速
-            //newPorp.criticalChance += a.Properties.crtlChanceBonus; //暴击几率
-            //newPorp.criticalRate += a.Properties.crtlRateBonus; //暴击伤害
-        }
-        return newPorp;
     }
 
     //装备改变事件
@@ -253,6 +359,32 @@ public class PlayerEquipment
     {
         if (this.EquipChangedEvent != null)
             EquipChangedEvent();
+    }
+
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("armor", this._armors, typeof(Item[]));
+        info.AddValue("weapon", this._weapons, typeof(Item[]));
+    }
+    /// <summary>
+    /// 反序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    public PlayerEquipment(SerializationInfo info, StreamingContext context)
+    {
+        this._armors = (Item[])info.GetValue("armor", typeof(Item[]));
+        this._weapons = (Item[])info.GetValue("weapon", typeof(Item[]));
+    }
+
+    public void BindProperties(PlayerProperties prop)
+    {
+        this.bindProperties = prop;
     }
 }
 

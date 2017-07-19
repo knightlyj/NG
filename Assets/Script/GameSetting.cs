@@ -37,6 +37,7 @@ public static class TextResources
 {
     //gameobect所用字符串
     public const string gamePlayUITag = "GamePlayUI"; //游戏场景UI的tag
+    public const string gameManager = "Manager"; //游戏管理器
 
     //资源名
     public const string defaultCraftClassIcon = "wood"; //默认合成分类图标

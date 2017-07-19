@@ -18,7 +18,7 @@ public class UIMatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     // Use this for initialization
     void Start()
     {
-        SetMaterial(ItemTypeTable.GetItemType(ItemId.Iron), 20);
+        SetMaterial(null, 20);
     }
 
     // Update is called once per frame

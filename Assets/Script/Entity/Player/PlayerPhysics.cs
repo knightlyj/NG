@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public partial class Player {
+public partial class Player
+{
     //enum SimualteState
     //{
     //    Nothing,
@@ -10,13 +11,13 @@ public partial class Player {
     //    OnLadder,
     //    InAir,
     //}
-    
+
     bool onGround = false;
     bool onPlatform = false;
     public Transform groundCheck;
     public LayerMask groundLayerMask;
     public LayerMask platformLayerMask;
-    
+
 
     DateTime jumpTime = DateTime.Now;
     DateTime crossPlatformTime = DateTime.Now;
@@ -44,13 +45,48 @@ public partial class Player {
             if (!syncState.left && !syncState.right && rb.velocity.y <= 0) //有向上的速度,也不会触发立即停止或者摩擦力
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                SetBodyAnimation(BodyAnimation.Idle);
             }
             else
-            {
-                if (syncState.left && rb.velocity.x > -MaxHorSpeed)
-                    rb.AddForce(new Vector2(-MovForce, 0));
-                if (syncState.right && rb.velocity.x < MaxHorSpeed)
-                    GetComponent<Rigidbody2D>().AddForce(new Vector2(MovForce, 0));
+            {  //地面移动处理
+                if (syncState.left)
+                { //按住左
+                    if (faceRight)  //朝着右边,则按后退处理
+                    {
+                        if (rb.velocity.x > -MaxBackSpeed)
+                            rb.AddForce(new Vector2(-MovBackForce, 0));
+                        else
+                            rb.velocity = new Vector2(-MaxBackSpeed, rb.velocity.y);
+                        SetBodyAnimation(BodyAnimation.Back);
+                    }
+                    else
+                    { //朝着左边,按前进处理
+                        if (rb.velocity.x > -MaxForwardSpeed)
+                            rb.AddForce(new Vector2(-MovForwardForce, 0));
+                        else
+                            rb.velocity = new Vector2(-MaxForwardSpeed, rb.velocity.y);
+                        SetBodyAnimation(BodyAnimation.Run);
+                    }
+                }
+                if (syncState.right) //按住右
+                {
+                    if (faceRight)  //朝着右边,前进
+                    {
+                        if (rb.velocity.x < MaxForwardSpeed)
+                            rb.AddForce(new Vector2(MovForwardForce, 0));
+                        else
+                            rb.velocity = new Vector2(MaxForwardSpeed, rb.velocity.y);
+                        SetBodyAnimation(BodyAnimation.Run);
+                    }
+                    else 
+                    {  //朝着左边,后退 
+                        if (rb.velocity.x < MaxBackSpeed)
+                            rb.AddForce(new Vector2(MovBackForce, 0));
+                        else
+                            rb.velocity = new Vector2(MaxBackSpeed, rb.velocity.y);
+                        SetBodyAnimation(BodyAnimation.Back);
+                    }
+                }
             }
 
             if (syncState.down)
@@ -82,14 +118,15 @@ public partial class Player {
                     rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
                     jumpTime = DateTime.Now;
                     GetOffLadder();
+                    SetBodyAnimation(BodyAnimation.Jump);
                 }
             }
         }
         else
         {   //在空中时,无摩擦力,按住左右会有较小的力
-            if (syncState.left && rb.velocity.x > -MaxHorSpeed)
+            if (syncState.left && rb.velocity.x > -MaxForwardSpeed)
                 rb.AddForce(new Vector2(-MovFroceInAir, 0));
-            if (syncState.right && rb.velocity.x < MaxHorSpeed)
+            if (syncState.right && rb.velocity.x < MaxForwardSpeed)
                 rb.AddForce(new Vector2(MovFroceInAir, 0));
 
             if (syncState.down)
@@ -102,12 +139,20 @@ public partial class Player {
                 if (inLadderArea)
                     GetOnLadder();
             }
+            if(rb.velocity.y > 0)
+            {   //上升
+                SetBodyAnimation(BodyAnimation.Raise);
+            }
+            else
+            {   //下降
+                SetBodyAnimation(BodyAnimation.Fall);
+            }
         }
         //max speed
-        if (rb.velocity.x < -MaxHorSpeed)
-            rb.velocity = new Vector2(-MaxHorSpeed, rb.velocity.y);
-        else if (rb.velocity.x > MaxHorSpeed)
-            rb.velocity = new Vector2(MaxHorSpeed, rb.velocity.y);
+        if (rb.velocity.x < -MaxForwardSpeed)
+            rb.velocity = new Vector2(-MaxForwardSpeed, rb.velocity.y);
+        else if (rb.velocity.x > MaxForwardSpeed)
+            rb.velocity = new Vector2(MaxForwardSpeed, rb.velocity.y);
 
         if (isCrossPlatform)
         {
@@ -161,6 +206,7 @@ public partial class Player {
                 jumpTime = DateTime.Now;
                 jumpFromLadderTime = DateTime.Now;
                 GetOffLadder();
+                SetBodyAnimation(BodyAnimation.Jump);
             }
         }
     }
@@ -174,10 +220,10 @@ public partial class Player {
             rb.gravityScale = 0;
             SetCrossPlatform(true);
         }
-        
+
         //Debug.Log("get on ladder");
     }
-    
+
     void GetOffLadder()
     {
         onLadder = false;
@@ -190,7 +236,7 @@ public partial class Player {
     bool inLadderArea = false;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
         {
             inLadderArea = true;
         }

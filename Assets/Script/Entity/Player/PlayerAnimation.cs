@@ -1,22 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DragonBones;
 
-public partial class Player{
-
+public partial class Player
+{
+    //动画名称
+    readonly string runAniName = "aimRun";
+    readonly string walkAniName = "aimWalk";
+    readonly string aimUpAniName = "aimUp";
+    readonly string aimDownAniName = "aimDown";
+    readonly string idleAniName = "idle";
+    readonly string jumpAniName = "jump";
+    readonly string fallAniName = "fall";
+    readonly string raiseAniName = "raise";
+    readonly string backAniName = "back";
+    //动画分组
+    readonly string aimAniGroup = "AimGroup";
+    readonly string bodyAniGroup = "BodyGroup";
     //***********************************************
-    Animator bodyAnimator = null;
-    //Animator aimAnimator = null;
-    Transform trHead;
-    Transform trMainHand;
-    Transform trOffHand;
+    UnityArmatureComponent armatureComponent = null;
+    UnityEngine.Transform aimBone = null;
     void InitAnimation()
     {
-        bodyAnimator = transform.FindChild("Body").GetComponent<Animator>();
-        //aimAnimator = bodyAnimator.transform.FindChild("Aim").GetComponent<Animator>();
-
-        trHead = transform.FindChild("Body").FindChild("Head");
-        trMainHand = transform.FindChild("Body").FindChild("MainUpperArm");
-        trOffHand = transform.FindChild("Body").FindChild("OffUpperArm");
+        armatureComponent = transform.FindChild("armature").GetComponent<UnityArmatureComponent>();
+        armatureComponent.animation.Reset();
+        aimBone = transform.FindChild("armature").FindChild("Bones").FindChild("for_aim");
     }
 
     void UpdateAnimation()
@@ -25,23 +33,25 @@ public partial class Player{
         UpdateAim();
         UpateBody();
     }
-    
+
     void UpdateAim()
     {
-        Vector2 direction = syncState.targetPos - (Vector2)this.transform.position;
+        Vector2 direction = syncState.targetPos - (Vector2)aimBone.position;
         direction.Normalize();
-        float angle = Mathf.Abs(Mathf.Acos(Mathf.Abs(direction.x)) / Mathf.PI * 180);
-        if (direction.y < 0)
-            angle = -angle;
-
-        if (!faceRight) //朝向左边时会导致角度反转,没详细了解原因
-            angle = -angle;
-        
-        trHead.rotation = Quaternion.Euler(0, 0, angle/2);
-        trMainHand.rotation = Quaternion.Euler(0, 0, angle);
-        trOffHand.rotation = Quaternion.Euler(0, 0, angle);
-        //待补充
-        //Debug.Log("angle " + angle);
+        float radian = Mathf.Abs(Mathf.Acos(Mathf.Abs(direction.x)));
+        float rate = radian / (Mathf.PI / 2);
+        //Debug.Log(rate);
+        DragonBones.AnimationState _aimState = null;
+        //瞄准方向
+        if (direction.y > 0)
+        {
+            _aimState = armatureComponent.animation.FadeIn(aimUpAniName, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+        }
+        else
+        {
+            _aimState = armatureComponent.animation.FadeIn(aimDownAniName, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+        }
+        _aimState.weight = rate;
     }
 
     bool faceRight = true;
@@ -56,49 +66,75 @@ public partial class Player{
         if (change)
         {
             faceRight = !faceRight;
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
+            //改变朝向
+            armatureComponent.armature.flipX = !armatureComponent.armature.flipX;
         }
     }
 
-    enum BodyAnimationState
+    enum BodyAnimation
     {
         Nothing,
-        Stand,
+        Idle,
         Run,
+        Walk,
         Back,
-        InAir,
+
+        Jump,
+        Raise,
+        Fall,
     }
-    BodyAnimationState bodyAnimationState = BodyAnimationState.Nothing;
+
     void UpateBody()
     {
-        BodyAnimationState newState = BodyAnimationState.Nothing;
         if (true)
         {
             if ((rb.velocity.x > 0 && faceRight) || (rb.velocity.x < 0 && !faceRight))
             {   //朝向与移动方向一致,跑
-                newState = BodyAnimationState.Run;
             }
             else if ((rb.velocity.x < 0 && faceRight) || (rb.velocity.x > 0 && !faceRight))
             {   //朝向与移动方向不同,后退
-                newState = BodyAnimationState.Back;
-            }
-            else
-            {   //速度为0,站立
-                newState = BodyAnimationState.Stand;
             }
         }
-        //else
-        //{
-        //    newState = BodyAnimationState.InAir;
-        //}
-        if (newState != bodyAnimationState)
-        {   //动画不同,切换 待补充
-            bodyAnimationState = newState;
-            bodyAnimator.SetInteger("BodyState", (int)bodyAnimationState);
-            //Debug.Log("animation state " + bodyAnimationState.ToString());
+        
+    }
+
+
+    BodyAnimation lastAnimation = BodyAnimation.Nothing;
+    void SetBodyAnimation(BodyAnimation animation)
+    {
+        if (animation != lastAnimation)
+        {   //动画不同,切换 
+            lastAnimation = animation;
+            Debug.Log("animation state " + animation.ToString());
+            switch (animation)
+            {
+                case BodyAnimation.Run:
+                    armatureComponent.animation.FadeIn(runAniName, -1, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Walk:
+                    armatureComponent.animation.FadeIn(walkAniName, -1, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Idle:
+                    armatureComponent.animation.FadeIn(idleAniName, -1, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Jump:
+                    armatureComponent.animation.FadeIn(jumpAniName, 0, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Fall:
+                    armatureComponent.animation.FadeIn(fallAniName, 0.2f, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Raise:
+                    armatureComponent.animation.FadeIn(raiseAniName, 0.2f, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Back:
+                    armatureComponent.animation.FadeIn(backAniName, 0.2f, -1, 0, bodyAniGroup);
+                    break;
+            }
         }
     }
 
+    public override void SetTransparent(float a)
+    {
+
+    }
 }

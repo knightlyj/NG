@@ -7,6 +7,8 @@ public enum EventId
     LocalPlayerCreate, //本地玩家创建
     LocalPlayerDestroy, //本地玩家销毁
     MouseItemChange, //鼠标挂载物品改变
+
+    LocalPlayerLoad, //读取玩家存档
 }
 
 public static class EventManager

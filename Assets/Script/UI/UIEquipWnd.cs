@@ -7,7 +7,7 @@ public class UIEquipWnd : MonoBehaviour
 {
     UIItemSlot[] weaponSlots = new UIItemSlot[PlayerEquipment.weaponAmount];
     UIItemSlot[] armorSlots;
-
+    readonly string[] armorSlotName = { "Helmet", "Armor", "Boot", "Glove", "Accessory0", "Accessory1", "Accessory2" };
     void Awake()
     {
         for (int i = 0; i < PlayerEquipment.weaponAmount; i++)
@@ -16,17 +16,21 @@ public class UIEquipWnd : MonoBehaviour
             weaponSlots[i].index = i;
             weaponSlots[i].MouseDownEvent += this.OnWeaponSlotClick;
         }
-
-        Array a = Enum.GetValues(typeof(ArmorType));
-        armorSlots = new UIItemSlot[a.Length];
-        for (int i = 0; i < a.Length; i++)
+        
+        armorSlots = new UIItemSlot[armorSlotName.Length];
+        for (int i = 0; i < armorSlotName.Length; i++)
         {
-            armorSlots[i] = transform.FindChild("Bg").FindChild(Enum.GetName(typeof(ArmorType), i)).GetComponent<UIItemSlot>();
+            armorSlots[i] = transform.FindChild("Bg").FindChild(armorSlotName[i]).GetComponent<UIItemSlot>();
             armorSlots[i].index = i;
             armorSlots[i].MouseDownEvent += this.OnArmorSlotClick;
         }
-
-        
+       
+        //订阅本地玩家创建事件
+        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
+        //订阅本地玩家销毁事件
+        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //读取存档事件,背包数据会改变
+        EventManager.AddListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
 
     // Use this for initialization
@@ -34,11 +38,7 @@ public class UIEquipWnd : MonoBehaviour
     {
         Player localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
-            BindEquipment(localPlayer.playerEquipment);
-        //订阅本地玩家创建事件
-        EventManager.AddListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
-        //订阅本地玩家销毁事件
-        EventManager.AddListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+            BindEquipment(localPlayer.equipment);
     }
 
     void OnDestroy()
@@ -59,6 +59,8 @@ public class UIEquipWnd : MonoBehaviour
         EventManager.RemoveListener(EventId.LocalPlayerCreate, this.OnLocalPlayerCreate);
         //退订本地玩家销毁事件
         EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
+        //退订读取存档事件,背包数据会改变
+        EventManager.RemoveListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
     }
 
     // Update is called once per frame
@@ -91,7 +93,9 @@ public class UIEquipWnd : MonoBehaviour
             {   //鼠标没物品,尝试取下武器,如果没武器,则会得到null
                 mouseItem.PutItem(bindEquipment.TakeOffWeapon(slot.index));
             }
+            Helper.ShowTips(bindEquipment.Weapons[slot.index]);
         }
+        Helper.MoveWndToFront(transform);
     }
 
     //护甲格子点击回调
@@ -105,9 +109,13 @@ public class UIEquipWnd : MonoBehaviour
             { //鼠标有物品,则尝试装备
                 if (mouseItem.item.Type.IsArmor)
                 {
-                    Item preArmor = null;
-                    bindEquipment.PutOnArmor(mouseItem.TakeItem(), out preArmor); //穿上护甲
-                    mouseItem.PutItem(preArmor); //鼠标放入之前格子里的护甲
+                    ArmorProperties armorProp = EquipTable.GetArmorProp(mouseItem.item.Type.armorId);
+                    if (armorProp != null && armorProp.armorType == PlayerEquipment.armorTypes[slot.index])
+                    { //护甲有效,护甲类型匹配,则装备
+                        Item preArmor = null;
+                        bindEquipment.PutOnArmor(mouseItem.TakeItem(), slot.index, out preArmor); //穿上护甲
+                        mouseItem.PutItem(preArmor); //鼠标放入之前格子里的护甲
+                    }
                 }
                 else
                 { //鼠标上的不是护甲,什么都不用做
@@ -116,25 +124,32 @@ public class UIEquipWnd : MonoBehaviour
             }
             else
             {   //鼠标没物品,尝试取下武器,如果没武器,则会得到null
-                mouseItem.PutItem(bindEquipment.TakeOffArmor((ArmorType)slot.index));
+                mouseItem.PutItem(bindEquipment.TakeOffArmor(slot.index));
             }
+            Helper.ShowTips(bindEquipment.Armors[slot.index]);
         }
+        Helper.MoveWndToFront(transform);
     }
 
     //更新装备窗口
-    void UpateEquip()
+    void UpdateEquip()
     {
         //显示武器
         for (int i = 0; i < PlayerEquipment.weaponAmount; i++)
         {
             weaponSlots[i].SetItemInfo(bindEquipment.Weapons[i]);
         }
+        //显示护甲
+        for(int i = 0; i < armorSlots.Length; i++)
+        {
+            armorSlots[i].SetItemInfo(bindEquipment.Armors[i]);
+        }
     }
 
     //装备改变事件
     void OnEquipChanged()
     {
-        UpateEquip();
+        UpdateEquip();
     }
 
     PlayerEquipment bindEquipment = null;
@@ -144,6 +159,7 @@ public class UIEquipWnd : MonoBehaviour
 
         bindEquipment = equip;
         bindEquipment.EquipChangedEvent += this.OnEquipChanged;
+        this.UpdateEquip();
     }
 
     void UnbindEquipment()
@@ -157,15 +173,24 @@ public class UIEquipWnd : MonoBehaviour
 
     void OnLocalPlayerCreate(System.Object sender)
     {
-        Player localPlayer = sender as Player;
+        LocalPlayer localPlayer = sender as LocalPlayer;
         if (localPlayer != null)
         {
-            BindEquipment(localPlayer.playerEquipment);
+            BindEquipment(localPlayer.equipment);
         }
     }
 
     void OnLocalPlayerDestroy(System.Object sender)
     {
         UnbindEquipment();
+    }
+
+    void OnLocalPlayerLoad(System.Object sender)
+    {
+        LocalPlayer localPlayer = sender as LocalPlayer;
+        if (localPlayer != null)
+        {
+            BindEquipment(localPlayer.equipment);
+        }
     }
 }

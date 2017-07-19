@@ -6,15 +6,15 @@ using System;
 
 public partial class Player : Entity
 {
-    void PlayerItemInit()
+    void ItemInit()
     {
-        _playerBag = new PlayerBag(itemPackSize);
-        _equip = new PlayerEquipment();
+        _bag = new PlayerBag(itemPackSize);
+        _equip = new PlayerEquipment(this.Properties);
     }
 
     public const int itemPackSize = 40;
-    PlayerBag _playerBag = null;
-    public PlayerBag bag { get { return this._playerBag; } }
+    protected PlayerBag _bag = null;
+    public PlayerBag bag { get { return this._bag; } }
 
     //属性改变事件
     //public delegate void PropChanged(Player p);
@@ -25,6 +25,6 @@ public partial class Player : Entity
     //        PropChangedEvent(this);
     //}
 
-    PlayerEquipment _equip = null;
-    public PlayerEquipment playerEquipment {  get { return this._equip; } }
+    protected PlayerEquipment _equip = null;
+    public PlayerEquipment equipment {  get { return this._equip; } }
 }

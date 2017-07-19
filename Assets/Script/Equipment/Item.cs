@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Runtime.Serialization;
 
 public enum ItemQuality
 {
@@ -29,7 +30,7 @@ public class ItemType// : UnityEngine.Object
     public bool IsWeapon { get { return weaponId != 0; } }
     public bool IsArmor { get { return armorId != 0; } }
     public bool IsEquipment { get { return IsWeapon || IsArmor; } }
-    
+
     //public bool CanCraft { get { return false; } }
     public bool CanStack { get { return !IsEquipment; } }
 
@@ -74,31 +75,74 @@ public class CraftFormula
     }
 }
 
-
-public class Item
+[Serializable]
+public class Item : ISerializable
 {
     ItemType _type; //这里保存物品的种类信息
     public ItemType Type { get { return _type; } }
 
-    public uint amount = 0; //为消耗品或材料时,可以堆叠
+    public int id = 0;
+    public uint amount = 0; //为消耗品或材料时,可以堆叠,做装备处理时,不考虑amout项
     //public string icon = null;
 
     public Item(ItemType type, uint a)
     {
+        this.id = type.id;
         this._type = type;
         this.amount = a;
     }
 
-    public Item(ItemId id, uint a)
+    public Item(int id, uint a)
     {
+        this.id = id;
         this._type = ItemTypeTable.GetItemType(id);
         this.amount = a;
     }
 
     public bool valid { get { return this._type != null; } }
 
-    virtual public int buyPrice { get { return Type.originalPrice * (int)this.amount; } }
-    virtual public int sellPrice { get { return (int)(Type.originalPrice * this.amount * GameSetting.SellPriceRate); } }
+    public int buyPrice
+    {
+        get
+        {
+            if (Type.CanStack) //可以叠加,不是装备,按数量算
+            {
+                return Type.originalPrice * (int)this.amount;
+            }
+            else
+            {   //装备,不按数量算
+                return Type.originalPrice;
+            }
+        }
+    }
+    public int sellPrice
+    {
+        get
+        {
+            if (Type.CanStack)//可以叠加,不是装备,按数量算
+            {
+                return (int)(Type.originalPrice * this.amount * GameSetting.SellPriceRate);
+            }
+            else
+            {
+                return (int)(Type.originalPrice * GameSetting.SellPriceRate);
+            }
+        }
+    }
+
+    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("id", this.id, typeof(int));
+        info.AddValue("amount", this.amount, typeof(uint));
+    }
+
+    public Item(SerializationInfo info, StreamingContext context)
+    {
+        this.id = (int)info.GetValue("id", typeof(int));
+        this.amount = (uint)info.GetValue("amount", typeof(uint));
+        this._type = ItemTypeTable.GetItemType(id);
+    }
+
 }
 
 
@@ -107,15 +151,15 @@ public static class ItemGenerator
     //生成物品的档次
     public enum GenItemLvl
     {
-        Normal, 
+        Normal,
 
     }
 
-    static Item GenItem(ItemId id, uint amount, GenItemLvl level = GenItemLvl.Normal)
+    static Item GenItem(int id, uint amount, GenItemLvl level = GenItemLvl.Normal)
     {
         Item item = null;
         ItemType type = ItemTypeTable.GetItemType(id);
-        if(type != null)
+        if (type != null)
         {
             if (type.weaponId != 0)
             {

@@ -6,10 +6,12 @@ TagManager:
   tags:
   - Map
   - BattleInfo
-  - Spawner
+  - Manager
   - Items
   - Trash
   - GamePlayUI
+  - LocalPlayer
+  - RemotePlayer
   layers:
   - Default
   - TransparentFX

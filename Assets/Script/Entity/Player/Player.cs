@@ -18,6 +18,8 @@ public struct PlayerSyncState
 
 public partial class Player : Entity
 {
+    protected string _playerName = "local player";
+    public string playerName { get { return this._playerName; } }
     public Player()
     {
         //hpbar偏移,base.Start会使用,需要先设置
@@ -33,19 +35,17 @@ public partial class Player : Entity
         base.Start();
 
         //物理效果参数
-        _maxHorSpeed = 2.0f;
-        _movForce = 3;
+        _maxForwardSpeed = 2.0f;
+        _movForwardForce = 3;
         _movForceInAir = 0.2f;
         _jumpSpeed = 6f;
-
-        //
-        SetUpBodySR();
+        
         InitAnimation();
 
         atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
                        1 << LayerMask.NameToLayer("Ground");
 
-        PlayerItemInit();
+        ItemInit();
         EventManager.RaiseEvent(EventId.LocalPlayerCreate, this);
 
     }
@@ -69,7 +69,7 @@ public partial class Player : Entity
     }
 
 
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (isLocal)
         {
@@ -83,45 +83,13 @@ public partial class Player : Entity
         }
     }
 
-    List<SpriteRenderer> bodySRs = new List<SpriteRenderer>();
-    void AddBodyPart(Transform t)
-    {
-        SpriteRenderer sr = t.GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            bodySRs.Add(sr);
-        }
-    }
-    void SetUpBodySR()
-    {
-        Helper.TravesalGameObj(this.transform, this.AddBodyPart);
-        //Debug.Log("count " + bodySRs.Count);
-        //foreach(SpriteRenderer sr in bodySRs)
-        //{
-        //    Debug.Log(sr.gameObject.name);
-        //}
-    }
-
-    public override void SetAlpha(float a)
-    {
-        if (bodySRs == null)
-            return;
-        foreach (SpriteRenderer sr in bodySRs)
-        {
-            Color newColor = sr.color;
-            newColor.a = a;
-            sr.color = newColor;
-
-        }
-    }
-
-    public override void HitByOther(EntityProperties other)
+    public override void HitByOther(PlayerProperties other)
     {
         if (Properties.invincible || !GameSetting.isHost) //无敌状态或者不是主机,则不产生击中效果
             return;
         //伤害计算
         bool critical;
-        int damage = EntityProperties.CalcDamage(other, this.Properties, out critical);
+        int damage = PlayerProperties.CalcDamage(other, this.Properties, out critical);
         Properties.hp -= damage;
         BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
         info.AddDamageText(transform.position, damage, critical);

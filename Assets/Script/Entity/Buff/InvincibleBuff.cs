@@ -28,12 +28,12 @@ public class InvincibleBuff : BaseBuff
             if (transparent)
             {
                 transparent = false;
-                buffTarget.SetAlpha(0.1f);
+                buffTarget.SetTransparent(0.1f);
             }
             else
             {
                 transparent = true;
-                buffTarget.SetAlpha(0.8f);
+                buffTarget.SetTransparent(0.8f);
             }
             switchTime = switchInterval;
         }
@@ -46,7 +46,7 @@ public class InvincibleBuff : BaseBuff
     public override void Stop()
     {
         Player p = this.buffTarget as Player;
-        p.SetAlpha(1f);
+        p.SetTransparent(1f);
 
         p.SetInvincible(false);
     }

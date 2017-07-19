@@ -20,27 +20,12 @@ public class CameraFollow : MonoBehaviour {
     
 	// Update is called once per frame
 	void Update () {
-        if (player == null)
-            FindPlayer();
-        else
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
+        if(localPlayer != null)
         {
-            FollowPlayer();
+            FollowPlayer(localPlayer);
         }
         
-    }
-
-    Transform player = null;
-    void FindPlayer()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject go in players)
-        {
-            Player p = go.GetComponent<Player>();
-            if (p == null)
-                Debug.LogError("CameraFollow.FindPlayer >> player have no Player component");
-            if (p.isLocal)
-                player = p.transform;
-        }
     }
 
     void CalcCameraSize()
@@ -68,7 +53,7 @@ public class CameraFollow : MonoBehaviour {
     }
 
     //float followSpeed = 15.0f;
-    void FollowPlayer()
+    void FollowPlayer(Player player)
     {
         //Vector2 dist = player.position - transform.position;
         //float length = dist.magnitude;
@@ -83,7 +68,7 @@ public class CameraFollow : MonoBehaviour {
         //    dist *= followLength;
         //    transform.position += (Vector3)dist;
         //}
-        transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
+        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.transform.position.z);
     }
     
 

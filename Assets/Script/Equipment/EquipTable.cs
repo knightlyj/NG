@@ -70,6 +70,7 @@ public static class EquipTable
     enum ArmorTableIndex
     {
         Id,
+        Type,
         Hp,
         MinAtk,
         MaxAtk,
@@ -86,6 +87,14 @@ public static class EquipTable
         ArmorProperties prop = new ArmorProperties();
         string[] cell = null;
         cell = str.Split(',');
+        try
+        {
+            prop.armorType = (ArmorType)Int32.Parse(cell[(int)ArmorTableIndex.Type]);
+        }
+        catch
+        {
+            return null;
+        }
         //hp
         try{
             prop.hpBonus = Int32.Parse(cell[(int)ArmorTableIndex.Hp]);
@@ -182,6 +191,7 @@ public static class EquipTable
     enum WeaponTableIndex
     {
         Id,
+        Type,
         MinAtk,
         MaxAtk,
         Interval,
@@ -196,6 +206,14 @@ public static class EquipTable
 
         string[] cell = null;
         cell = str.Split(',');
+        try
+        {
+            prop.gunType = (GunType)Int32.Parse(cell[(int)WeaponTableIndex.Type]);
+        }
+        catch
+        {
+            return null;
+        }
         //min atk
         try
         {

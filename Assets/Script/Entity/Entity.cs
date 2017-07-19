@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EntityProperties
+public class PlayerProperties
 {
     public float hp;
     public int maxHp;
@@ -14,12 +14,11 @@ public class EntityProperties
     public float atkSpeed;
     public float criticalChance;
     public float criticalRate;
-    //public float cdr;  //cdr和rcr属性暂时不用
-    //public float rcr;
+    public float rcr; //资源消耗减少
 
     public bool invincible = false;
 
-    public EntityProperties()
+    public PlayerProperties()
     {
         hp = 100;
         maxHp = 100;
@@ -31,8 +30,7 @@ public class EntityProperties
         atkSpeed = 1.0f;
         criticalChance = 0.05f;
         criticalRate = 2.0f;
-        //cdr = 0;  //cdr和rcr属性暂时不用
-        //rcr = 0;
+        rcr = 0;
     }
 
     public void Reset() //全部设置为初值
@@ -47,11 +45,10 @@ public class EntityProperties
         atkSpeed = 1.0f;
         criticalChance = 0.05f;
         criticalRate = 2.0f;
-        //cdr = 0;  //cdr和rcr属性暂时不用
-        //rcr = 0;
+        rcr = 0;
     }
 
-    public static int CalcDamage(EntityProperties from, EntityProperties to, out bool critical)
+    public static int CalcDamage(PlayerProperties from, PlayerProperties to, out bool critical)
     {
         //减去防御
         int damage = Random.Range(from.minAttack, from.maxAttack) - to.defense;
@@ -119,22 +116,22 @@ public class Entity : MonoBehaviour {
     [SerializeField]
     protected float hpBarOffset = -0.5f;
 
-    EntityProperties _properties = new EntityProperties();
-    public EntityProperties Properties { get { return _properties;} }
+    PlayerProperties _properties = new PlayerProperties();
+    public PlayerProperties Properties { get { return _properties;} }
     
     public BuffModule buffModule = new BuffModule();
-    public virtual void SetAlpha(float a)
+    public virtual void SetTransparent(float a)
     {
 
     }
     
-    public virtual void HitByOther(EntityProperties other)
+    public virtual void HitByOther(PlayerProperties other)
     {
         if (Properties.invincible || !GameSetting.isHost) //无敌状态或者不是主机,则不产生击中效果
             return;
         //伤害计算
         bool critical;
-        int damage = EntityProperties.CalcDamage(other, this.Properties, out critical);
+        int damage = PlayerProperties.CalcDamage(other, this.Properties, out critical);
         Properties.hp -= damage;
         BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
         info.AddDamageText(transform.position, damage, critical);
@@ -148,16 +145,24 @@ public class Entity : MonoBehaviour {
     public delegate void OnEntityDestory();
     public event OnEntityDestory EntityDestroyEvent;
 
-    //最大移动速度
-    public float _maxHorSpeed = 2.0f;
-    public float MaxHorSpeed { get { return _maxHorSpeed * Properties.speedScale; } }
+    //最大前进速度
+    public float _maxForwardSpeed = 2.0f;
+    public float MaxForwardSpeed { get { return _maxForwardSpeed * Properties.speedScale; } }
 
-    //移动加速力
-    public float _movForce = 3;
-    public float MovForce { get { return _movForce * Properties.speedScale; } }
+    //最大后退速度
+    public float _maxBackSpeed = 1.0f;
+    public float MaxBackSpeed { get { return _maxBackSpeed * Properties.speedScale; } }
+
+    //前进加速力
+    public float _movForwardForce = 3;
+    public float MovForwardForce { get { return _movForwardForce * Properties.speedScale; } }
+
+    //后退加速力
+    public float _movBackForce = 1;
+    public float MovBackForce { get { return _movBackForce * Properties.speedScale; } }
 
     //空中移动加速力
-    public float _movForceInAir = 0.2f;
+    public float _movForceInAir = 0.1f;
     public float MovFroceInAir { get { return _movForceInAir * Properties.speedScale; } }
 
     //跳跃速度

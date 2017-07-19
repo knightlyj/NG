@@ -16,7 +16,7 @@ public class WeaponObj : MonoBehaviour {
     [SerializeField]
     private ShotEffect shotEffect; //射击效果
     [SerializeField]
-    private Spawner.ProjectileType projectile; //仅在射击类型为抛射物时有效
+    private GameManager.ProjectileType projectile; //仅在射击类型为抛射物时有效
     //通过设置以上属性和sprite,决定武器原型,但不影响武器属性                                           
 
 
@@ -42,7 +42,7 @@ public class WeaponObj : MonoBehaviour {
         return this.weaponItem;
     }
 
-    public void Shoot(EntityProperties ownerProp, Vector2 target, int hitLayerMask, float speedScale = 1.0f)
+    public void Shoot(PlayerProperties ownerProp, Vector2 target, int hitLayerMask, float speedScale = 1.0f)
     {
         Vector3 muzzlePos = transform.FindChild("Muzzle").position;
         switch (shotEffect)
@@ -58,7 +58,7 @@ public class WeaponObj : MonoBehaviour {
         }
     }
 
-    void FirePistol(EntityProperties ownerProp, Vector2 start, Vector2 target, int hitLayerMask)
+    void FirePistol(PlayerProperties ownerProp, Vector2 start, Vector2 target, int hitLayerMask)
     {
         Vector2 dir = target - start;
         dir.Normalize();
@@ -69,22 +69,22 @@ public class WeaponObj : MonoBehaviour {
                 hit.collider.gameObject.layer == LayerMask.NameToLayer("NPC") ||
                 hit.collider.gameObject.tag == "Player")
             {   //击中单位
-                Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
-                spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Ground, start, hit.point);
+                GameManager spawner = GameObject.FindWithTag(TextResources.gameManager).GetComponent<GameManager>();
+                spawner.ShootBullet(GameManager.BulletType.BaseBullet, GameManager.HitType.Ground, start, hit.point);
 
                 Entity e = hit.collider.GetComponent<Entity>();
                 e.HitByOther(ownerProp);
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {   //击中地面
-                Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
-                spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Ground, start, hit.point);
+                GameManager spawner = GameObject.FindWithTag(TextResources.gameManager).GetComponent<GameManager>();
+                spawner.ShootBullet(GameManager.BulletType.BaseBullet, GameManager.HitType.Ground, start, hit.point);
             }
         }
         else
         { //没击中任何碰撞体,不显示击中效果
-            Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
-            spawner.ShootBullet(Spawner.BulletType.BaseBullet, Spawner.HitType.Nothing, start, start+dir*5);
+            GameManager spawner = GameObject.FindWithTag(TextResources.gameManager).GetComponent<GameManager>();
+            spawner.ShootBullet(GameManager.BulletType.BaseBullet, GameManager.HitType.Nothing, start, start+dir*5);
         }
     }
 
@@ -93,9 +93,9 @@ public class WeaponObj : MonoBehaviour {
 
     }
 
-    void FireProjectile(Spawner.ProjectileType type, EntityProperties ownerProp, Vector2 start, Vector2 target, float speedScale, int hitLayerMask)
+    void FireProjectile(GameManager.ProjectileType type, PlayerProperties ownerProp, Vector2 start, Vector2 target, float speedScale, int hitLayerMask)
     {
-        Spawner spawner = GameObject.FindWithTag("Etc").GetComponent<Spawner>();
+        GameManager spawner = GameObject.FindWithTag(TextResources.gameManager).GetComponent<GameManager>();
         spawner.ShootProjectile(type, ownerProp, start, target, 1, hitLayerMask);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Runtime.Serialization;
 
-public class ItemPackage
+[Serializable]
+public class ItemPackage : ISerializable
 {
     //物品栏
     public int packSize = 4 * 10;
@@ -13,6 +15,25 @@ public class ItemPackage
     {
         packSize = size;
         _content = new Item[packSize];
+    }
+
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("content", this._content, typeof(Item[]));
+    }
+    /// <summary>
+    /// 反序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    public ItemPackage(SerializationInfo info, StreamingContext context)
+    {
+        this._content = (Item[])info.GetValue("content", typeof(Item[]));
     }
 
     //-----------------捡东西的逻辑,先看是否可以叠加,不能叠加则放入新的空位
@@ -65,10 +86,10 @@ public class ItemPackage
             }
         }
         else //原来格子是空的
-        { 
+        {
             content[idx] = item;
         }
-        
+
         RaisePackChanged();
         return true;
     }
@@ -168,7 +189,8 @@ public class ItemPackage
         {
             if (content[i] != null)
             {
-                if (content[i].Type == null) {
+                if (content[i].Type == null)
+                {
                     Debug.Log("PackageFindIdcs 物品类型为空");
                 }
                 else if (content[i].Type.id == id)
@@ -188,7 +210,7 @@ public class ItemPackage
 
         return content[idx];
     }
-    
+
     //背包改变事件
     public delegate void OnPackChanged();
     public event OnPackChanged PackChangedEvent;
@@ -232,7 +254,7 @@ public class Trash
         _item = null;
         return it;
     }
-    
+
 }
 
 //鼠标格子
@@ -263,7 +285,8 @@ public class MouseItem
 }
 
 //这里包括背包的格子,垃圾箱,以及鼠标拖拽的物品
-public class PlayerBag
+[Serializable]
+public class PlayerBag : ISerializable
 {
     /// <summary>
     /// 物品包
@@ -274,13 +297,13 @@ public class PlayerBag
     /// <summary>
     /// 垃圾箱
     /// </summary>
-    Trash _trash;
+    Trash _trash = new Trash();
     public Trash trash { get { return this._trash; } }
 
     /// <summary>
     /// 鼠标物品
     /// </summary>
-    MouseItem _mouseItem;
+    MouseItem _mouseItem = new MouseItem();
     public MouseItem mouseItem { get { return this._mouseItem; } }
 
     /// <summary>
@@ -291,7 +314,26 @@ public class PlayerBag
     public PlayerBag(int size)
     {
         _itemPack = new ItemPackage(size);
-        _trash = new Trash();
-        _mouseItem = new MouseItem();
+    }
+
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("itempack", this._itemPack, typeof(ItemPackage));
+        info.AddValue("money", this.money, typeof(int));
+    }
+    /// <summary>
+    /// 反序列化
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    public PlayerBag(SerializationInfo info, StreamingContext context)
+    {
+        this._itemPack = (ItemPackage)info.GetValue("itempack", typeof(ItemPackage));
+        this.money = (int)info.GetValue("money", typeof(int));
     }
 }

@@ -46,7 +46,7 @@ public class UICraftItemCell : MonoBehaviour, ListCell
         Image imgIcon = transform.FindChild("Icon").GetComponent<Image>();
         Text txtName = transform.FindChild("Name").GetComponent<Text>();
 
-        ItemType type = ItemTypeTable.GetItemType((ItemId)formula.outputId);
+        ItemType type = ItemTypeTable.GetItemType(formula.outputId);
         imgIcon.sprite = Resources.Load<Sprite>("ItemIcon/" + type.icon);
         imgIcon.SetNativeSize();
         txtName.text = type.itemName;

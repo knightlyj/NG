@@ -83,6 +83,7 @@ public static class ItemTypeTable
                     if (cell.Length >= 13 && count >= 1) //表格长度限制,且第一行为标题栏
                     {
                         itemTable[count] = new ItemType();
+                        itemTable[count].id = count;
                         ParseItem(itemTable[count], cell);
                     }
                     count++;
@@ -93,10 +94,11 @@ public static class ItemTypeTable
         }
     }
 
-    public static ItemType GetItemType(ItemId id)
+    public static ItemType GetItemType(int id)
     {
-        ItemType type = null;
-        type = itemTable[(int)id];
+        if (id < 0 || id >= itemTable.Length)
+            return null;
+        ItemType type = itemTable[id];
         return type;
     }
 
@@ -116,8 +118,6 @@ public static class ItemTypeTable
 
     public static void ParseItem(ItemType type, string[] data)
     {
-        //id
-        type.id = Int32.Parse(data[(int)ItemCsvIndex.Id]);
         //name
         type.itemName = data[(int)ItemCsvIndex.Name];
         //品质
