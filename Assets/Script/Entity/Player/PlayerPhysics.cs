@@ -78,7 +78,7 @@ public partial class Player
                             rb.velocity = new Vector2(MaxForwardSpeed, rb.velocity.y);
                         SetBodyAnimation(BodyAnimation.Run);
                     }
-                    else 
+                    else
                     {  //朝着左边,后退 
                         if (rb.velocity.x < MaxBackSpeed)
                             rb.AddForce(new Vector2(MovBackForce, 0));
@@ -139,7 +139,7 @@ public partial class Player
                 if (inLadderArea)
                     GetOnLadder();
             }
-            if(rb.velocity.y > 0)
+            if (rb.velocity.y > 0)
             {   //上升
                 SetBodyAnimation(BodyAnimation.Raise);
             }
@@ -173,28 +173,18 @@ public partial class Player
     {
         if (syncState.up)
         {
-            rb.velocity = new Vector2(rb.velocity.x, climeSpeed);
+            rb.velocity = new Vector2(0, climeSpeed);
+            SetBodyAnimation(BodyAnimation.Climb);
         }
         else if (syncState.down)
         {
-            rb.velocity = new Vector2(rb.velocity.x, -slideDownSpeed);
+            rb.velocity = new Vector2(0, -slideDownSpeed);
+            SetBodyAnimation(BodyAnimation.ClimbDown);
         }
         else
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-        }
-
-        if (syncState.left)
-        {
-            rb.velocity = new Vector2(-climeSpeed, rb.velocity.y);
-        }
-        else if (syncState.right)
-        {
-            rb.velocity = new Vector2(climeSpeed, rb.velocity.y);
-        }
-        else
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.velocity = new Vector2(0, 0);
+            SetBodyAnimation(BodyAnimation.IdleOnLadder);
         }
 
         if (syncState.jump)
@@ -202,11 +192,14 @@ public partial class Player
             TimeSpan span = DateTime.Now - jumpTime;
             if (span.TotalMilliseconds > 500)
             {
-                rb.velocity = new Vector2(rb.velocity.x, JumpSpeed);
-                jumpTime = DateTime.Now;
-                jumpFromLadderTime = DateTime.Now;
-                GetOffLadder();
-                SetBodyAnimation(BodyAnimation.Jump);
+                if (syncState.left || syncState.right)
+                {
+                    rb.velocity = new Vector2(syncState.left  ? -MaxBackSpeed : MaxBackSpeed, JumpSpeed);
+                    jumpTime = DateTime.Now;
+                    jumpFromLadderTime = DateTime.Now;
+                    GetOffLadder();
+                    SetBodyAnimation(BodyAnimation.Jump);
+                }
             }
         }
     }
@@ -219,6 +212,7 @@ public partial class Player
             onLadder = true;
             rb.gravityScale = 0;
             SetCrossPlatform(true);
+            rb.velocity = new Vector2(0, 0);
         }
 
         //Debug.Log("get on ladder");

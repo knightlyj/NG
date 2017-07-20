@@ -5,15 +5,18 @@ using DragonBones;
 public partial class Player
 {
     //动画名称
-    readonly string runAniName = "aimRun";
-    readonly string walkAniName = "aimWalk";
-    readonly string aimUpAniName = "aimUp";
-    readonly string aimDownAniName = "aimDown";
-    readonly string idleAniName = "idle";
-    readonly string jumpAniName = "jump";
-    readonly string fallAniName = "fall";
-    readonly string raiseAniName = "raise";
-    readonly string backAniName = "back";
+    readonly string runAni = "aimRun";
+    readonly string walkAni = "aimWalk";
+    readonly string aimUpAni = "aimUp";
+    readonly string aimDownAni = "aimDown";
+    readonly string idleAni = "idle";
+    readonly string jumpAni = "jump";
+    readonly string fallAni = "fall";
+    readonly string raiseAni = "raise";
+    readonly string backAni = "back";
+    readonly string idleOnLadderAni = "idleOnLadder";
+    readonly string climbAni = "climb";
+    readonly string climbDownAni = "climbDown";
     //动画分组
     readonly string aimAniGroup = "AimGroup";
     readonly string bodyAniGroup = "BodyGroup";
@@ -45,11 +48,11 @@ public partial class Player
         //瞄准方向
         if (direction.y > 0)
         {
-            _aimState = armatureComponent.animation.FadeIn(aimUpAniName, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+            _aimState = armatureComponent.animation.FadeIn(aimUpAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
         }
         else
         {
-            _aimState = armatureComponent.animation.FadeIn(aimDownAniName, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+            _aimState = armatureComponent.animation.FadeIn(aimDownAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
         }
         _aimState.weight = rate;
     }
@@ -57,7 +60,7 @@ public partial class Player
     bool faceRight = true;
     void UpdateFace()
     {
-        Vector2 direction = syncState.targetPos - (Vector2)this.transform.position;
+        Vector2 direction = syncState.targetPos - (Vector2)aimBone.position;
         bool change = false;
         if (direction.x >= 0 && !faceRight)
             change = true;
@@ -82,6 +85,10 @@ public partial class Player
         Jump,
         Raise,
         Fall,
+
+        IdleOnLadder,
+        Climb,
+        ClimbDown,
     }
 
     void UpateBody()
@@ -109,25 +116,34 @@ public partial class Player
             switch (animation)
             {
                 case BodyAnimation.Run:
-                    armatureComponent.animation.FadeIn(runAniName, -1, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(runAni, -1, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Walk:
-                    armatureComponent.animation.FadeIn(walkAniName, -1, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(walkAni, -1, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Idle:
-                    armatureComponent.animation.FadeIn(idleAniName, -1, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(idleAni, -1, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Jump:
-                    armatureComponent.animation.FadeIn(jumpAniName, 0, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(jumpAni, 0, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Fall:
-                    armatureComponent.animation.FadeIn(fallAniName, 0.2f, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(fallAni, 0.2f, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Raise:
-                    armatureComponent.animation.FadeIn(raiseAniName, 0.2f, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(raiseAni, 0.2f, -1, 0, bodyAniGroup);
                     break;
                 case BodyAnimation.Back:
-                    armatureComponent.animation.FadeIn(backAniName, 0.2f, -1, 0, bodyAniGroup);
+                    armatureComponent.animation.FadeIn(backAni, 0.2f, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.Climb:
+                    armatureComponent.animation.FadeIn(climbAni, -1, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.ClimbDown:
+                    armatureComponent.animation.FadeIn(climbDownAni, -1, -1, 0, bodyAniGroup);
+                    break;
+                case BodyAnimation.IdleOnLadder:
+                    armatureComponent.animation.FadeIn(idleOnLadderAni, -1, -1, 0, bodyAniGroup);
                     break;
             }
         }
