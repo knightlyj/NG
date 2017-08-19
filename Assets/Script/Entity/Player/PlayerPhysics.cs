@@ -12,8 +12,8 @@ public partial class Player
     //    InAir,
     //}
 
-    bool onGround = false;
-    bool onPlatform = false;
+    protected bool onGround = false;
+    protected bool onPlatform = false;
     public Transform groundCheck;
     public LayerMask groundLayerMask;
     public LayerMask platformLayerMask;
@@ -22,6 +22,7 @@ public partial class Player
     DateTime jumpTime = DateTime.Now;
     DateTime crossPlatformTime = DateTime.Now;
     bool isCrossPlatform = false;
+    protected Vector2 recoil = Vector2.zero; //后坐力,update中生成,存在这里,fixedupdate再来处理
     void Simualte()
     {
         CircleCollider2D col = GetComponent<CircleCollider2D>();
@@ -38,6 +39,7 @@ public partial class Player
         }
     }
 
+    
     void SimulateFree()
     {
         if (onGround || onPlatform)
@@ -121,13 +123,19 @@ public partial class Player
                     SetBodyAnimation(BodyAnimation.Jump);
                 }
             }
+
+            //max speed
+            if (rb.velocity.x < -MaxForwardSpeed)
+                rb.velocity = new Vector2(-MaxForwardSpeed, rb.velocity.y);
+            else if (rb.velocity.x > MaxForwardSpeed)
+                rb.velocity = new Vector2(MaxForwardSpeed, rb.velocity.y);
         }
         else
         {   //在空中时,无摩擦力,按住左右会有较小的力
-            if (syncState.left && rb.velocity.x > -MaxForwardSpeed)
-                rb.AddForce(new Vector2(-MovFroceInAir, 0));
-            if (syncState.right && rb.velocity.x < MaxForwardSpeed)
-                rb.AddForce(new Vector2(MovFroceInAir, 0));
+            //if (syncState.left && rb.velocity.x > -MaxForwardSpeed)
+            //    rb.AddForce(new Vector2(-MovFroceInAir, 0));
+            //if (syncState.right && rb.velocity.x < MaxForwardSpeed)
+            //    rb.AddForce(new Vector2(MovFroceInAir, 0));
 
             if (syncState.down)
             {
@@ -148,11 +156,6 @@ public partial class Player
                 SetBodyAnimation(BodyAnimation.Fall);
             }
         }
-        //max speed
-        if (rb.velocity.x < -MaxForwardSpeed)
-            rb.velocity = new Vector2(-MaxForwardSpeed, rb.velocity.y);
-        else if (rb.velocity.x > MaxForwardSpeed)
-            rb.velocity = new Vector2(MaxForwardSpeed, rb.velocity.y);
 
         if (isCrossPlatform)
         {
@@ -163,6 +166,13 @@ public partial class Player
                 SetCrossPlatform(false);
                 isCrossPlatform = false;
             }
+        }
+
+        //处理后坐力
+        if (recoil.x != 0 || recoil.y != 0)
+        {
+            rb.AddForce(recoil);
+            recoil = Vector2.zero; //清空
         }
     }
 
@@ -202,6 +212,9 @@ public partial class Player
                 }
             }
         }
+
+
+        recoil = Vector2.zero; //梯子上不考虑后坐力
     }
 
     void GetOnLadder()

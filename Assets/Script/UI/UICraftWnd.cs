@@ -4,9 +4,14 @@ using System.Collections;
 
 public class UICraftWnd : MonoBehaviour
 {
+    [SerializeField]
+    Transform itemCellPrefab = null;
+    [SerializeField]
+    Transform classCellPrefab = null;
+
     UIScrollPanel craftClassPanel;
     UIScrollPanel craftItemPanel;
-    System.Object[] crafgClassInfo;
+    System.Object[] craftClassInfo;
     UIMatSlot[] matSlot = new UIMatSlot[CraftFormula.maxRawMatSorts];
     UIMatSlot productSlot = null;
     Button btnCraft;
@@ -40,20 +45,20 @@ public class UICraftWnd : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
 
         //合成类型列表
-        crafgClassInfo = new System.Object[ItemTypeTable.className.Count];
-        for (int i = 0; i < crafgClassInfo.Length; i++)
+        craftClassInfo = new System.Object[ItemTypeTable.className.Count];
+        for (int i = 0; i < craftClassInfo.Length; i++)
         {
             CraftClassCellInfo info = new CraftClassCellInfo();
             info.icon = ItemTypeTable.classIcon[i];
             info.name = ItemTypeTable.className[i];
-            crafgClassInfo[i] = (System.Object)info;
+            craftClassInfo[i] = (System.Object)info;
         }
-        craftClassPanel.SetList(crafgClassInfo);
+        craftClassPanel.SetList(craftClassInfo, classCellPrefab);
         craftClassPanel.OnCellSelected += this.OnClassClick;
         //合成物品列表
         craftItemPanel.OnCellSelected += this.OnItemClick;
@@ -102,7 +107,7 @@ public class UICraftWnd : MonoBehaviour
         {
             list[i] = ItemTypeTable.craftFormulas[cell.index][i];
         }
-        craftItemPanel.SetList(list);
+        craftItemPanel.SetList(list, itemCellPrefab);
     }
 
     //选中物品

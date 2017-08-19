@@ -94,7 +94,7 @@ public class UIConsole : MonoBehaviour {
             Item newItem = new Item(id, amount);
             if (newItem.valid)
             {
-                Player localPlayer = Helper.FindLocalPlayer();
+                LocalPlayer localPlayer = Helper.FindLocalPlayer();
                 if (localPlayer != null)
                 {
                     //获取背包
@@ -118,7 +118,7 @@ public class UIConsole : MonoBehaviour {
             money = 0;
         }
 
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
         {
             //获取背包
@@ -133,12 +133,13 @@ public class UIConsole : MonoBehaviour {
         Player localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
         {
-            PlayerProperties prop = localPlayer.Properties;
-            txtProp.text = string.Format("血量: {0}/{1}, 攻击: {2}-{3},防御: {4}\n攻击间隔: {5:N}, 攻速: {6}%\n暴击率: {7}%, 暴击伤害: {8}%\nrcr: {9}%,  速度: {10}%, 跳跃: {11}%", 
+            EntityProperties prop = localPlayer.Properties;
+            txtProp.text = string.Format("血量: {0}/{1}, 攻击: {2}-{3},防御: {4}\n攻击间隔: {5:N}, 攻速: {6}%\n暴击率: {7}%, 暴击伤害: {8}%\nrcr: {9}%,  速度: {10}%, 跳跃: {11}%\n 后坐力: {12}, 击退: {13}", 
                 prop.hp, prop.maxHp, prop.minAttack, prop.maxAttack, prop.defense,
                 prop.atkInterval, Mathf.Round(prop.atkSpeed * 100),
                 Mathf.Round(prop.criticalChance * 100), Mathf.Round(prop.criticalRate * 100),
-                Mathf.Round(prop.rcr * 100), Mathf.Round(prop.speedScale * 100), Mathf.Round(prop.jumpScale * 100));
+                Mathf.Round(prop.rcr * 100), Mathf.Round(prop.speedScale * 100), Mathf.Round(prop.jumpScale * 100),
+                prop.recoil, prop.knockBack);
         }
     }
 

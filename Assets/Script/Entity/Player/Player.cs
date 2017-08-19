@@ -44,8 +44,7 @@ public partial class Player : Entity
 
         atkLayerMask = 1 << LayerMask.NameToLayer("Monster") |
                        1 << LayerMask.NameToLayer("Ground");
-
-        ItemInit();
+        
         EventManager.RaiseEvent(EventId.LocalPlayerCreate, this);
 
     }
@@ -56,16 +55,14 @@ public partial class Player : Entity
         EventManager.RaiseEvent(EventId.LocalPlayerDestroy, this);
     }
 
-    int atkLayerMask;
+    protected int atkLayerMask;
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
 
         syncState.targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        UpdateAnimation();
-        CheckShoot();
-        
+        UpdateAnimation();        
     }
 
 
@@ -83,29 +80,41 @@ public partial class Player : Entity
         }
     }
 
-    public override void HitByOther(PlayerProperties other)
+    public override void HitByOther(EntityProperties other, Vector2 pos)
     {
-        if (Properties.invincible || !GameSetting.isHost) //无敌状态或者不是主机,则不产生击中效果
-            return;
-        //伤害计算
-        bool critical;
-        int damage = PlayerProperties.CalcDamage(other, this.Properties, out critical);
-        Properties.hp -= damage;
-        BattleInfo info = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
-        info.AddDamageText(transform.position, damage, critical);
-
+        base.HitByOther(other, pos);
+         
         //击中后添加无敌buff
         if (this.buffModule != null)
         {
             buffModule.AddBuff(this, BuffId.Invincible);
         }
-
-        //空血处理
-        if (Properties.hp <= 0)
-        {   //隐藏,不销毁
-            this.gameObject.SetActive(false);
-        }
     }
 
+    protected override void OnHpEmpty()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Shoot()
+    {
+        Vector2 direction = syncState.targetPos - (Vector2)shootPoint.position;
+        direction.Normalize();
+        GameManager manager = Helper.GetManager();
+        Projectile proj = manager.GenProj(GameManager.ProjectileType.BaseBullet);
+        //设置抛射物的属性
+        proj.minAttack = this.Properties.minAttack;
+        proj.maxAttack = this.Properties.maxAttack;
+        proj.criticalChance = this.Properties.criticalChance;
+        proj.criticalRate = this.Properties.criticalRate;
+        proj.knockBack = this.Properties.knockBack;
+
+        proj.Shoot(this, shootPoint.position, direction, 1.0f, this.atkLayerMask);
+        manager.ShowFlame(shootPoint.position, direction);
+
+        //设置后坐力,在fixedupdate中再施加力
+        Vector2 recoilDir = direction * -1;
+        recoil = recoilDir * Properties.recoil;
+    }
     
 }

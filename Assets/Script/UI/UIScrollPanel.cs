@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using System;
 
 public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
-    public Transform CellPrefab;
     Scrollbar bar;
     RectTransform rectList;
     float listToSide = 5;
@@ -122,7 +121,7 @@ public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     List<Transform> cellList = new List<Transform>();
     float cellHeight;
     //用List<>初始化
-    public void SetList(List<System.Object> list)
+    public void SetList(List<System.Object> list, Transform cellPrefab)
     {
         ClearList();
         
@@ -132,7 +131,7 @@ public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         int idx = 0;
         foreach (System.Object t in list)
         {
-            RectTransform rectCell = GameObject.Instantiate(CellPrefab, rectList) as RectTransform;
+            RectTransform rectCell = GameObject.Instantiate(cellPrefab, rectList) as RectTransform;
             cellList.Add(rectCell);
             //设置内容
             ListCell cell = rectCell.GetComponent<ListCell>();
@@ -167,7 +166,7 @@ public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     //用数组初始化
-    public void SetList(System.Object[] list)
+    public void SetList(System.Object[] list, Transform cellPrefab)
     {
         ClearList();
 
@@ -177,7 +176,7 @@ public class UIScrollPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         int idx = 0;
         foreach (System.Object t in list)
         {
-            RectTransform rectCell = GameObject.Instantiate(CellPrefab, rectList) as RectTransform;
+            RectTransform rectCell = GameObject.Instantiate(cellPrefab, rectList) as RectTransform;
             cellList.Add(rectCell);
             //设置内容
             ListCell cell = rectCell.GetComponent<ListCell>();

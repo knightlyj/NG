@@ -188,14 +188,14 @@ public static class ItemTypeTable
         }
         //合成分类
         int craftClass = className.Count;
-        if (data[(int)ItemCsvIndex.CraftStart-1] != null && !data[(int)ItemCsvIndex.CraftStart-1].Equals(""))
+        if (data[(int)ItemCsvIndex.CraftStart] != null && !data[(int)ItemCsvIndex.CraftStart].Equals(""))
         {
-            craftClass = Int32.Parse(data[(int)ItemCsvIndex.CraftStart-1]);
+            craftClass = Int32.Parse(data[(int)ItemCsvIndex.CraftStart]);
         }
         craftClass--; //偏移量从1开始,需要减去1
         //合成公式解析
         CraftFormula formual = new CraftFormula();
-        for (int i = 0; i < CraftFormula.maxRawMatSorts; i++) //最多6种材料
+        for (int i = 1; i <= CraftFormula.maxRawMatSorts; i++) //最多6种材料
         {   //表格偏移量从x开始
             string strMat = data[i + (int)ItemCsvIndex.CraftStart];
             if (strMat != null && !strMat.Equals(""))
@@ -219,11 +219,11 @@ public static class ItemTypeTable
         }
         //产出物品的id和数量
         formual.outputId = type.id;
-        if (data[(int)ItemCsvIndex.CraftStart + 6] != null && !data[(int)ItemCsvIndex.CraftStart + 6].Equals(""))
+        if (data[(int)ItemCsvIndex.CraftStart + 7] != null && !data[(int)ItemCsvIndex.CraftStart + 7].Equals(""))
         {   //解析合成公式的产出数量
             try
             {
-                formual.outputAmount = UInt32.Parse(data[(int)ItemCsvIndex.CraftStart + 6]);
+                formual.outputAmount = UInt32.Parse(data[(int)ItemCsvIndex.CraftStart + 7]);
             }
             catch
             {

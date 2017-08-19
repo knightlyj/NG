@@ -55,6 +55,8 @@ public class WeaponProperties
     public float crtlRateBonus; //暴击倍数
     public uint ammoCapacity; //弹药容量
     public float rcrBonus; //资源消耗减少
+    public float recoil; //后坐力
+    public float beatBack; //击退
 
     public string appearance;
 }
@@ -62,13 +64,13 @@ public class WeaponProperties
 [Serializable]
 public class PlayerEquipment : ISerializable
 {
-    public PlayerEquipment(PlayerProperties bindProp)
+    public PlayerEquipment(EntityProperties bindProp)
     {
         bindProperties = bindProp;
         ArmorInit();
         WeaponInit();
     }
-    PlayerProperties bindProperties = null;
+    EntityProperties bindProperties = null;
     ////////////////////////////////////////////////////////
     //******************装备栏*****************************
     ////////////////////////////////////////////////////
@@ -142,7 +144,7 @@ public class PlayerEquipment : ISerializable
     }
 
     //加上装备属性
-    void AddArmorProp(PlayerProperties playerProp, ArmorProperties armorProp)
+    void AddArmorProp(EntityProperties playerProp, ArmorProperties armorProp)
     {
         if (playerProp != null && armorProp != null)
         {
@@ -163,7 +165,7 @@ public class PlayerEquipment : ISerializable
     }
 
     //移除装备属性
-    void RemoveArmorProp(PlayerProperties playerProp, ArmorProperties armorProp)
+    void RemoveArmorProp(EntityProperties playerProp, ArmorProperties armorProp)
     {
         if (playerProp != null && armorProp != null)
         {
@@ -296,26 +298,30 @@ public class PlayerEquipment : ISerializable
         return true;
     }
 
-    void AddWeaponProp(PlayerProperties playerProp, WeaponProperties weaponProp)
+    void AddWeaponProp(EntityProperties playerProp, WeaponProperties weaponProp)
     {
         if (playerProp != null && weaponProp != null)
         {
             playerProp.minAttack += weaponProp.minAtkBonus; //最小攻击
             playerProp.maxAttack += weaponProp.maxAtkBonus; //最大攻击
             playerProp.atkInterval = weaponProp.atkInterval; //攻击间隔
+            playerProp.recoil = weaponProp.recoil; //后坐力
+            playerProp.knockBack = weaponProp.beatBack;//击退
             playerProp.criticalChance += weaponProp.crtlChanceBonus; //暴击几率
             playerProp.criticalRate += weaponProp.crtlRateBonus; //暴击伤害
             playerProp.rcr += weaponProp.rcrBonus; //rcr
         }
     }
 
-    void RemoveWeaponProp(PlayerProperties playerProp, WeaponProperties weaponProp)
+    void RemoveWeaponProp(EntityProperties playerProp, WeaponProperties weaponProp)
     {
         if (playerProp != null && weaponProp != null)
         {
             playerProp.minAttack -= weaponProp.minAtkBonus; //最小攻击
             playerProp.maxAttack -= weaponProp.maxAtkBonus; //最大攻击
-            playerProp.atkInterval = weaponProp.atkInterval; //攻击间隔
+            playerProp.atkInterval = 0.5f; //攻击间隔
+            playerProp.recoil = 0; //后坐力
+            playerProp.knockBack = 0; //击退
             playerProp.criticalChance -= weaponProp.crtlChanceBonus; //暴击几率
             playerProp.criticalRate -= weaponProp.crtlRateBonus; //暴击伤害
             playerProp.rcr -= weaponProp.rcrBonus; //rcr
@@ -382,7 +388,7 @@ public class PlayerEquipment : ISerializable
         this._weapons = (Item[])info.GetValue("weapon", typeof(Item[]));
     }
 
-    public void BindProperties(PlayerProperties prop)
+    public void BindProperties(EntityProperties prop)
     {
         this.bindProperties = prop;
     }

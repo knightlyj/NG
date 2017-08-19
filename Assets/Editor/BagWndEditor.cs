@@ -53,7 +53,7 @@ class BagWndEditor : Editor
             return;
         }
         //40格背包
-        for (int i = 0; i < Player.itemPackSize; i++)
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             RectTransform slotRect = GameObject.Instantiate(bag.packSlotPrefab, trPack) as RectTransform;
             slotRect.name = "Slot" + i;
@@ -93,7 +93,7 @@ class BagWndEditor : Editor
         int slotGap = bag.slotGap;
         int toSide = bag.slotToSide;
 
-        for (int i = 0; i < Player.itemPackSize; i++)
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             RectTransform rect = trPack.FindChild("Slot" + i) as RectTransform;
             if (rect == null)
@@ -112,8 +112,8 @@ class BagWndEditor : Editor
             rect.offsetMax = max;
         }
 
-        int trashRow = Player.itemPackSize / rowAmout;
-        int trashCol = (Player.itemPackSize - 1) % rowAmout;
+        int trashRow = LocalPlayer.itemPackSize / rowAmout;
+        int trashCol = (LocalPlayer.itemPackSize - 1) % rowAmout;
         RectTransform trashRect = trPack.FindChild("Trash") as RectTransform;
         trashRect.anchorMin = new Vector2(0, 1);
         trashRect.anchorMax = new Vector2(0, 1);

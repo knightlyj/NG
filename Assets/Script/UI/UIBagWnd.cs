@@ -24,8 +24,8 @@ public class UIBagWnd : MonoBehaviour
     {
         Transform trPack = transform.FindChild("Bg");
         //物品栏 8行5列
-        packSlots = new UIItemSlot[Player.itemPackSize];
-        for (int i = 0; i < Player.itemPackSize; i++)
+        packSlots = new UIItemSlot[LocalPlayer.itemPackSize];
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             packSlots[i] = trPack.FindChild("Slot" + i).GetComponent<UIItemSlot>();
             packSlots[i].index = i;
@@ -49,7 +49,7 @@ public class UIBagWnd : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
     }
@@ -123,7 +123,7 @@ public class UIBagWnd : MonoBehaviour
                 itemInSlot = itemPack.TakeItem(slot.index); //拿出来
                 if (itemInSlot.Type.IsArmor)
                 {   //护甲,装备上,饰品就放在第一个格子里
-                    Player localPlayer = Helper.FindLocalPlayer();
+                    LocalPlayer localPlayer = Helper.FindLocalPlayer();
                     if (localPlayer != null)
                     {
                         Item preArmor = null;
@@ -163,7 +163,7 @@ public class UIBagWnd : MonoBehaviour
     void UpdateItemPack()
     {
         //显示所有物品
-        for (int i = 0; i < Player.itemPackSize; i++)
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             packSlots[i].SetItemInfo(bindBag.itemPack.content[i]);
         }

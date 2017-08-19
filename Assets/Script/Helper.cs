@@ -120,8 +120,14 @@ public static class Helper {
     //找到manager
     static public GameManager GetManager()
     {
-        GameObject goManager = GameObject.FindGameObjectWithTag("Manager");
+        GameObject goManager = GameObject.FindGameObjectWithTag(TextResources.gameManagerTag);
         return goManager.GetComponent<GameManager>();
+    }
+
+    static public UIDynamicCursor GetDyanamicCursor()
+    {
+        UIDynamicCursor dynCursor = GameObject.FindGameObjectWithTag(TextResources.gamePlayUITag).transform.FindChild("DynamicCursor").GetComponent<UIDynamicCursor>();
+        return dynCursor;
     }
 
     //东西丢到玩家旁边
@@ -130,6 +136,19 @@ public static class Helper {
 
     }
     
+    static public float Dir2Angle(Vector2 dir)
+    {
+        float angle = Mathf.Acos(dir.x / dir.magnitude) / Mathf.PI * 180;
+        if (dir.y < 0)
+            angle = -angle;
+        return angle;
+    }
+
+    static public Player[] FindAllPlayer()
+    {
+        Player[] players = null;
+        return players;
+    }
 }
 
 

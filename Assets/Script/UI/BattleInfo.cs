@@ -109,7 +109,7 @@ public class BattleInfo : MonoBehaviour {
         }
         else
         {
-            PlayerProperties prop = localPlayer.Properties;
+            EntityProperties prop = localPlayer.Properties;
             float hpRate = prop.hp / prop.maxHp;
             if (hpRate > 1)
                 hpRate = 1;

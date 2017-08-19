@@ -1,24 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
-
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        
+    }
 
-    public Transform rocektPrefab;
+    [SerializeField]
+    Transform rocektPrefab;
+    [SerializeField]
+    Transform bulletPrefab;
+    [SerializeField]
+    Transform shootFlamePrefab;
     public enum ProjectileType
     {
         Nothing,
         BaseRocket,
+        BaseBullet,
     }
-    public void ShootProjectile(ProjectileType type, PlayerProperties ownerProp, Vector2 position, Vector2 target, float speedScale, int hitLayerMask)
+    public Projectile GenProj(ProjectileType type)
     {
         Transform trProjectile = null;
         switch (type)
@@ -26,58 +33,27 @@ public class GameManager : MonoBehaviour {
             case ProjectileType.BaseRocket:
                 trProjectile = Instantiate(this.rocektPrefab);
                 break;
+            case ProjectileType.BaseBullet:
+                trProjectile = Instantiate(this.bulletPrefab);
+                break;
         }
 
         Projectile prScrpit = trProjectile.GetComponent<Projectile>();
-        prScrpit.Shoot(ownerProp, position, target, speedScale, hitLayerMask);
-    }
-
-
-    public Transform baseBulletPrefab;
-    public enum BulletType
-    {
-        Nothing,
-        BaseBullet,
-    }
-
-    public Transform hitGroundPrefab;
-    public enum HitType
-    {
-        Nothing,
-        Ground,
-    }
-    public void ShootBullet(BulletType bulletType, HitType hitType, Vector2 start, Vector2 end)
-    {
-        //子弹射击效果
-        Transform trBullet = null;
-        switch (bulletType)
-        {
-            case BulletType.BaseBullet:
-                trBullet = Instantiate(baseBulletPrefab);
-                break;
-        }
-        if(trBullet != null)
-        {
-            ShootTrail trail = trBullet.GetComponent<ShootTrail>();
-            trail.ShowTtrail(start, end);
-        }
-
-        //子弹命中效果
-        Transform trHit = null;
-        switch (hitType)
-        {
-            case HitType.Ground:
-                trHit = Instantiate(hitGroundPrefab);
-                break;  
-        }
-        if(trHit != null)
-        {
-            trHit.position = end;
-            ParticleSystem ps = trHit.GetComponent<ParticleSystem>();
-            Destroy(trHit.gameObject, ps.startLifetime);
-        }
+        return prScrpit;
     }
     
+    public void ShowFlame(Vector2 position, Vector2 direction)
+    {
+        Transform trFlame = Instantiate(this.shootFlamePrefab);
+        ShootFlame sfScprit = trFlame.GetComponent<ShootFlame>();
+        sfScprit.Init(position, direction);
+    }
+
+
+    /// <summary>
+    /// 保存相关
+    /// </summary>
+    /// <returns></returns>
     string GetSavePath()
     {
         return Application.persistentDataPath;
@@ -109,4 +85,5 @@ public class GameManager : MonoBehaviour {
         return true;
     }
 
+    
 }

@@ -54,7 +54,7 @@ public class UIStoreWnd : MonoBehaviour
     //点下物品格
     void OnItemMouseDown(UIItemSlot slot, PointerEventData eventData)
     {
-        Player player = Helper.FindLocalPlayer();
+        LocalPlayer player = Helper.FindLocalPlayer();
         if (player != null)
         {
             PlayerBag bag = player.bag;

@@ -53,7 +53,7 @@ public class StoreWndEditor : Editor
             return;
         }
         //40格商品
-        for (int i = 0; i < Player.itemPackSize; i++)
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             RectTransform slotRect = GameObject.Instantiate(store.slotPrefab, trPack) as RectTransform;
             slotRect.name = "Slot" + i;
@@ -89,7 +89,7 @@ public class StoreWndEditor : Editor
         int slotGap = store.slotGap;
         int toSide = store.slotToSide;
 
-        for (int i = 0; i < Player.itemPackSize; i++)
+        for (int i = 0; i < LocalPlayer.itemPackSize; i++)
         {
             RectTransform rect = trPack.FindChild("Slot" + i) as RectTransform;
             if (rect == null)

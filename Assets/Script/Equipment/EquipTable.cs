@@ -198,6 +198,8 @@ public static class EquipTable
         CrtlChance,
         CtrlRate,
         RCR,
+        Recoil,
+        BeatBack,
         AmmoCap,
     }
     static WeaponProperties ParseWeapon(string str)
@@ -277,6 +279,26 @@ public static class EquipTable
         {
             prop.rcrBonus = 0;
         }
+
+        //recoil
+        try
+        {
+            prop.recoil = float.Parse(cell[(int)WeaponTableIndex.Recoil]);
+        }
+        catch
+        {
+            prop.recoil = 0;
+        }
+        //beat back
+        try
+        {
+            prop.beatBack = float.Parse(cell[(int)WeaponTableIndex.BeatBack]);
+        }
+        catch
+        {
+            prop.beatBack = 0;
+        }
+
         return prop;
     }
 }

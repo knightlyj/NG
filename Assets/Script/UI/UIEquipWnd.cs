@@ -36,7 +36,7 @@ public class UIEquipWnd : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindEquipment(localPlayer.equipment);
     }
@@ -72,7 +72,7 @@ public class UIEquipWnd : MonoBehaviour
     //武器格子点击回调
     void OnWeaponSlotClick(UIItemSlot slot, PointerEventData eventData)
     {
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null && bindEquipment != null)
         {
             MouseItem mouseItem = localPlayer.bag.mouseItem;
@@ -101,7 +101,7 @@ public class UIEquipWnd : MonoBehaviour
     //护甲格子点击回调
     void OnArmorSlotClick(UIItemSlot slot, PointerEventData eventData)
     {
-        Player localPlayer = Helper.FindLocalPlayer();
+        LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null && bindEquipment != null)
         {
             MouseItem mouseItem = localPlayer.bag.mouseItem;

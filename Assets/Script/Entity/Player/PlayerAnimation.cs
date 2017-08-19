@@ -17,17 +17,21 @@ public partial class Player
     readonly string idleOnLadderAni = "idleOnLadder";
     readonly string climbAni = "climb";
     readonly string climbDownAni = "climbDown";
+    readonly string recoilAni = "recoil";
     //动画分组
     readonly string aimAniGroup = "AimGroup";
     readonly string bodyAniGroup = "BodyGroup";
+    readonly string recoilAniGroup = "RecoilGroup";
     //***********************************************
-    UnityArmatureComponent armatureComponent = null;
-    UnityEngine.Transform aimBone = null;
+    protected UnityArmatureComponent armatureComponent = null;
+    protected UnityEngine.Transform aimBone = null;
+    protected UnityEngine.Transform shootPoint = null;
     void InitAnimation()
     {
         armatureComponent = transform.FindChild("armature").GetComponent<UnityArmatureComponent>();
         armatureComponent.animation.Reset();
         aimBone = transform.FindChild("armature").FindChild("Bones").FindChild("for_aim");
+        shootPoint = transform.FindChild("armature").FindChild("Bones").FindChild("shootPoint");
     }
 
     void UpdateAnimation()
@@ -36,7 +40,10 @@ public partial class Player
         UpdateAim();
         UpateBody();
     }
+    
 
+    protected bool _aiming = false;
+    public bool aiming { get { return this._aiming; } }
     void UpdateAim()
     {
         Vector2 direction = syncState.targetPos - (Vector2)aimBone.position;
@@ -44,17 +51,17 @@ public partial class Player
         float radian = Mathf.Abs(Mathf.Acos(Mathf.Abs(direction.x)));
         float rate = radian / (Mathf.PI / 2);
         //Debug.Log(rate);
-        DragonBones.AnimationState _aimState = null;
+        DragonBones.AnimationState aimState = null;
         //瞄准方向
         if (direction.y > 0)
         {
-            _aimState = armatureComponent.animation.FadeIn(aimUpAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+            aimState = armatureComponent.animation.FadeIn(aimUpAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
         }
         else
         {
-            _aimState = armatureComponent.animation.FadeIn(aimDownAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
+            aimState = armatureComponent.animation.FadeIn(aimDownAni, 0.01f, 1, 0, aimAniGroup, AnimationFadeOutMode.SameGroup);
         }
-        _aimState.weight = rate;
+        aimState.weight = rate;
     }
 
     bool faceRight = true;
@@ -105,6 +112,11 @@ public partial class Player
         
     }
 
+    void SetRecoilAnimation(float weight)
+    {
+        DragonBones.AnimationState aimState = armatureComponent.animation.FadeIn(recoilAni, 0.01f, 1, 0, recoilAniGroup, AnimationFadeOutMode.SameGroup);
+        aimState.weight = weight;
+    }
 
     BodyAnimation lastAnimation = BodyAnimation.Nothing;
     void SetBodyAnimation(BodyAnimation animation)
@@ -112,7 +124,7 @@ public partial class Player
         if (animation != lastAnimation)
         {   //动画不同,切换 
             lastAnimation = animation;
-            Debug.Log("animation state " + animation.ToString());
+            //Debug.Log("animation state " + animation.ToString());
             switch (animation)
             {
                 case BodyAnimation.Run:

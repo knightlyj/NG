@@ -68,6 +68,11 @@ public class Slime : Entity {
             }
         }
 
+        if(knockBack.x != 0 || knockBack.y != 0)
+        {
+            rb.AddForce(knockBack);
+            knockBack = Vector2.zero;
+        }
         groundedBefore = onGround || onPlatform;
     }
 
@@ -118,7 +123,7 @@ public class Slime : Entity {
         if (coll.gameObject.tag == "Player")
         {   //hit player
             Player p = coll.gameObject.GetComponent<Player>();
-            p.HitByOther(this.Properties);
+            p.HitByOther(this.Properties, transform.position);
         }
     }
 }

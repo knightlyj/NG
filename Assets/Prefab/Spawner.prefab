@@ -22,7 +22,7 @@ GameObject:
   - 114: {fileID: 114000012029986460}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Spawner
+  m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocektPrefab: {fileID: 4000013455770204, guid: 5f8426353e0ee7e4597df55dbce1b101,
     type: 2}
-  baseBulletPrefab: {fileID: 4000013789585110, guid: ae7e5c3c90db9714fb2b859e09926e69,
+  bulletPrefab: {fileID: 4000013789585110, guid: ae7e5c3c90db9714fb2b859e09926e69,
     type: 2}
-  hitGroundPrefab: {fileID: 4000011982218178, guid: e1916cb96cc5a8c4ab8f0931817c8798,
+  shootFlamePrefab: {fileID: 4000013461919968, guid: 76b2040b2c8ad7b429a5392d333007f6,
     type: 2}
