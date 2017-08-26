@@ -3,13 +3,18 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class DamageText : MonoBehaviour {
-    float fontSize = defaultScreen.damageFontSize;
-	// Use this for initialization
-	void Start () {
-        fontSize = (int)((float)Screen.height / defaultScreen.height * defaultScreen.damageFontSize);
+    float fontSize = GameSetting.damageFontSize;
+
+    void Awake()
+    {
+        fontSize = (int)((float)Screen.height / GameSetting.defaultScreenheight * GameSetting.damageFontSize);
         Text txt = GetComponent<Text>();
         txt.fontSize = (int)this.fontSize;
-        
+    }
+
+	// Use this for initialization
+	void Start () {
+
     }
 
     //向上飘的速度

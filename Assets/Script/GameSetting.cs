@@ -23,6 +23,13 @@ public static class GameSetting
     public static KeyCode openBagWnd = KeyCode.B;
     public static KeyCode openEquipWnd = KeyCode.C;
     public static KeyCode openConsole = KeyCode.F10;
+
+    //屏幕分辨率相关
+    public const float defaultScreenwidth = 1280;
+    public const float defaultScreenheight = 720;
+
+    public const float damageFontSize = 26f;
+    public const int textFontSize = 25;
 }
 
 

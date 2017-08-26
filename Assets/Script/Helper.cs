@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class Helper {
     public delegate void OperationOnGameObj(Transform t);
@@ -144,9 +145,18 @@ public static class Helper {
         return angle;
     }
 
-    static public Player[] FindAllPlayer()
+    static public List<Player> FindAllPlayers()
     {
-        Player[] players = null;
+        List<Player> players = new List<Player>();
+
+        GameObject local = GameObject.FindGameObjectWithTag(TextResources.localPlayerLayer);
+        players.Add(local.GetComponent<Player>());
+
+        GameObject[] remote = GameObject.FindGameObjectsWithTag(TextResources.remotePlayerLayer);
+        foreach (GameObject go in remote)
+        {
+            players.Add(go.GetComponent<Player>());
+        }
         return players;
     }
 }

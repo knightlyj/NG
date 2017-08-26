@@ -11,8 +11,9 @@ public class FastProjectile : Projectile {
         totalTime = 0;
         transform.localScale = new Vector3(1f, startScale, 1f);
     }
-
-    const float baseSpeed = 0.2f;
+    
+    [SerializeField]
+    protected float baseSpeed = 0.2f;
     void Update()
     {
         CheckLifeTime();

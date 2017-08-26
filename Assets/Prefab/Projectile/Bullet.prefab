@@ -28,34 +28,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000012654183178
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010959891768}
-  m_Layer: 10
-  m_Name: ColCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4000010959891768
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012654183178}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.185, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013789585110}
-  m_RootOrder: 0
 --- !u!4 &4000013789585110
 Transform:
   m_ObjectHideFlags: 1
@@ -66,8 +38,7 @@ Transform:
   m_LocalPosition: {x: 19.97, y: -3.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 4000010959891768}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!114 &114000014145918596
@@ -89,6 +60,7 @@ MonoBehaviour:
   lifeTime: 5
   explodePrefab: {fileID: 4000011982218178, guid: e1916cb96cc5a8c4ab8f0931817c8798,
     type: 2}
+  baseSpeed: 0.25
 --- !u!212 &212000013153781154
 SpriteRenderer:
   m_ObjectHideFlags: 1

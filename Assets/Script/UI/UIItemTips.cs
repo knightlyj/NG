@@ -13,12 +13,17 @@ public class UIItemTips : MonoBehaviour
     }
 
     Text txt;
+
+    void Awake()
+    {
+        txt = GetComponent<Text>();
+        txt.fontSize = GameSetting.textFontSize;
+    }
+
     // Use this for initialization
     void Start()
     {
-        txt = GetComponent<Text>();
         this.gameObject.SetActive(false);
-
     }
 
     const float maxDim = 1.0f;

@@ -120,6 +120,7 @@
     <Compile Include="Assets\Script\EventManager.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
+    <Compile Include="Assets\Script\Group.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\MouseCheck.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
@@ -146,6 +147,8 @@
     <Compile Include="Assets\Script\UI\UICraftClassCell.cs" />
     <Compile Include="Assets\Script\UI\UICraftItemCell.cs" />
     <Compile Include="Assets\Script\UI\UICraftWnd.cs" />
+    <Compile Include="Assets\Script\UI\UIDialog.cs" />
+    <Compile Include="Assets\Script\UI\UIDialogOpt.cs" />
     <Compile Include="Assets\Script\UI\UIEquipWnd.cs" />
     <Compile Include="Assets\Script\UI\UIItemSlot.cs" />
     <Compile Include="Assets\Script\UI\UIItemTips.cs" />

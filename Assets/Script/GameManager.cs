@@ -14,11 +14,11 @@ public class GameManager : MonoBehaviour {
     }
 
     [SerializeField]
-    Transform rocektPrefab;
+    Transform rocektPrefab = null;
     [SerializeField]
-    Transform bulletPrefab;
+    Transform bulletPrefab = null;
     [SerializeField]
-    Transform shootFlamePrefab;
+    Transform shootFlamePrefab = null;
     public enum ProjectileType
     {
         Nothing,

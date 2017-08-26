@@ -8,7 +8,7 @@ public class HpBar : MonoBehaviour {
     float scale;
     // Use this for initialization
     void Start () {
-        scale = (float)Screen.height / defaultScreen.height;
+        scale = (float)Screen.height / GameSetting.defaultScreenheight;
         transform.localScale = new Vector3(scale, scale, scale);
     }
 	
