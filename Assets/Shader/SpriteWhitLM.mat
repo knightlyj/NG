@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Tiles_1
-  m_Shader: {fileID: 4800000, guid: 99fd33029232b8444a60a01e27b081ee, type: 3}
-  m_ShaderKeywords: PIXELSNAP_ON
+  m_Name: SpriteWhitLM
+  m_Shader: {fileID: 4800000, guid: d0e2e87b3f7f504409359465f8ca4346, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
   stringTagMap: {}

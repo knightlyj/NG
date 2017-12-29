@@ -19,8 +19,6 @@ public static class ItemTypeTable
     
     static ItemTypeTable()
     {
-        Debug.Log("item table init------------");
-
         //初始化合成表
         using (FileStream fs = new FileStream(Application.streamingAssetsPath + "/GameData/" + TextResources.craftClassTable, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         {

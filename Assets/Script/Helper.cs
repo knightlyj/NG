@@ -43,7 +43,7 @@ public static class Helper {
             localPlayer = goPlayer.GetComponent<LocalPlayer>();
             if (localPlayer != null)
             {
-                localPlayer.EntityDestroyEvent += OnPlayerDestroy;
+                localPlayer.onDestroy += OnPlayerDestroy;
             }
         }
         return localPlayer;
@@ -51,7 +51,7 @@ public static class Helper {
 
     private static void OnPlayerDestroy()
     {
-        localPlayer.EntityDestroyEvent -= OnPlayerDestroy;
+        localPlayer.onDestroy -= OnPlayerDestroy;
         localPlayer = null;
     }
 
@@ -118,11 +118,11 @@ public static class Helper {
         while (tr != null);
     }
 
-    //找到manager
-    static public GameManager GetManager()
+    //找到level manager
+    static public LevelManager GetLevelManager()
     {
         GameObject goManager = GameObject.FindGameObjectWithTag(TextResources.gameManagerTag);
-        return goManager.GetComponent<GameManager>();
+        return goManager.GetComponent<LevelManager>();
     }
 
     static public UIDynamicCursor GetDyanamicCursor()

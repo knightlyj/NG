@@ -76,4 +76,11 @@ public class UIItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             itemAmount.gameObject.SetActive(true);
         }
     }
+
+    public void ClearItem()
+    {
+        showItem = null;
+        itemImg.gameObject.SetActive(false);
+        itemAmount.gameObject.SetActive(false);
+    }
 }

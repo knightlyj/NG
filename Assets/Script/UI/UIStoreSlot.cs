@@ -31,4 +31,5 @@ public class UIStoreSlot : UIItemSlot
             itemImg.gameObject.SetActive(true);
         }
     }
+    
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Slime : Entity {
+public class Slime : Creature {
 
     // Use this for initialization
     protected override void Start () {
@@ -68,10 +68,10 @@ public class Slime : Entity {
             }
         }
 
-        if(knockBack.x != 0 || knockBack.y != 0)
+        if(knockForce.x != 0 || knockForce.y != 0)
         {
-            rb.AddForce(knockBack);
-            knockBack = Vector2.zero;
+            rb.AddForce(knockForce);
+            knockForce = Vector2.zero;
         }
         groundedBefore = onGround || onPlatform;
     }
@@ -123,7 +123,7 @@ public class Slime : Entity {
         if (coll.gameObject.tag == "Player")
         {   //hit player
             Player p = coll.gameObject.GetComponent<Player>();
-            p.HitByOther(this.Properties, transform.position);
+            //p.HitByOther(this.Properties, transform.position);
         }
     }
 }

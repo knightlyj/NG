@@ -100,17 +100,17 @@
     <Compile Include="Assets\DragonBones\DragonBones\unity\UnityTextureData.cs" />
     <Compile Include="Assets\DragonBones\DragonBones\unity\UnityUGUIDisplay.cs" />
     <Compile Include="Assets\Script\BackGround.cs" />
-    <Compile Include="Assets\Script\CameraFollow.cs" />
-    <Compile Include="Assets\Script\Entity\Buff\BaseBuff.cs" />
-    <Compile Include="Assets\Script\Entity\Buff\BuffModule.cs" />
-    <Compile Include="Assets\Script\Entity\Buff\InvincibleBuff.cs" />
-    <Compile Include="Assets\Script\Entity\Entity.cs" />
-    <Compile Include="Assets\Script\Entity\Monster\Slime.cs" />
-    <Compile Include="Assets\Script\Entity\Package.cs" />
-    <Compile Include="Assets\Script\Entity\Player\LocalPlayer.cs" />
-    <Compile Include="Assets\Script\Entity\Player\Player.cs" />
-    <Compile Include="Assets\Script\Entity\Player\PlayerAnimation.cs" />
-    <Compile Include="Assets\Script\Entity\Player\PlayerPhysics.cs" />
+    <Compile Include="Assets\Script\CameraControl.cs" />
+    <Compile Include="Assets\Script\Creature\Buff\BaseBuff.cs" />
+    <Compile Include="Assets\Script\Creature\Buff\BuffModule.cs" />
+    <Compile Include="Assets\Script\Creature\Buff\InvincibleBuff.cs" />
+    <Compile Include="Assets\Script\Creature\Creature.cs" />
+    <Compile Include="Assets\Script\Creature\Monster\Slime.cs" />
+    <Compile Include="Assets\Script\Creature\Player\LocalPlayer.cs" />
+    <Compile Include="Assets\Script\Creature\Player\Package.cs" />
+    <Compile Include="Assets\Script\Creature\Player\Player.cs" />
+    <Compile Include="Assets\Script\Creature\Player\PlayerAnimation.cs" />
+    <Compile Include="Assets\Script\Creature\Player\PlayerPhysics.cs" />
     <Compile Include="Assets\Script\Equipment\EquipTable.cs" />
     <Compile Include="Assets\Script\Equipment\Equipment.cs" />
     <Compile Include="Assets\Script\Equipment\Item.cs" />
@@ -118,10 +118,11 @@
     <Compile Include="Assets\Script\Equipment\ItemTypeTable.cs" />
     <Compile Include="Assets\Script\Equipment\StoreInfo.cs" />
     <Compile Include="Assets\Script\EventManager.cs" />
-    <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
     <Compile Include="Assets\Script\Group.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
+    <Compile Include="Assets\Script\LevelManager.cs" />
+    <Compile Include="Assets\Script\LightManager.cs" />
     <Compile Include="Assets\Script\MouseCheck.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
     <Compile Include="Assets\Script\Network\GameNetWork.cs" />
@@ -177,7 +178,11 @@
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\TmxObject.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Shader\TipsFont.shader" />
+    <None Include="Assets\Shader\shaLightMap.shader" />
+    <None Include="Assets\Shader\shaOccMap.shader" />
+    <None Include="Assets\Shader\shaShadowMap.shader" />
+    <None Include="Assets\Shader\shaSpriteWhitLM.shader" />
+    <None Include="Assets\Shader\shaTipsFont.shader" />
     <None Include="Assets\Tiled2Unity\Imported\_ReadMe.txt" />
     <None Include="Assets\Tiled2Unity\Imported\test.tiled2unity.xml" />
     <None Include="Assets\Tiled2Unity\License.txt" />

@@ -41,7 +41,7 @@ public class LocalPlayer : Player
         this._playerName = (string)formatter.Deserialize(s);
         this._bag = (PlayerBag)formatter.Deserialize(s);
         this._equip = (PlayerEquipment)formatter.Deserialize(s);
-        this._equip.BindProperties(this.Properties); //属性重新计算
+        this._equip.BindPlayer(this); //属性重新计算
         this._equip.RecalcProperties();
         EventManager.RaiseEvent(EventId.LocalPlayerLoad, this);
 
@@ -62,7 +62,7 @@ public class LocalPlayer : Player
     void ItemInit()
     {
         _bag = new PlayerBag(itemPackSize);
-        _equip = new PlayerEquipment(this.Properties);
+        _equip = new PlayerEquipment(this);
     }
 
     public const int itemPackSize = 40;

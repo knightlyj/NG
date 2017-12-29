@@ -2,62 +2,160 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class GamePlayUI : MonoBehaviour {
+public class GamePlayUI : MonoBehaviour
+{
     public UIItemTips itemTips;
     public UIMouseItem mouseItem;
     public UIDynamicCursor dynCursor;
 
     [SerializeField]
-    GameWindow craftWnd = null;
+    UICraftWnd craftWnd = null;
     [SerializeField]
-    GameWindow bagWnd = null;
+    UIBagWnd bagWnd = null;
     [SerializeField]
-    GameWindow console = null;
+    UIConsole console = null;
     [SerializeField]
-    GameWindow equipWnd = null;
+    UIEquipWnd equipWnd = null;
     [SerializeField]
-    GameWindow storeWnd = null;
+    UIStoreWnd storeWnd = null;
+    [SerializeField]
+    UIDialog dialog = null;
+
+    void HideAllWnd()
+    {
+        craftWnd.HideWnd();
+        bagWnd.HideWnd();
+        console.HideWnd();
+        equipWnd.HideWnd();
+        storeWnd.HideWnd();
+    }
 
     void Awake()
     {
+
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         this.SetCursor(CursorState.Normal);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (Input.GetKeyDown(GameSetting.openBagWnd)) //背包
         {
             bagWnd.SwitchShowAndHide();
+            dialog.Hide();
         }
         if (Input.GetKeyDown(GameSetting.openCraftWnd)) //制造
         {
             craftWnd.SwitchShowAndHide();
+            dialog.Hide();
         }
         if (Input.GetKeyDown(GameSetting.openEquipWnd)) //装备
         {
             equipWnd.SwitchShowAndHide();
+            dialog.Hide();
         }
 
 
         if (Input.GetKeyDown(GameSetting.openConsole)) //控制台
         {
-            console.SwitchShowAndHide();
+            if (GameSetting.enableConsole == true)
+            {
+                console.SwitchShowAndHide();
+                dialog.Hide();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         { //close all windows
-            bagWnd.HideWnd();
-            craftWnd.HideWnd();
-            equipWnd.HideWnd();
+            HideAllWnd();
+            dialog.Hide();
+        }
 
-            console.HideWnd();
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            ShowStore(null);
+            dialog.Hide();
         }
 
         UpdateCursor(); //更新鼠标外观
+    }
+    
+    ///*******************window state*************************
+    public enum WndMode
+    {
+        HideAll,
+        Store,
+        Repo,
+    }
+
+
+    static bool firstShowStore = true;
+    public void ShowStore(StoreInfo info)
+    {
+        if (firstShowStore)
+        {   //第一次打开商店,界面摆在固定位置
+            RectTransform rectStore = storeWnd.GetComponent<RectTransform>();
+            RectTransform rectBag = bagWnd.GetComponent<RectTransform>();
+            rectStore.anchoredPosition = new Vector2(250, 620);
+            rectBag.anchoredPosition = new Vector2(250, 315);
+            firstShowStore = false;
+        }
+        //显示窗口并设置商店数据
+        storeWnd.ShowWnd();
+        storeWnd.SetStoreInfo(info);
+        bagWnd.ShowWnd();
+
+        //隐藏对话框
+        dialog.Hide();
+    }
+
+    public void ShowRepo()
+    {
+
+    }
+
+    public void ShowDialog(string content, string[] options, UIDialogOpt.OnOptionChosen optionChosen)
+    {
+        HideAllWnd();
+        dialog.ShowDialog(content, options, optionChosen);
+    }
+
+    //******************cursor etc**********************
+    public enum CursorState
+    {
+        Normal,
+        Talk,
+        Shoot,
+    }
+    [SerializeField]
+    Texture2D normalCursor = null;
+    [SerializeField]
+    Texture2D talkCursor = null;
+
+    private void SetCursor(CursorState state, float frontSight = 0)
+    {
+        switch (state)
+        {
+            case CursorState.Normal:
+                Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
+                dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
+                Cursor.visible = true;
+                break;
+            case CursorState.Talk:
+                Cursor.SetCursor(talkCursor, Vector2.zero, CursorMode.Auto);
+                dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
+                Cursor.visible = true;
+                break;
+            case CursorState.Shoot:
+                dynCursor.SetCursorState(UIDynamicCursor.CursorState.FrontSight);
+                Cursor.visible = false;
+                break;
+        }
     }
 
 
@@ -97,38 +195,4 @@ public class GamePlayUI : MonoBehaviour {
             }
         }
     }
-
-    //******************cursor etc**********************
-    public enum CursorState
-    {
-        Normal,
-        Talk,
-        Shoot,
-    }
-    [SerializeField]
-    Texture2D normalCursor = null;
-    [SerializeField]
-    Texture2D talkCursor = null;
-
-    private void SetCursor(CursorState state, float frontSight = 0)
-    {
-        switch (state)
-        {
-            case CursorState.Normal:
-                Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
-                dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
-                Cursor.visible = true;
-                break;
-            case CursorState.Talk:
-                Cursor.SetCursor(talkCursor, Vector2.zero, CursorMode.Auto);
-                dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
-                Cursor.visible = true;
-                break;
-            case CursorState.Shoot:
-                dynCursor.SetCursorState(UIDynamicCursor.CursorState.FrontSight);
-                Cursor.visible = false;
-                break;
-        }
-    }
-
 }

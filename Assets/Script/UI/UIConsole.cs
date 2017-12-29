@@ -4,12 +4,13 @@ using UnityEngine.UI;
 using System;
 using System.Text;
 
-public class UIConsole : MonoBehaviour {
+public class UIConsole : GameWindow {
     InputField itemId, itemAmount;
     InputField moneyInput;
     Text txtProp;
-    void Awake()
+    public new void Awake()
     {
+        base.Awake();
         //物品
         itemId = transform.FindChild("Bg").FindChild("ItemId").GetComponent<InputField>();
         itemAmount = transform.FindChild("Bg").FindChild("ItemAmount").GetComponent<InputField>();
@@ -33,21 +34,23 @@ public class UIConsole : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-	
+    public new void Start () {
+        base.Start();
 	}
 
     int propUpateCnt = 0;
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    public new void Update () {
+        base.Update();
 	    if(++propUpateCnt >= 20)
         {
             UpdateProperties();
         }
 	}
 
-    void OnDestroy()
+    public new void OnDestroy()
     {
+        base.OnDestroy();
         //物品
         Button addItem = transform.FindChild("Bg").FindChild("AddItem").GetComponent<Button>();
         addItem.onClick.RemoveListener(this.OnAddItemClick);
@@ -65,6 +68,8 @@ public class UIConsole : MonoBehaviour {
 
     void OnAddItemClick()
     {
+        if (GameSetting.enableConsole != true)
+            return;
         int intId = -1;
         uint amount = 0;
         try
@@ -108,6 +113,8 @@ public class UIConsole : MonoBehaviour {
 
     void OnAddMoneyClick()
     {
+        if (GameSetting.enableConsole != true)
+            return;
         int money = 0;
         try
         {
@@ -133,19 +140,19 @@ public class UIConsole : MonoBehaviour {
         Player localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
         {
-            EntityProperties prop = localPlayer.Properties;
+            Player player = localPlayer;
             txtProp.text = string.Format("血量: {0}/{1}, 攻击: {2}-{3},防御: {4}\n攻击间隔: {5:N}, 攻速: {6}%\n暴击率: {7}%, 暴击伤害: {8}%\nrcr: {9}%,  速度: {10}%, 跳跃: {11}%\n 后坐力: {12}, 击退: {13}", 
-                prop.hp, prop.maxHp, prop.minAttack, prop.maxAttack, prop.defense,
-                prop.atkInterval, Mathf.Round(prop.atkSpeed * 100),
-                Mathf.Round(prop.criticalChance * 100), Mathf.Round(prop.criticalRate * 100),
-                Mathf.Round(prop.rcr * 100), Mathf.Round(prop.speedScale * 100), Mathf.Round(prop.jumpScale * 100),
-                prop.recoil, prop.knockBack);
+                player.hp, player.maxHp, player.minAttack, player.maxAttack, player.defense,
+                player.atkInterval, Mathf.Round(player.atkSpeed * 100),
+                Mathf.Round(player.criticalChance * 100), Mathf.Round(player.criticalRate * 100),
+                Mathf.Round(player.rcr * 100), Mathf.Round(player.speedScale * 100), Mathf.Round(player.jumpScale * 100),
+                player.recoil, player.knockBack);
         }
     }
 
     void Save()
     {
-        GameManager manager = Helper.GetManager();
+        LevelManager manager = Helper.GetLevelManager();
         if(manager != null)
         {
             manager.SaveGame();
@@ -154,7 +161,7 @@ public class UIConsole : MonoBehaviour {
 
     void Load()
     {
-        GameManager manager = Helper.GetManager();
+        LevelManager manager = Helper.GetLevelManager();
         if (manager != null)
         {
             manager.LoadGame("local player", null);

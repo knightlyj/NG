@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class UIStoreWnd : MonoBehaviour
+public class UIStoreWnd : GameWindow
 {
     //布局用参数
     public Transform slotPrefab;
@@ -13,8 +13,9 @@ public class UIStoreWnd : MonoBehaviour
 
     UIStoreSlot[] slots = new UIStoreSlot[slotAmount];
 
-    void Awake()
+    public new void Awake()
     {
+        base.Awake();
         Transform trStore = transform.FindChild("Bg");
         //8行5列
         for (int i = 0; i < slotAmount; i++)
@@ -27,8 +28,9 @@ public class UIStoreWnd : MonoBehaviour
 
     StoreInfo storeInfo = null;
     // Use this for initialization
-    void Start()
+    public new void Start()
     {
+        base.Start();
         StoreInfo info = new StoreInfo();
         for (int i = 1; i <= 3; i++)
         {
@@ -37,18 +39,19 @@ public class UIStoreWnd : MonoBehaviour
         this.SetStoreInfo(info);
     }
 
-    void OnDestroy()
+    // Update is called once per frame
+    public new void Update()
     {
+        base.Update();
+    }
+
+    public new void OnDestroy()
+    {
+        base.OnDestroy();
         foreach (UIItemSlot slot in slots)
         {
             slot.MouseDownEvent -= this.OnItemMouseDown;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     //点下物品格
@@ -67,14 +70,27 @@ public class UIStoreWnd : MonoBehaviour
         Helper.MoveWndToFront(transform);
     }
 
-    void SetStoreInfo(StoreInfo info)
+    public void SetStoreInfo(StoreInfo info)
     {
-        this.storeInfo = info; //记录数据
-        //更新到界面
-        int count = 0;
-        foreach (Commodity comm in info)
+        //清除原来的数据
+        if (this.storeInfo != null)
         {
-            slots[count++].SetItemInfo(comm.item);
+            for (int i = 0; i < this.storeInfo.Count; i++)
+            {
+                slots[i].ClearItem();
+            }
+        }
+
+        
+        this.storeInfo = info; //记录数据
+        if (info != null)
+        {
+            //更新到界面
+            int count = 0;
+            foreach (Commodity comm in info)
+            {
+                slots[count++].SetItemInfo(comm.item);
+            }
         }
     }
 }

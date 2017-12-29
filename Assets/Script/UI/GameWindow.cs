@@ -7,7 +7,7 @@ using System;
 public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     RectTransform rect;
-    void Awake()
+    public void Awake()
     {
         rect = transform as RectTransform;
         Button btnClose = transform.FindChild("Close").GetComponent<Button>();
@@ -15,13 +15,13 @@ public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     }
 
     // Use this for initialization
-    void Start()
+    public void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (drag)
         {
@@ -29,7 +29,7 @@ public class GameWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-    void OnDestroy()
+    public void OnDestroy()
     {
         Button btnClose = transform.FindChild("Close").GetComponent<Button>();
         btnClose.onClick.RemoveAllListeners();

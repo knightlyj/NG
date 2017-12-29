@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class GameManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         

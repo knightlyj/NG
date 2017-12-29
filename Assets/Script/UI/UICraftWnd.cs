@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UICraftWnd : MonoBehaviour
+public class UICraftWnd : GameWindow
 {
     [SerializeField]
     Transform itemCellPrefab = null;
@@ -16,8 +16,9 @@ public class UICraftWnd : MonoBehaviour
     UIMatSlot productSlot = null;
     Button btnCraft;
 
-    void Awake()
+    public new void Awake()
     {
+        base.Awake();
         //制造按钮
         btnCraft = transform.FindChild("Craft").GetComponent<Button>();
         btnCraft.onClick.AddListener(this.OnCraftClick);
@@ -43,8 +44,9 @@ public class UICraftWnd : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    public new void Start()
     {
+        base.Start();
         LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
@@ -66,13 +68,14 @@ public class UICraftWnd : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public new void Update()
     {
-
+        base.Update();
     }
 
-    void OnDestroy()
+    public new void OnDestroy()
     {
+        base.OnDestroy();
         //制造按钮
         btnCraft = transform.FindChild("Craft").GetComponent<Button>();
         btnCraft.onClick.RemoveAllListeners();

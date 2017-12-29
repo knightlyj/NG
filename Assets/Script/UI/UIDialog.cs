@@ -30,7 +30,7 @@ public class UIDialog : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Init();
-        SetDialog(test, opts, Chosen);
+        ShowDialog(test, opts, Chosen);
     }
 
     void Init()
@@ -46,8 +46,9 @@ public class UIDialog : MonoBehaviour {
         Debug.Log("choose " + idx);
     }
 
-    public void SetDialog(string content, string[] options, UIDialogOpt.OnOptionChosen optionChosen)
+    public void ShowDialog(string content, string[] options, UIDialogOpt.OnOptionChosen optionChosen)
     {
+        this.gameObject.SetActive(true);
         txtContent.text = content;
         float height = 0;
         height = txtContent.preferredHeight;
@@ -73,5 +74,10 @@ public class UIDialog : MonoBehaviour {
         RectTransform rect = transform as RectTransform;
         rect.offsetMin = rect.anchoredPosition - new Vector2(dialogWidth / 2, height / 2);
         rect.offsetMax = rect.offsetMin + new Vector2(dialogWidth, height);
+    }
+
+    public void Hide()
+    {
+        this.gameObject.SetActive(false);
     }
 }

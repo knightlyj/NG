@@ -3,13 +3,7 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
     [HideInInspector]
-    public int minAttack = 1;
-    [HideInInspector]
-    public int maxAttack = 2;
-    [HideInInspector]
-    public float criticalChance = 0;
-    [HideInInspector]
-    public float criticalRate = 1;
+    public int damage = 1;
     [HideInInspector]
     public float knockBack; //击退
 
@@ -26,10 +20,10 @@ public class Projectile : MonoBehaviour {
     }
 
     protected float speedScale = 1.0f; //速度scale
-    protected Entity owner = null; 
+    protected Creature owner = null; 
     protected int hitLayerMask;
     protected Vector2 direction;
-    public virtual void Shoot(Entity owner, Vector2 position, Vector2 direction, float speedScale, int hitLayerMask)
+    public virtual void Shoot(Creature owner, Vector2 position, Vector2 direction, float speedScale, int hitLayerMask)
     {
         //保存参数
         this.owner = owner;

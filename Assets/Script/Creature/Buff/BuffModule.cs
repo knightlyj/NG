@@ -11,7 +11,7 @@ public enum BuffId
 public class BuffModule{
     Dictionary<BuffId, BaseBuff> buffDict = new Dictionary<BuffId, BaseBuff>();
     //同id的buff不能叠加,只能覆盖
-	public bool AddBuff(Entity target, BuffId id)
+	public bool AddBuff(Creature target, BuffId id)
     {
         BaseBuff newBuff = null;
         switch (id)

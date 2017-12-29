@@ -10,7 +10,7 @@ public class InvincibleBuff : BaseBuff
     const float invincibleDuration = 1;
     
     // Use this for initialization
-    public override void Start (Entity target) {
+    public override void Start (Creature target) {
         base.Start(target);
         this.duration = invincibleDuration;
         //Debug.Log("buff start");

@@ -10,10 +10,10 @@ public class BaseBuff
         Monster,
     }
     protected EntityType entityType;
-    protected Entity buffTarget = null;
+    protected Creature buffTarget = null;
     protected float duration = 0;
     // Use this for initialization
-    public virtual void Start (Entity target)
+    public virtual void Start (Creature target)
     {
 	    if(target.GetType() == typeof(Player))
         {

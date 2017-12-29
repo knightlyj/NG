@@ -32,7 +32,7 @@ public class FastProjectile : Projectile {
             GameObject go = hit.collider.gameObject;
             if (((1 << go.layer) & hitLayerMask) != 0)
             {
-                Entity e = go.gameObject.GetComponent<Entity>();
+                Creature e = go.gameObject.GetComponent<Creature>();
                 if (e != null)
                     e.HitByOther(this, transform.position);
                 Explode(hit.point);

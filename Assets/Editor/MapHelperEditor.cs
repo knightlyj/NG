@@ -22,30 +22,32 @@ public class MapHelperEditor : Editor {
             map.tag = "Map";
             Helper.TravesalGameObj(map.transform, this.SetLayer);
             foreach (string s in layerNames)
-            {
-                //Transform layer = map.transform.FindChild(s);
-                //Transform collision = layer.FindChild("Collision");
-                //collision.gameObject.layer = LayerMask.NameToLayer(s);
-                Transform collision = map.transform.FindChild(s).FindChild("Collision");
-                collision.gameObject.layer = LayerMask.NameToLayer(s);
-                //Collider2D col = collision.GetComponent<PolygonCollider2D>();
-                //col.isTrigger = true;
-                if (s == "Platform")
+            {   //遍历layer的子节点,mesh设置layer就行了,碰撞体还要额外设置一些其他属性
+                Transform trLayer = map.transform.FindChild(s);
+                for (int i = 0; i < trLayer.childCount; i++)
                 {
-                    Collider2D col = collision.GetComponent<PolygonCollider2D>();
-                    col.usedByEffector = true;
-
-                    PlatformEffector2D effctor = collision.gameObject.GetComponent<PlatformEffector2D>();
-                    if (effctor == null)
+                    Transform trChild = trLayer.GetChild(i);
+                    trChild.gameObject.layer = LayerMask.NameToLayer(s);
+                    if (trChild.name == "Collision")
                     {
-                        effctor = collision.gameObject.AddComponent<PlatformEffector2D>();
-                        effctor.useColliderMask = false;
+                        if (s == "Platform")
+                        {
+                            Collider2D col = trChild.GetComponent<PolygonCollider2D>();
+                            col.usedByEffector = true;
+
+                            PlatformEffector2D effctor = trChild.gameObject.GetComponent<PlatformEffector2D>();
+                            if (effctor == null)
+                            {
+                                effctor = trChild.gameObject.AddComponent<PlatformEffector2D>();
+                                effctor.useColliderMask = false;
+                            }
+                        }
+                        else if (s == "Ladder")
+                        {
+                            Collider2D col = trChild.GetComponent<PolygonCollider2D>();
+                            col.isTrigger = true;
+                        }
                     }
-                }
-                else if (s == "Ladder")
-                {
-                    Collider2D col = collision.GetComponent<PolygonCollider2D>();
-                    col.isTrigger = true;
                 }
             }
         }

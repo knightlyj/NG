@@ -109,8 +109,7 @@ public class BattleInfo : MonoBehaviour {
         }
         else
         {
-            EntityProperties prop = localPlayer.Properties;
-            float hpRate = prop.hp / prop.maxHp;
+            float hpRate = localPlayer.hp / localPlayer.maxHp;
             if (hpRate > 1)
                 hpRate = 1;
             localHpBar.localScale = new Vector3(hpRate, 1, 1);

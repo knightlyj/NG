@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 using UnityEngine.EventSystems;
 
-public class UIBagWnd : MonoBehaviour
+public class UIBagWnd : GameWindow
 {
     //布局用参数
     public Transform packSlotPrefab;
@@ -20,8 +20,9 @@ public class UIBagWnd : MonoBehaviour
     Text money = null;
 
     //awake会在setactive后立即调用,初始化写在这里
-    void Awake()
+    public new void Awake()
     {
+        base.Awake();
         Transform trPack = transform.FindChild("Bg");
         //物品栏 8行5列
         packSlots = new UIItemSlot[LocalPlayer.itemPackSize];
@@ -47,15 +48,29 @@ public class UIBagWnd : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    public new void Start()
     {
+        base.Start();
         LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindBag(localPlayer.bag);
     }
 
-    void OnDestroy()
+    // Update is called once per frame
+    public new void Update()
     {
+        base.Update();
+        if (bindBag != null)
+        {
+            //获取背包
+            money.text = bindBag.money.ToString(); //金钱数量
+            trashSlot.SetItemInfo(bindBag.trash.item);
+        }
+    }
+
+    public new void OnDestroy()
+    {
+        base.OnDestroy();
         //物品栏 8行5列
         foreach (UIItemSlot slot in packSlots)
         {
@@ -70,17 +85,6 @@ public class UIBagWnd : MonoBehaviour
         EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
         //退订读取存档事件,背包数据会改变
         EventManager.RemoveListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        if (bindBag != null)
-        {
-            //获取背包
-            money.text = bindBag.money.ToString(); //金钱数量
-            trashSlot.SetItemInfo(bindBag.trash.item);
-        }
     }
 
     //点下物品格

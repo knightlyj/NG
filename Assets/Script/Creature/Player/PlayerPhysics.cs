@@ -22,7 +22,7 @@ public partial class Player
     DateTime jumpTime = DateTime.Now;
     DateTime crossPlatformTime = DateTime.Now;
     bool isCrossPlatform = false;
-    protected Vector2 recoil = Vector2.zero; //后坐力,update中生成,存在这里,fixedupdate再来处理
+    protected Vector2 recoilForce = Vector2.zero; //后坐力,update中生成,存在这里,fixedupdate再来处理
     void Simualte()
     {
         CircleCollider2D col = GetComponent<CircleCollider2D>();
@@ -169,10 +169,10 @@ public partial class Player
         }
 
         //处理后坐力
-        if (recoil.x != 0 || recoil.y != 0)
+        if (recoilForce.x != 0 || recoilForce.y != 0)
         {
-            rb.AddForce(recoil);
-            recoil = Vector2.zero; //清空
+            rb.AddForce(recoilForce);
+            recoilForce = Vector2.zero; //清空
         }
     }
 
@@ -214,7 +214,7 @@ public partial class Player
         }
 
 
-        recoil = Vector2.zero; //梯子上不考虑后坐力
+        recoilForce = Vector2.zero; //梯子上不考虑后坐力
     }
 
     void GetOnLadder()
@@ -283,12 +283,12 @@ public partial class Player
             else if (gameObject.layer == LayerMask.NameToLayer("PICP"))
                 gameObject.layer = LayerMask.NameToLayer("PCP");
         }
-        Properties.invincible = invincible;
+        this.invincible = invincible;
     }
 
     bool GetInvincible()
     {
-        return Properties.invincible;
+        return invincible;
     }
 
 

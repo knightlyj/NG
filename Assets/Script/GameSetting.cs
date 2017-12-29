@@ -3,6 +3,7 @@ using System.Collections;
 
 public static class GameSetting
 {
+    //******************玩家信息相关参数**************************
     static public string name;
     static public bool isMultiPlayer = false;
     static public bool isHost = true;
@@ -24,12 +25,15 @@ public static class GameSetting
     public static KeyCode openEquipWnd = KeyCode.C;
     public static KeyCode openConsole = KeyCode.F10;
 
-    //屏幕分辨率相关
+    //****************屏幕分辨率相关****************************
     public const float defaultScreenwidth = 1280;
     public const float defaultScreenheight = 720;
 
     public const float damageFontSize = 26f;
     public const int textFontSize = 25;
+
+    //****************控制台开关***********************
+    public const bool enableConsole = true;
 }
 
 

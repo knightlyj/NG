@@ -9,16 +9,17 @@ public class BackGround : MonoBehaviour {
 
     void Awake()
     {
-        CameraFollow cf = GameObject.FindWithTag("MainCamera").GetComponent<CameraFollow>();
-        cf.CameraResizeEvent += this.OnCameraResize;
+        near = transform.FindChild("Near");
+        far = transform.FindChild("Far");
+        farthest = transform.FindChild("Farthest");
     }
 
     // Use this for initialization
     void Start () {
-        near = transform.FindChild("Near");
-        far = transform.FindChild("Far");
-        farthest = transform.FindChild("Farthest");
-        if(near == null || far == null || farthest == null)
+        CameraControl cf = GameObject.FindWithTag("MainCamera").GetComponent<CameraControl>();
+        cf.CameraResizeEvent += this.OnCameraResize;
+
+        if (near == null || far == null || farthest == null)
         {
             Debug.LogError("BackGround.Start >> background null");
         }
@@ -50,10 +51,10 @@ public class BackGround : MonoBehaviour {
         }
     }
 
-    CameraFollow cameraFollow = null;
+    CameraControl cameraFollow = null;
     void OnCameraResize(object sender)
     {
-        CameraFollow cf = sender as CameraFollow;
+        CameraControl cf = sender as CameraControl;
         cameraFollow = cf;
         SetBgSize();
     }

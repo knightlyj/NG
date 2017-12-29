@@ -2027,6 +2027,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4bfc378bffae7e45b61f02fa9080e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 100
+  maxHp: 100
+  minAttack: 10
+  maxAttack: 20
+  defense: 0
+  speedScale: 1
+  jumpScale: 1
+  knockBack: 1
+  recoil: 0
+  criticalChance: 0.05
+  criticalRate: 1.5
+  invincible: 0
   isLocal: 1
   hpBarOffset: -0.35
   _maxForwardSpeed: 2
@@ -2035,6 +2047,9 @@ MonoBehaviour:
   _movBackForce: 1
   _movForceInAir: 0.2
   _jumpSpeed: 6
+  atkInterval: 0.5
+  atkSpeed: 1
+  rcr: 0
   groundCheck: {fileID: 4000014092169368}
   groundLayerMask:
     serializedVersion: 2

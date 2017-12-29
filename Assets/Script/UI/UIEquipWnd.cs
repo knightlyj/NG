@@ -3,13 +3,15 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System;
 
-public class UIEquipWnd : MonoBehaviour
+public class UIEquipWnd : GameWindow
 {
     UIItemSlot[] weaponSlots = new UIItemSlot[PlayerEquipment.weaponAmount];
     UIItemSlot[] armorSlots;
     readonly string[] armorSlotName = { "Helmet", "Armor", "Boot", "Glove", "Accessory0", "Accessory1", "Accessory2" };
-    void Awake()
+
+    public new void Awake()
     {
+        base.Awake();
         for (int i = 0; i < PlayerEquipment.weaponAmount; i++)
         {
             weaponSlots[i] = transform.FindChild("Bg").FindChild("Weapon" + i).GetComponent<UIItemSlot>();
@@ -34,15 +36,23 @@ public class UIEquipWnd : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    public new void Start()
     {
+        base.Start();
         LocalPlayer localPlayer = Helper.FindLocalPlayer();
         if (localPlayer != null)
             BindEquipment(localPlayer.equipment);
     }
 
-    void OnDestroy()
+    // Update is called once per frame
+    public new void Update()
     {
+        base.Update();
+    }
+
+    public new void OnDestroy()
+    {
+        base.OnDestroy();
         for (int i = 0; i < weaponSlots.Length; i++)
         {
             weaponSlots[i].MouseDownEvent -= this.OnWeaponSlotClick;
@@ -61,12 +71,6 @@ public class UIEquipWnd : MonoBehaviour
         EventManager.RemoveListener(EventId.LocalPlayerDestroy, this.OnLocalPlayerDestroy);
         //退订读取存档事件,背包数据会改变
         EventManager.RemoveListener(EventId.LocalPlayerLoad, this.OnLocalPlayerLoad);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     //武器格子点击回调

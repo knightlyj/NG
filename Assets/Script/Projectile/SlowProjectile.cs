@@ -37,7 +37,7 @@ public class SlowProjectile : Projectile
     }
 
     //射击时的初始参数
-    public override void Shoot(Entity owner, Vector2 position, Vector2 direction, float speedScale, int hitLayerMask)
+    public override void Shoot(Creature owner, Vector2 position, Vector2 direction, float speedScale, int hitLayerMask)
     {
         base.Shoot(owner, position, direction, speedScale, hitLayerMask);
 
@@ -65,7 +65,7 @@ public class SlowProjectile : Projectile
                         || col.gameObject.layer == LayerMask.NameToLayer("Monster")
                         || col.gameObject.layer == LayerMask.NameToLayer("NPC"))
                     {
-                        Entity e = col.gameObject.GetComponent<Entity>();
+                        Creature e = col.gameObject.GetComponent<Creature>();
                         e.HitByOther(this, transform.position);
                     }
                 }
