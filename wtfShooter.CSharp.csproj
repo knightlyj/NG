@@ -134,6 +134,7 @@
     <Compile Include="Assets\Script\Projectile\ShootFlame.cs" />
     <Compile Include="Assets\Script\Projectile\SlowProjectile.cs" />
     <Compile Include="Assets\Script\Test\LightTest.cs" />
+    <Compile Include="Assets\Script\Test\PointLightTest.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\Cursor\UIDynamicCursor.cs" />
     <Compile Include="Assets\Script\UI\Cursor\UIFrontSight.cs" />

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+//TODO 点光源只受到ground遮挡
 public class PointLightParam
 {
     public Vector2 position;
@@ -128,21 +129,32 @@ public class LightManager : MonoBehaviour {
     {
         ClearRenderTexture(lightMap);
         ClearRenderTexture(occlusionMap);
-        //这个camera中设置渲染的layer,只会渲染entity和ground,用来遮挡光线
-        occlusionCamera.RenderWithShader(Shader.Find("Custom/OccMap"), "OccType");  //使用替换shader渲染 
+        occlusionCamera.RenderWithShader(Shader.Find("Custom/OccMap"), "OccType");  //使用替换shader渲染
 
         CameraControl cc = GetComponent<CameraControl>();
-        
-
         //设置shader的全局参数
         Shader.SetGlobalVector("leftBottom", new Vector4(transform.position.x - cc.cameraSize.x, transform.position.y - cc.cameraSize.y, 0, 0));
         Shader.SetGlobalVector("rightTop", new Vector4(transform.position.x + cc.cameraSize.x, transform.position.y + cc.cameraSize.y, 0, 0));
 
         Shader.SetGlobalVector("cameraLB", new Vector4(transform.position.x - cc.cameraSize.x * 0.5f, transform.position.y - cc.cameraSize.y * 0.5f));
         Shader.SetGlobalVector("cameraSize", new Vector4(cc.cameraSize.x, cc.cameraSize.y, 0, 0));
+        
+        //渲染点光,流程同上面聚光灯
+        foreach (PointLightParam light in pointLights)
+        {
+            Shader.SetGlobalFloat("lightResolution", 100.0f);
+            Shader.SetGlobalFloat("lightRange", light.range);
+            Shader.SetGlobalVector("lightWorldPos", new Vector4(light.position.x, light.position.y, 0, 0)); //z为0表示点光
 
+            ClearRenderTexture(shadowMap);
+            Graphics.Blit(occlusionMap, shadowMap, shadowMapMat);//根据遮挡图渲染出阴影图
+
+            Shader.SetGlobalColor("lightColor", light.color);
+            Graphics.Blit(shadowMap, lightMap, lightMapMat); //根据阴影图,渲染叠加到光照图
+        }
+        
         //渲染聚光灯
-        foreach(SpotLightParam light in spotLights)
+        foreach (SpotLightParam light in spotLights)
         {
             Shader.SetGlobalFloat("lightResolution", 100.0f);
             Shader.SetGlobalFloat("lightRange", light.range);
@@ -152,28 +164,15 @@ public class LightManager : MonoBehaviour {
             Shader.SetGlobalFloat("lightCenterAngle", light.centerAngle);
 
 
-            ClearRenderTexture(shadowMap);
-            Graphics.Blit(occlusionMap, shadowMap, shadowMapMat);
+            ClearRenderTexture(shadowMap);  
+            Graphics.Blit(occlusionMap, shadowMap, shadowMapMat);  //根据遮挡图渲染出阴影图
 
             Shader.SetGlobalColor("lightColor", light.color);
-            Graphics.Blit(shadowMap, lightMap, lightMapMat);
+            Graphics.Blit(shadowMap, lightMap, lightMapMat);   //根据阴影图,渲染叠加到光照图
         }
+        
 
-        //渲染点光
-        foreach (PointLightParam light in pointLights)
-        {
-            Shader.SetGlobalFloat("lightResolution", 100.0f);
-            Shader.SetGlobalFloat("lightRange", light.range);
-            Shader.SetGlobalVector("lightWorldPos", new Vector4(light.position.x, light.position.y, 0, 0)); //z为0表示点光
-
-            ClearRenderTexture(shadowMap);
-            Graphics.Blit(occlusionMap, shadowMap, shadowMapMat);
-
-            Shader.SetGlobalColor("lightColor", light.color);
-            Graphics.Blit(shadowMap, lightMap, lightMapMat);
-        }
-
-        Graphics.Blit(lightMap, blurMap, blurMat);
+        Graphics.Blit(lightMap, blurMap, blurMat); //这里每个像素都会重绘,且不叠加,所以不用清理
         Shader.SetGlobalTexture("lightMap", blurMap);
     }
 

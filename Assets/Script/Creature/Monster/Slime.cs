@@ -78,7 +78,7 @@ public class Slime : Creature {
 
     Transform FindTarget()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("LocalPlayer");
         if(players.Length == 0)
             return null;
         Transform closest = null;
