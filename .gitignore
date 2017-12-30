@@ -8,3 +8,4 @@
 *.tmp
 *.pidb.meta
 *.suo
+/debug.log

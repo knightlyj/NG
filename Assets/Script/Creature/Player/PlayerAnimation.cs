@@ -64,18 +64,19 @@ public partial class Player
         aimState.weight = rate;
     }
 
-    bool faceRight = true;
+    bool _faceRight = true;
+    public bool faceRight { get { return this._faceRight; } }
     void UpdateFace()
     {
         Vector2 direction = syncState.targetPos - (Vector2)aimBone.position;
         bool change = false;
-        if (direction.x >= 0 && !faceRight)
+        if (direction.x >= 0 && !_faceRight)
             change = true;
-        else if (direction.x < 0 && faceRight)
+        else if (direction.x < 0 && _faceRight)
             change = true;
         if (change)
         {
-            faceRight = !faceRight;
+            _faceRight = !_faceRight;
             //改变朝向
             armatureComponent.armature.flipX = !armatureComponent.armature.flipX;
         }
@@ -102,10 +103,10 @@ public partial class Player
     {
         if (true)
         {
-            if ((rb.velocity.x > 0 && faceRight) || (rb.velocity.x < 0 && !faceRight))
+            if ((rb.velocity.x > 0 && _faceRight) || (rb.velocity.x < 0 && !_faceRight))
             {   //朝向与移动方向一致,跑
             }
-            else if ((rb.velocity.x < 0 && faceRight) || (rb.velocity.x > 0 && !faceRight))
+            else if ((rb.velocity.x < 0 && _faceRight) || (rb.velocity.x > 0 && !_faceRight))
             {   //朝向与移动方向不同,后退
             }
         }

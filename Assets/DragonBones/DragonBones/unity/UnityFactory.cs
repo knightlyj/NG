@@ -40,7 +40,7 @@ namespace DragonBones
          * 创建材质时默认使用的 shader。
          * @version DragonBones 4.7
          */
-		public string defaultShaderName = "Sprites/Default";
+		public string defaultShaderName = "Custom/SpriteWithOcc";
 		public string defaultUIShaderName = "UI/Default";
 
         private string _textureAtlasPath = null;

@@ -120,10 +120,12 @@
     <Compile Include="Assets\Tiled2Unity\Scripts\Editor\TiledAssetPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\shaBlur.shader" />
     <None Include="Assets\Shader\shaLightMap.shader" />
     <None Include="Assets\Shader\shaOccMap.shader" />
     <None Include="Assets\Shader\shaShadowMap.shader" />
-    <None Include="Assets\Shader\shaSpriteWhitLM.shader" />
+    <None Include="Assets\Shader\shaSpriteNoOcc.shader" />
+    <None Include="Assets\Shader\shaSpriteWithOcc.shader" />
     <None Include="Assets\Shader\shaTipsFont.shader" />
     <None Include="Assets\Tiled2Unity\Imported\_ReadMe.txt" />
     <None Include="Assets\Tiled2Unity\Imported\test.tiled2unity.xml" />

@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SpriteWhitLM
+  m_Name: AllLightOcc
   m_Shader: {fileID: 4800000, guid: d0e2e87b3f7f504409359465f8ca4346, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
@@ -24,6 +24,9 @@ Material:
     m_Floats:
     - first:
         name: PixelSnap
+      second: 1
+    - first:
+        name: _UseLightMap
       second: 1
     m_Colors:
     - first:

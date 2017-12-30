@@ -1,9 +1,10 @@
-﻿Shader "Custom/SpriteWithLM"
+﻿Shader "Custom/SpriteNoOcc"
 {
     Properties
     {
         _MainTex ("Tiled Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
+		_UseLightMap ("Use Light Map", Range(0, 1)) = 1
     }
 
     SubShader
@@ -14,7 +15,6 @@
             "IgnoreProjector"="True" 
             "RenderType"="Transparent" 
             "PreviewType"="Plane"
-			"OccType" = "True"
         }
 
         Cull Off
@@ -40,7 +40,7 @@
             struct v2f
             {
                 float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
+                float4 color    : COLOR;
                 half2 texcoord  : TEXCOORD0;
 				float2 cameraUV : TEXCOORD1;
             };
@@ -48,7 +48,9 @@
 			uniform sampler2D lightMap;
 			uniform float2 cameraLB;
 			uniform float2 cameraSize;
-            fixed4 _Color;
+			uniform float4 ambient;
+			float4 _Color;
+			float _UseLightMap;
 
             v2f vert(appdata_t IN)
             {
@@ -65,10 +67,28 @@
 
             sampler2D _MainTex;
 
-            fixed4 frag(v2f IN) : COLOR
+			float4 frag(v2f IN) : COLOR
             {
-                half4 texcol = tex2D(_MainTex, IN.texcoord);
-				fixed4 light = tex2D(lightMap, IN.cameraUV);
+				float4 texcol = tex2D(_MainTex, IN.texcoord);
+				float4 light = tex2D(lightMap, IN.cameraUV);
+				light.rgb *= _UseLightMap;
+				light.rgb += ambient.rgb;
+
+				if (light.r < 0)
+					light.r = 0;
+				else if (light.r > 1)
+					light.r = 1;
+
+				if (light.g < 0)
+					light.g = 0;
+				else if (light.g > 1)
+					light.g = 1;
+
+				if (light.b < 0)
+					light.b = 0;
+				else if (light.b > 1)
+					light.b = 1;
+
                 texcol = texcol * IN.color * light;
                 return texcol;
             }

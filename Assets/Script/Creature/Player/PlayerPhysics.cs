@@ -53,7 +53,7 @@ public partial class Player
             {  //地面移动处理
                 if (syncState.left)
                 { //按住左
-                    if (faceRight)  //朝着右边,则按后退处理
+                    if (_faceRight)  //朝着右边,则按后退处理
                     {
                         if (rb.velocity.x > -MaxBackSpeed)
                             rb.AddForce(new Vector2(-MovBackForce, 0));
@@ -72,7 +72,7 @@ public partial class Player
                 }
                 if (syncState.right) //按住右
                 {
-                    if (faceRight)  //朝着右边,前进
+                    if (_faceRight)  //朝着右边,前进
                     {
                         if (rb.velocity.x < MaxForwardSpeed)
                             rb.AddForce(new Vector2(MovForwardForce, 0));

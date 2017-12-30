@@ -39,7 +39,7 @@ public partial class Player : Creature
     public Player()
     {
         //hpbar偏移,base.Start会使用,需要先设置
-        this.hpBarOffset = -0.35f;
+        //this.hpBarOffset = -0.35f;
     }
 
     public PlayerSyncState syncState; //同步所需状态

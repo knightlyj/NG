@@ -149,8 +149,8 @@ public class Creature : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
-        hpBar = battle.AddHpBar(this.transform, hpBarOffset);
+        //BattleInfo battle = GameObject.FindWithTag("BattleInfo").GetComponent<BattleInfo>();
+        //hpBar = battle.AddHpBar(this.transform, hpBarOffset);
     }
 
     // Update is called once per frame
@@ -161,17 +161,17 @@ public class Creature : MonoBehaviour
             buffModule.UpateBuff(Time.deltaTime);
 
         //血条更新 
-        if (hpBar)
-            hpBar.SetHpRate((float)hp / maxHp);
+        //if (hpBar)
+        //    hpBar.SetHpRate((float)hp / maxHp);
     }
 
     protected virtual void OnDestroy()
     {
-        if (!hpBar.destroyed)
-        {
-            hpBar.Delete();
-            hpBar = null;
-        }
+        //if (!hpBar.destroyed)
+        //{
+        //    hpBar.Delete();
+        //    hpBar = null;
+        //}
 
         if (onDestroy != null)
         {
@@ -184,9 +184,9 @@ public class Creature : MonoBehaviour
 
     }
 
-    protected HpBar hpBar = null;
-    [SerializeField]
-    protected float hpBarOffset = -0.5f;
+    //protected HpBar hpBar = null;
+    //[SerializeField]
+    //protected float hpBarOffset = -0.5f;
 
     public BuffModule buffModule = new BuffModule();
     public virtual void SetTransparent(float a)

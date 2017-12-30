@@ -72,8 +72,8 @@ public class BackGround : MonoBehaviour {
         Rect textureRect = sr.sprite.textureRect;
         this.farSize = new Vector2(textureRect.width / sr.sprite.pixelsPerUnit * far.localScale.x, 
             textureRect.height / sr.sprite.pixelsPerUnit * far.localScale.y);
-        float rateX = cameraFollow.CameraSize.x / farSize.x;
-        float rateY = cameraFollow.CameraSize.y / farSize.y;
+        float rateX = cameraFollow.cameraSize.x / farSize.x;
+        float rateY = cameraFollow.cameraSize.y / farSize.y;
         if (rateX > 1 || rateY > 1)
             Debug.LogError("BackGround.SetBgSize >> size rate less than 1");
 

@@ -133,6 +133,7 @@
     <Compile Include="Assets\Script\Projectile\Projectile.cs" />
     <Compile Include="Assets\Script\Projectile\ShootFlame.cs" />
     <Compile Include="Assets\Script\Projectile\SlowProjectile.cs" />
+    <Compile Include="Assets\Script\Test\LightTest.cs" />
     <Compile Include="Assets\Script\UI\BattleInfo.cs" />
     <Compile Include="Assets\Script\UI\Cursor\UIDynamicCursor.cs" />
     <Compile Include="Assets\Script\UI\Cursor\UIFrontSight.cs" />
@@ -158,7 +159,6 @@
     <Compile Include="Assets\Script\UI\UIScrollPanel.cs" />
     <Compile Include="Assets\Script\UI\UIStoreSlot.cs" />
     <Compile Include="Assets\Script\UI\UIStoreWnd.cs" />
-    <Compile Include="Assets\Script\test.cs" />
     <Compile Include="Assets\Tiled2Unity\MapHelper.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\CircleObject.cs" />
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\GroupLayer.cs" />
@@ -178,10 +178,12 @@
     <Compile Include="Assets\Tiled2Unity\Scripts\Runtime\TmxObject.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\shaBlur.shader" />
     <None Include="Assets\Shader\shaLightMap.shader" />
     <None Include="Assets\Shader\shaOccMap.shader" />
     <None Include="Assets\Shader\shaShadowMap.shader" />
-    <None Include="Assets\Shader\shaSpriteWhitLM.shader" />
+    <None Include="Assets\Shader\shaSpriteNoOcc.shader" />
+    <None Include="Assets\Shader\shaSpriteWithOcc.shader" />
     <None Include="Assets\Shader\shaTipsFont.shader" />
     <None Include="Assets\Tiled2Unity\Imported\_ReadMe.txt" />
     <None Include="Assets\Tiled2Unity\Imported\test.tiled2unity.xml" />
