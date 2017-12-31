@@ -21,16 +21,16 @@ TagManager:
   - UI
   - 
   - 
-  - Player
-  - PCP
+  - Creature
+  - CCP
   - Projectile
   - Ground
   - Platform
   - Ladder
-  - PlayerInvincible
-  - PICP
-  - Monster
-  - NPC
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

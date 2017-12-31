@@ -103,17 +103,17 @@ public class BattleInfo : MonoBehaviour {
     Player localPlayer = null;
     void LocalHpBarUpdate()
     {
-        if(localPlayer == null)
-        { //血条设置为空,并寻找本地玩家
-            localHpBar.localScale = new Vector3(0, 1, 1);
-        }
-        else
-        {
-            float hpRate = localPlayer.hp / localPlayer.maxHp;
-            if (hpRate > 1)
-                hpRate = 1;
-            localHpBar.localScale = new Vector3(hpRate, 1, 1);
-        }
+        //if(localPlayer == null)
+        //{ //血条设置为空,并寻找本地玩家
+        //    localHpBar.localScale = new Vector3(0, 1, 1);
+        //}
+        //else
+        //{
+        //    float hpRate = localPlayer.hp / localPlayer.maxHp;
+        //    if (hpRate > 1)
+        //        hpRate = 1;
+        //    localHpBar.localScale = new Vector3(hpRate, 1, 1);
+        //}
     }
 
     //本机玩家弹药显示

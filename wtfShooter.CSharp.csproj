@@ -105,6 +105,7 @@
     <Compile Include="Assets\Script\Creature\Buff\BuffModule.cs" />
     <Compile Include="Assets\Script\Creature\Buff\InvincibleBuff.cs" />
     <Compile Include="Assets\Script\Creature\Creature.cs" />
+    <Compile Include="Assets\Script\Creature\Monster\MonsterBase.cs" />
     <Compile Include="Assets\Script\Creature\Monster\Slime.cs" />
     <Compile Include="Assets\Script\Creature\Player\LocalPlayer.cs" />
     <Compile Include="Assets\Script\Creature\Player\Package.cs" />
@@ -119,11 +120,9 @@
     <Compile Include="Assets\Script\Equipment\StoreInfo.cs" />
     <Compile Include="Assets\Script\EventManager.cs" />
     <Compile Include="Assets\Script\GameSetting.cs" />
-    <Compile Include="Assets\Script\Group.cs" />
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\LevelManager.cs" />
     <Compile Include="Assets\Script\LightManager.cs" />
-    <Compile Include="Assets\Script\MouseCheck.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
     <Compile Include="Assets\Script\Network\GameNetWork.cs" />
     <Compile Include="Assets\Script\Network\MessageHelper.cs" />

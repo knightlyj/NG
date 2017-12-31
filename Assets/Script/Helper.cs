@@ -79,32 +79,40 @@ public static class Helper {
         wndPos.y = pos.y - Screen.height;
         return wndPos;
     }
-
-    static UIItemTips GetUIItemTips()
-    {
-        return GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().itemTips;
-    }
-
+    
     static public UIMouseItem GetUIMouseItem()
     {
         return GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().mouseItem;
     }
 
+    //显示tips
     static UIItemTips tips = null;
     static public void ShowTips(Item item, UIItemTips.ShowPrice showPrice = UIItemTips.ShowPrice.None)
     {
         if (tips == null)
-            tips = Helper.GetUIItemTips();
+            tips = GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().itemTips;
         tips.ShowTips(item, showPrice);
     }
 
-    //找到gamewindow类,并将窗口移动到前面
+    //显示对话框
+    static public void ShowDialog(string content, string[] options, UIDialogOpt.OnOptionChosen optionChosen)
+    {
+        GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().ShowDialog(content, options, optionChosen);
+    }
+
+    //关闭对话框
+    static public void HideDialog()
+    {
+        GameObject.FindWithTag(TextResources.gamePlayUITag).GetComponent<GamePlayUI>().HideDialog();
+    }
+
+    //找到transform所属的窗口,并将窗口移动到前面
     static public void MoveWndToFront(Transform transform)
     {
         GameWindow wnd = null;
         Transform tr = transform;
         do
-        {
+        {   //找到包含GameWindow组件的节点
             wnd = tr.GetComponent<GameWindow>();
             if(wnd != null)
             {
@@ -126,18 +134,13 @@ public static class Helper {
         return goManager.GetComponent<LevelManager>();
     }
 
-    static public UIDynamicCursor GetDyanamicCursor()
-    {
-        UIDynamicCursor dynCursor = GameObject.FindGameObjectWithTag(TextResources.gamePlayUITag).transform.FindChild("DynamicCursor").GetComponent<UIDynamicCursor>();
-        return dynCursor;
-    }
-
     //东西丢到玩家旁边
     static public void DropItemByPlayer(Item item)
     {
 
     }
     
+    //方向换算成角度
     static public float Dir2Angle(Vector2 dir)
     {
         float angle = Mathf.Acos(dir.x / dir.magnitude) / Mathf.PI * 180;
@@ -146,14 +149,15 @@ public static class Helper {
         return angle;
     }
 
+    //找到所有玩家
     static public List<Player> FindAllPlayers()
     {
         List<Player> players = new List<Player>();
 
-        GameObject local = GameObject.FindGameObjectWithTag(TextResources.localPlayerLayer);
+        GameObject local = GameObject.FindGameObjectWithTag(TextResources.localPlayerTag);
         players.Add(local.GetComponent<Player>());
 
-        GameObject[] remote = GameObject.FindGameObjectsWithTag(TextResources.remotePlayerLayer);
+        GameObject[] remote = GameObject.FindGameObjectsWithTag(TextResources.remotePlayerTag);
         foreach (GameObject go in remote)
         {
             players.Add(go.GetComponent<Player>());
@@ -161,6 +165,7 @@ public static class Helper {
         return players;
     }
 
+    //RT输出到文件
     public static void DumpRenderTexture(RenderTexture rt, string pngOutPath)
     {
         var oldRT = RenderTexture.active;

@@ -39,7 +39,7 @@ public partial class Player
         }
     }
 
-    
+
     void SimulateFree()
     {
         if (onGround || onPlatform)
@@ -132,10 +132,10 @@ public partial class Player
         }
         else
         {   //在空中时,无摩擦力,按住左右会有较小的力
-            //if (syncState.left && rb.velocity.x > -MaxForwardSpeed)
-            //    rb.AddForce(new Vector2(-MovFroceInAir, 0));
-            //if (syncState.right && rb.velocity.x < MaxForwardSpeed)
-            //    rb.AddForce(new Vector2(MovFroceInAir, 0));
+            if (syncState.left && rb.velocity.x > -MaxForwardSpeed)
+                rb.AddForce(new Vector2(-MovFroceInAir, 0));
+            if (syncState.right && rb.velocity.x < MaxForwardSpeed)
+                rb.AddForce(new Vector2(MovFroceInAir, 0));
 
             if (syncState.down)
             {
@@ -159,7 +159,6 @@ public partial class Player
 
         if (isCrossPlatform)
         {
-            //Debug.Log("crossing");
             TimeSpan span = DateTime.Now - crossPlatformTime;
             if (span.TotalMilliseconds > 500 && !onLadder)
             {
@@ -204,7 +203,7 @@ public partial class Player
             {
                 if (syncState.left || syncState.right)
                 {
-                    rb.velocity = new Vector2(syncState.left  ? -MaxBackSpeed : MaxBackSpeed, JumpSpeed);
+                    rb.velocity = new Vector2(syncState.left ? -MaxBackSpeed : MaxBackSpeed, JumpSpeed);
                     jumpTime = DateTime.Now;
                     jumpFromLadderTime = DateTime.Now;
                     GetOffLadder();
@@ -269,20 +268,6 @@ public partial class Player
 
     public void SetInvincible(bool invincible)
     {
-        if (invincible)
-        {
-            if (gameObject.layer == LayerMask.NameToLayer("Player"))
-                gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
-            else if (gameObject.layer == LayerMask.NameToLayer("PCP"))
-                gameObject.layer = LayerMask.NameToLayer("PICP");
-        }
-        else
-        {
-            if (gameObject.layer == LayerMask.NameToLayer("PlayerInvincible"))
-                gameObject.layer = LayerMask.NameToLayer("Player");
-            else if (gameObject.layer == LayerMask.NameToLayer("PICP"))
-                gameObject.layer = LayerMask.NameToLayer("PCP");
-        }
         this.invincible = invincible;
     }
 
@@ -295,19 +280,9 @@ public partial class Player
     void SetCrossPlatform(bool cross)
     {
         if (cross)
-        {
-            if (gameObject.layer == LayerMask.NameToLayer("Player"))
-                gameObject.layer = LayerMask.NameToLayer("PCP");
-            else if (gameObject.layer == LayerMask.NameToLayer("PlayerInvincible"))
-                gameObject.layer = LayerMask.NameToLayer("PICP");
-        }
+            gameObject.layer = LayerMask.NameToLayer(TextResources.CCPLayer);
 
         else
-        {
-            if (gameObject.layer == LayerMask.NameToLayer("PCP"))
-                gameObject.layer = LayerMask.NameToLayer("Player");
-            else if (gameObject.layer == LayerMask.NameToLayer("PICP"))
-                gameObject.layer = LayerMask.NameToLayer("PlayerInvincible");
-        }
+            gameObject.layer = LayerMask.NameToLayer(TextResources.CreatureLayer);
     }
 }

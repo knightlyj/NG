@@ -119,6 +119,11 @@ public class GamePlayUI : MonoBehaviour
 
     }
 
+    public void HideDialog()
+    {
+        dialog.Hide();
+    }
+
     public void ShowDialog(string content, string[] options, UIDialogOpt.OnOptionChosen optionChosen)
     {
         HideAllWnd();
@@ -180,9 +185,23 @@ public class GamePlayUI : MonoBehaviour
             else
             {
                 if (!GlobalVariable.mouseOnUI)
-                {
+                {   //鼠标没在UI上,检测鼠标覆盖的物体
                     Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    if (Physics2D.OverlapCircle(pos, 0.1f, LayerMask.NameToLayer(TextResources.NPCLayer)) != null)
+                    Collider2D[] hits = Physics2D.OverlapCircleAll(pos, 0.1f, 1 << LayerMask.NameToLayer(TextResources.CreatureLayer) | 1 << LayerMask.NameToLayer(TextResources.CCPLayer));
+                    bool onNPC = false;
+                    foreach(Collider2D hit in hits)
+                    {
+                        MonsterBase monster = hit.GetComponent<MonsterBase>();
+                        if(monster != null && monster.faction >= 0)
+                        {
+                            onNPC = true;
+                            if (Input.GetMouseButtonDown(1)) 
+                            {  //有点击右键,则与NPC对话
+                                monster.TalkWith();
+                            }
+                        }
+                    }
+                    if (onNPC)
                     {
                         this.SetCursor(CursorState.Talk);
                     }

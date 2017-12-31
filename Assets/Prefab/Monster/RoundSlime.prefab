@@ -39,6 +39,7 @@ GameObject:
   - 50: {fileID: 50000010436493774}
   - 61: {fileID: 61000011997900128}
   - 114: {fileID: 114000012311969880}
+  - 114: {fileID: 114000010555902670}
   m_Layer: 16
   m_Name: RoundSlime
   m_TagString: Untagged
@@ -121,6 +122,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000010555902670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011736946108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0e17043152f894b808df45987493b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000012311969880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,7 +157,6 @@ MonoBehaviour:
   criticalRate: 1.5
   invincible: 0
   isLocal: 1
-  hpBarOffset: -0.2
   _maxForwardSpeed: 2
   _maxBackSpeed: 1
   _movForwardForce: 3

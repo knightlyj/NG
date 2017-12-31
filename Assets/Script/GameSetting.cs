@@ -46,10 +46,14 @@ public static class GlobalVariable
 
 public static class TextResources
 {
-    //Layer
-    public const string localPlayerLayer = "LocalPlayer";
-    public const string remotePlayerLayer = "RemotePlayer";
-    public const string NPCLayer = "NPC";
+    //layers
+    public const string CreatureLayer = "Creature";
+    public const string CCPLayer = "CCP";  //creature cross platform
+
+    //tags
+    public const string localPlayerTag = "LocalPlayer";
+    public const string remotePlayerTag = "RemotePlayer";
+    public const string NPCTag = "NPC";
 
     //gameobect所用字符串
     public const string gamePlayUITag = "GamePlayUI"; //游戏场景UI的tag
@@ -63,6 +67,7 @@ public static class TextResources
     public const string craftClassTable = "craftClass.csv"; //合成分类表名字
     public const string armorTable = "armor.csv"; //护甲属性表
     public const string weaponTable = "weapon.csv"; //武器属性表 
+
 
     //物品信息格式化
     public const string atkFormat = "攻击: {0} - {1}\n";

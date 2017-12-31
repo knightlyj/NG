@@ -19,18 +19,15 @@ public class UIDialog : MonoBehaviour {
     {
         Init();
     }
-
-    string test = "安安啊123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890asdfsafdasfsadf";
+    
     // Use this for initialization
     void Start () {
 
     }
-
-    string[] opts = { "111111111", "222222222", "33333333", "444444" };
+    
 	// Update is called once per frame
 	void Update () {
-        Init();
-        ShowDialog(test, opts, Chosen);
+
     }
 
     void Init()
@@ -61,6 +58,7 @@ public class UIDialog : MonoBehaviour {
             if (i < options.Length)
             {
                 dialogOpt.SetOption(options[i], optionChosen, i);
+                dialogOpt.SetCover(false);
                 trOptions[i].anchoredPosition = new Vector2(0, -height);
                 height += textInterval / 2 + optionHeight;
             }

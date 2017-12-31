@@ -139,7 +139,7 @@ public class LightManager : MonoBehaviour {
         Shader.SetGlobalVector("cameraLB", new Vector4(transform.position.x - cc.cameraSize.x * 0.5f, transform.position.y - cc.cameraSize.y * 0.5f));
         Shader.SetGlobalVector("cameraSize", new Vector4(cc.cameraSize.x, cc.cameraSize.y, 0, 0));
         
-        //渲染点光,流程同上面聚光灯
+        //渲染点光
         foreach (PointLightParam light in pointLights)
         {
             Shader.SetGlobalFloat("lightResolution", 100.0f);

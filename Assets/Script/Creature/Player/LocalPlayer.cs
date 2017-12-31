@@ -91,15 +91,15 @@ public class LocalPlayer : Player
 
     void CheckShoot()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            _aiming = true;
-        }
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    _aiming = true;
+        //}
 
-        if (Input.GetMouseButtonUp(1))
-        {
-            _aiming = false;
-        }
+        //if (Input.GetMouseButtonUp(1))
+        //{
+        //    _aiming = false;
+        //}
 
 
         

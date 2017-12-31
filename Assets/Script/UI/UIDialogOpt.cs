@@ -30,14 +30,12 @@ public class UIDialogOpt : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        textComp.color = coverColor;
-        //Debug.Log("enter " + index);
+        SetCover(true);
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
-        textComp.color = normalColor;
-        //Debug.Log("exit " + index);
+        SetCover(false);
     }
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
@@ -61,5 +59,13 @@ public class UIDialogOpt : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             OptionChosenEvent = onChosen;
             gameObject.SetActive(true);
         }
+    }
+
+    public void SetCover(bool chosen)
+    {
+        if (chosen)
+            textComp.color = coverColor;
+        else
+            textComp.color = normalColor;
     }
 }

@@ -124,6 +124,8 @@ public class Creature : MonoBehaviour
     public float criticalRate = 1.5f;
     [HideInInspector]
     public bool invincible = false;
+    [HideInInspector]
+    public int faction = 0;  //阵营 0为NPC,1是玩家,-1是怪物
 
     virtual public void ResetProperties()
     {

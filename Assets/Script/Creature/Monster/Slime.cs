@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class Slime : Creature {
+public class Slime : MonsterBase
+{
 
     // Use this for initialization
     protected override void Start () {
