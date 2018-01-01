@@ -2,7 +2,6 @@
     Properties {
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _TextureSize ("_TextureSize",Vector) = (256,256, 0, 0)
-        _BlurRadius ("_BlurRadius",Range(1,15) ) = 5
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -17,7 +16,6 @@
 
 
         sampler2D _MainTex;
-        int _BlurRadius;
         float2 _TextureSize;
 
         struct v2f {
@@ -36,17 +34,18 @@
         
 		float4 GetBlurColor(float2 uv)
 		{
-
+			int blurRange = 5;
 			float spaceX = 1.0 / _TextureSize.x; //算出一个像素的空间
 			float spaceY = 1.0 / _TextureSize.y; //算出一个像素的空间
-			int count = _BlurRadius * 2 + 1; //取值范围
+			int count = blurRange * 2 + 1; //取值范围
 			count *= count;
 
 			//将以自己为中心，周围半径的所有颜色相加，然后除以总数，求得平均值
 			float4 colorTmp = float4(0, 0, 0, 0);
-			for (int x = -_BlurRadius; x <= _BlurRadius; x++)
+			
+			for (int x = -blurRange; x <= blurRange; x++)
 			{
-				for (int y = -_BlurRadius; y <= _BlurRadius; y++)
+				for (int y = -blurRange; y <= blurRange; y++)
 				{
 					float4 color = tex2D(_MainTex, uv + float2(x * spaceX, y * spaceY));
 					colorTmp += color;

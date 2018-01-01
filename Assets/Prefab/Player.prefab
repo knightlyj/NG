@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011737583454}
   - 114: {fileID: 114000012710602180}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010541579822}
   - 114: {fileID: 114000013079463802}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shin1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014041522666}
   - 114: {fileID: 114000010694919586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: foot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - 4: {fileID: 4000013440995986}
   - 23: {fileID: 23000012969887802}
   - 33: {fileID: 33000011467148658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shin1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - 4: {fileID: 4000011867800112}
   - 23: {fileID: 23000012322371838}
   - 33: {fileID: 33000011977801534}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: offHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - 4: {fileID: 4000012006573656}
   - 23: {fileID: 23000012933567558}
   - 33: {fileID: 33000014069007312}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,8 +139,24 @@ GameObject:
   - 4: {fileID: 4000011813293462}
   - 23: {fileID: 23000013782659692}
   - 33: {fileID: 33000011932634128}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: foot1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000011041816594
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010348841022}
+  - 114: {fileID: 114000011450625134}
+  m_Layer: 8
+  m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,7 +171,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014147577946}
   - 114: {fileID: 114000013576979918}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: backFoot_ik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +187,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013541446796}
   - 114: {fileID: 114000014128624038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: thigh1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +203,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011668075042}
   - 114: {fileID: 114000011021723594}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: frontFoot_ik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +220,7 @@ GameObject:
   - 4: {fileID: 4000012751069164}
   - 23: {fileID: 23000010048842942}
   - 33: {fileID: 33000012659951932}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: offArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +236,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012510291496}
   - 114: {fileID: 114000014238555294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +252,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013733877320}
   - 114: {fileID: 114000012015275468}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +268,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012082573660}
   - 114: {fileID: 114000010455834066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +285,7 @@ GameObject:
   - 4: {fileID: 4000012255333322}
   - 23: {fileID: 23000012902371954}
   - 33: {fileID: 33000010346893566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +302,7 @@ GameObject:
   - 4: {fileID: 4000012296246322}
   - 23: {fileID: 23000013276794338}
   - 33: {fileID: 33000013562978688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +318,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013187765974}
   - 114: {fileID: 114000012468024318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: upperarm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +334,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011233719832}
   - 114: {fileID: 114000013680461654}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: for_aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +350,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012208397484}
   - 114: {fileID: 114000013943446920}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forearm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +366,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014252448676}
   - 114: {fileID: 114000013656425914}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: thigh2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -367,7 +383,7 @@ GameObject:
   - 4: {fileID: 4000012252040618}
   - 23: {fileID: 23000014292226234}
   - 33: {fileID: 33000010080290248}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: thigh2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +399,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014198216426}
   - 114: {fileID: 114000010660173846}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: offHand_ik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +416,7 @@ GameObject:
   - 4: {fileID: 4000012032474422}
   - 23: {fileID: 23000010773251970}
   - 33: {fileID: 33000010904933960}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +432,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012696009046}
   - 114: {fileID: 114000013886657550}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,7 +448,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014063169686}
   - 114: {fileID: 114000013484444106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: offArm2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +464,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011528799096}
   - 114: {fileID: 114000011905272032}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +479,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011070792980}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +494,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012784028928}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +510,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000014109347414}
   - 114: {fileID: 114000012677733640}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -510,7 +526,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011285394584}
   - 114: {fileID: 114000013738482752}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: offArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +543,7 @@ GameObject:
   - 4: {fileID: 4000013693699394}
   - 23: {fileID: 23000011770554888}
   - 33: {fileID: 33000010137555896}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +560,7 @@ GameObject:
   - 4: {fileID: 4000011342534908}
   - 23: {fileID: 23000010338287066}
   - 33: {fileID: 33000013387468040}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: foot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +576,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010181894830}
   - 114: {fileID: 114000011548905120}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: foot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -577,7 +593,7 @@ GameObject:
   - 4: {fileID: 4000010107809570}
   - 23: {fileID: 23000010930635586}
   - 33: {fileID: 33000013573155220}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: upperarm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +609,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011502191456}
   - 114: {fileID: 114000013110163554}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,7 +641,7 @@ GameObject:
   - 4: {fileID: 4000012826431726}
   - 23: {fileID: 23000012355619022}
   - 33: {fileID: 33000012277568012}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: thigh1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,6 +674,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000012784028928}
   m_RootOrder: 13
+--- !u!4 &4000010348841022
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011041816594}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000012296246322}
+  m_RootOrder: 0
 --- !u!4 &4000010541579822
 Transform:
   m_ObjectHideFlags: 1
@@ -678,7 +707,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010230009082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.779, y: -5.144, z: 0}
+  m_LocalPosition: {x: 21.883, y: -2.913, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -919,7 +948,8 @@ Transform:
   m_LocalPosition: {x: 1.1026223, y: 1.3735166, z: -0.009000001}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 4000010348841022}
   m_Father: {fileID: 4000011070792980}
   m_RootOrder: 9
 --- !u!4 &4000012510291496
@@ -1704,12 +1734,12 @@ MonoBehaviour:
   criticalChance: 0.05
   criticalRate: 1.5
   invincible: 0
+  faction: 0
   isLocal: 1
-  hpBarOffset: -0.35
   _maxForwardSpeed: 2
   _maxBackSpeed: 0.8
   _movForwardForce: 3
-  _movBackForce: 1
+  _movBackForce: 3
   _movForceInAir: 0.2
   _jumpSpeed: 6
   atkInterval: 0.5
@@ -1806,6 +1836,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 1000011279781800}
+--- !u!114 &114000011450625134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011041816594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c234f76b4ec24749abfa9ec589ea599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 114000010447624036}
 --- !u!114 &114000011548905120
 MonoBehaviour:
   m_ObjectHideFlags: 1

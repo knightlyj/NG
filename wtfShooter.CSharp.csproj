@@ -123,6 +123,10 @@
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\LevelManager.cs" />
     <Compile Include="Assets\Script\LightManager.cs" />
+    <Compile Include="Assets\Script\Mechanism\Elevator.cs" />
+    <Compile Include="Assets\Script\Mechanism\Handle.cs" />
+    <Compile Include="Assets\Script\Mechanism\Mechanism.cs" />
+    <Compile Include="Assets\Script\Mechanism\Switch.cs" />
     <Compile Include="Assets\Script\Network\ClientAgent.cs" />
     <Compile Include="Assets\Script\Network\GameNetWork.cs" />
     <Compile Include="Assets\Script\Network\MessageHelper.cs" />

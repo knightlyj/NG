@@ -8,7 +8,7 @@ public class MonsterBase : Creature {
         Helper.HideDialog();
     }
 
-    public virtual void TalkWith()
+    public virtual void TalkWith(Player player)
     {
         Helper.ShowDialog("hellow world", new string[] { "bye", "thank u" }, this.OnOptionChosen);
     }

@@ -31,6 +31,8 @@ public static class GameSetting
 
     public const float damageFontSize = 26f;
     public const int textFontSize = 25;
+    
+    public const float touchThreshold = 0.01f;  //物体接触的阈值,根据整体缩放尺寸调整
 
     //****************控制台开关***********************
     public const bool enableConsole = true;
@@ -47,8 +49,9 @@ public static class GlobalVariable
 public static class TextResources
 {
     //layers
-    public const string CreatureLayer = "Creature";
-    public const string CCPLayer = "CCP";  //creature cross platform
+    public const string creatureLayer = "Creature";
+    public const string ccpLayer = "CCP";  //creature cross platform
+    public const string handleLayer = "Handle"; 
 
     //tags
     public const string localPlayerTag = "LocalPlayer";

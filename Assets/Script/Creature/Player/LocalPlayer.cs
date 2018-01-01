@@ -82,11 +82,24 @@ public class LocalPlayer : Player
     public PlayerEquipment equipment { get { return this._equip; } }
 
     //******************************************
-    //操作相关
+    PointLightParam pointLight;
+    protected override void Start()
+    {
+        base.Start();
+        pointLight = new PointLightParam();
+        pointLight.position = transform.position;
+        pointLight.color = Color.white * 0.5f;
+        pointLight.range = 1.0f;
+
+        LightManager lm = Camera.main.GetComponent<LightManager>();
+        lm.AddPointLight(pointLight);
+    }
+
     protected override void Update()
     {
         base.Update();
         CheckShoot();
+        pointLight.position = transform.position;
     }
 
     void CheckShoot()

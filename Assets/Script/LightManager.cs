@@ -47,9 +47,9 @@ public class LightManager : MonoBehaviour {
 
         blurMap = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, 0, RenderTextureFormat.ARGB32);
         blurMat = new Material(Shader.Find("Custom/Blur"));
-        blurMat.SetVector("_TextureSize", new Vector4(1024, 768));
+        blurMat.SetVector("_TextureSize", new Vector4(Camera.main.pixelWidth, Camera.main.pixelHeight));
 
-        SetAmbient(Color.white * 0.1f);
+        SetAmbient(Color.white * 0f);
     }
 	
 	// Update is called once per frame

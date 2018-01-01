@@ -115,14 +115,14 @@
 					}
 					else 
 					{
-						float atn = (1 - pow(lightDst / lightRange, 3.5)) * 0.3;
+						float atn = (1 - pow(lightDst / lightRange, 2)) * 0.3;
 						float atn2 = 1 - pow(remDst / rem, 2);
 						col.rgb *= atn2 * atn;
 					}
 				}
 				else 
 				{
-					float atn = 1 - pow(dst / lightRange, 3.5);
+					float atn = 1 - pow(dst / lightRange, 2);
 					col.rgb *= atn;
 				}
 

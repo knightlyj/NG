@@ -236,17 +236,17 @@ public class Creature : MonoBehaviour
 
     //最大后退速度
     [SerializeField]
-    protected float _maxBackSpeed = 1.0f;
+    protected float _maxBackSpeed = 2.0f;
     public float MaxBackSpeed { get { return _maxBackSpeed * speedScale; } }
 
     //前进加速力
     [SerializeField]
-    protected float _movForwardForce = 3;
+    protected float _movForwardForce = 5;
     public float MovForwardForce { get { return _movForwardForce * speedScale; } }
 
     //后退加速力
     [SerializeField]
-    protected float _movBackForce = 1;
+    protected float _movBackForce = 5;
     public float MovBackForce { get { return _movBackForce * speedScale; } }
 
     //空中移动加速力

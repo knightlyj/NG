@@ -135,15 +135,18 @@ public class GamePlayUI : MonoBehaviour
     {
         Normal,
         Talk,
+        Handle,
         Shoot,
     }
     [SerializeField]
-    Texture2D normalCursor = null;
+    Texture2D normalCursor = null; //普通
     [SerializeField]
-    Texture2D talkCursor = null;
+    Texture2D talkCursor = null; //对话
+    [SerializeField] 
+    Texture2D handleCursor = null; //操作开关
 
     private void SetCursor(CursorState state, float frontSight = 0)
-    {
+    {   //动态鼠标,用UIDynamicCursor这个类实现,使用时隐藏默认Cursor
         switch (state)
         {
             case CursorState.Normal:
@@ -153,6 +156,11 @@ public class GamePlayUI : MonoBehaviour
                 break;
             case CursorState.Talk:
                 Cursor.SetCursor(talkCursor, Vector2.zero, CursorMode.Auto);
+                dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
+                Cursor.visible = true;
+                break;
+            case CursorState.Handle:
+                Cursor.SetCursor(handleCursor, Vector2.zero, CursorMode.Auto);
                 dynCursor.SetCursorState(UIDynamicCursor.CursorState.Hidden);
                 Cursor.visible = true;
                 break;
@@ -187,28 +195,42 @@ public class GamePlayUI : MonoBehaviour
                 if (!GlobalVariable.mouseOnUI)
                 {   //鼠标没在UI上,检测鼠标覆盖的物体
                     Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Collider2D[] hits = Physics2D.OverlapCircleAll(pos, 0.1f, 1 << LayerMask.NameToLayer(TextResources.CreatureLayer) | 1 << LayerMask.NameToLayer(TextResources.CCPLayer));
+                    //先检测NPC
+                    Collider2D[] hitCreature = Physics2D.OverlapCircleAll(pos, 0.1f, 1 << LayerMask.NameToLayer(TextResources.creatureLayer) | 1 << LayerMask.NameToLayer(TextResources.ccpLayer));
                     bool onNPC = false;
-                    foreach(Collider2D hit in hits)
+                    foreach(Collider2D hit in hitCreature)
                     {
                         MonsterBase monster = hit.GetComponent<MonsterBase>();
                         if(monster != null && monster.faction >= 0)
                         {
-                            onNPC = true;
-                            if (Input.GetMouseButtonDown(1)) 
+                            onNPC = true;  
+                            this.SetCursor(CursorState.Talk);  //设置鼠标为对话样式
+                            if (Input.GetMouseButtonDown(1))  
                             {  //有点击右键,则与NPC对话
-                                monster.TalkWith();
+                                monster.TalkWith(localPlayer);
                             }
+                            break;
                         }
                     }
-                    if (onNPC)
-                    {
-                        this.SetCursor(CursorState.Talk);
-                    }
-                    else
-                    {
-                        //Debug.Log("nothing")
-                        this.SetCursor(CursorState.Normal);
+
+                    if (!onNPC)
+                    {//没覆盖NPC,检测开关
+                        Collider2D hitHanlde = Physics2D.OverlapCircle(pos, 0.1f,1 << LayerMask.NameToLayer(TextResources.handleLayer));
+                        if (hitHanlde)
+                        {
+                            Handle handle = hitHanlde.GetComponent<Handle>();
+                            
+                            if (handle != null && handle.canManipulate)
+                            {
+                                this.SetCursor(CursorState.Handle);
+                                if (Input.GetMouseButtonDown(1))
+                                    handle.Manipulate(localPlayer);
+                            }
+                        }
+                        else
+                        {   //什么都没覆盖,显示普通鼠标样式
+                            this.SetCursor(CursorState.Normal);
+                        }
                     }
                 }
             }
