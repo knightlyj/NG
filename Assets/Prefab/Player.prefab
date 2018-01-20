@@ -886,7 +886,7 @@ Transform:
   m_RootOrder: 2
 --- !u!4 &4000012082573660
 Transform:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011426367960}
@@ -1754,7 +1754,7 @@ MonoBehaviour:
     m_Bits: 4096
 --- !u!114 &114000010455834066
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011426367960}

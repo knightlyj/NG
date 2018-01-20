@@ -123,6 +123,7 @@
     <Compile Include="Assets\Script\Helper.cs" />
     <Compile Include="Assets\Script\LevelManager.cs" />
     <Compile Include="Assets\Script\LightManager.cs" />
+    <Compile Include="Assets\Script\Mechanism\ColliderHandle.cs" />
     <Compile Include="Assets\Script\Mechanism\Elevator.cs" />
     <Compile Include="Assets\Script\Mechanism\Handle.cs" />
     <Compile Include="Assets\Script\Mechanism\Mechanism.cs" />

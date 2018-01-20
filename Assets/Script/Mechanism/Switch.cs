@@ -8,6 +8,12 @@ public class Switch : Handle
     [SerializeField]
     Sprite spriteOff = null;
 
+    SpriteRenderer sr = null;
+    void Awake()
+    {
+        sr = GetComponent<SpriteRenderer>();
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -38,6 +44,17 @@ public class Switch : Handle
     public override void Manipulate(Player player)
     {
         on = !on;
+        if (on)
+        {
+            if (spriteOn != null)
+                sr.sprite = spriteOn;
+        }
+        else
+        {
+            if (spriteOff != null)
+                sr.sprite = spriteOff;
+        }
+
         if (mechanism != null)
         {
             mechanism.Trigger();
