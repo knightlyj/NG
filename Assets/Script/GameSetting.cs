@@ -51,7 +51,9 @@ public static class TextResources
     //layers
     public const string creatureLayer = "Creature";
     public const string ccpLayer = "CCP";  //creature cross platform
-    public const string handleLayer = "Handle"; 
+    public const string handleLayer = "Handle";
+    public const string platformLayer = "Platform";
+    public const string groundLayer = "Ground";
 
     //tags
     public const string localPlayerTag = "LocalPlayer";

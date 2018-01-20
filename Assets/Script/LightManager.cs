@@ -32,6 +32,8 @@ public class LightManager : MonoBehaviour {
     Material shadowMapMat = null;
     Material lightMapMat = null;
     Material blurMat = null;
+    
+    public float amb = 1.0f;
     // Use this for initialization
     void Start () {
         occlusionCamera = transform.FindChild("OccCamera").GetComponent<Camera>();
@@ -49,13 +51,15 @@ public class LightManager : MonoBehaviour {
         blurMat = new Material(Shader.Find("Custom/Blur"));
         blurMat.SetVector("_TextureSize", new Vector4(Camera.main.pixelWidth, Camera.main.pixelHeight));
 
-        SetAmbient(Color.white * 0f);
+        SetAmbient(Color.white * amb);
     }
 	
 	// Update is called once per frame
 	void Update () {
+        SetAmbient(Color.white * amb);
         if (Application.isPlaying)
         {
+            
             //PointLightParam light = new PointLightParam();
             //light.position = transform.position;
             //light.position.x -= 2f;

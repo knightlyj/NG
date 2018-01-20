@@ -89,7 +89,7 @@ public class LocalPlayer : Player
         pointLight = new PointLightParam();
         pointLight.position = transform.position;
         pointLight.color = Color.white * 0.5f;
-        pointLight.range = 1.0f;
+        pointLight.range = 3.0f;
 
         LightManager lm = Camera.main.GetComponent<LightManager>();
         lm.AddPointLight(pointLight);

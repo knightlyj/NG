@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Switch : Handle
+public class Door : Handle
 {
     [SerializeField]
     Sprite spriteOn = null;
@@ -11,13 +11,12 @@ public class Switch : Handle
     SpriteRenderer sr = null;
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
-    
+
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -32,15 +31,11 @@ public class Switch : Handle
     {
         get
         {
-            if (mechanism != null)
-                return this._canManipulate && this.mechanism.canTrigger;
-            else
-                return this._canManipulate;
+            return this._canManipulate;
         }
     }
 
     bool on = false;
-    public Mechanism mechanism = null;
     public override void Manipulate(Player player)
     {
         on = !on;
@@ -48,16 +43,17 @@ public class Switch : Handle
         {
             if (spriteOn != null)
                 sr.sprite = spriteOn;
+
+            sr.gameObject.layer = LayerMask.NameToLayer("Default");
+            sr.material.shader = Shader.Find("Custom/SpriteNoOcc");
         }
         else
         {
             if (spriteOff != null)
                 sr.sprite = spriteOff;
-        }
 
-        if (mechanism != null)
-        {
-            mechanism.Trigger();
+            sr.gameObject.layer = LayerMask.NameToLayer(TextResources.groundLayer);
+            sr.material.shader = Shader.Find("Custom/SpriteWithOcc");
         }
     }
 }
